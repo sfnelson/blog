@@ -35,9 +35,9 @@ public class TaskUpdateTest {
 		init.put("_id", id);
 		init.put("version", version);
 		init.put("message", message);
-		init.put("created", created);
+		init.put("posted", created);
 		init.put("task", taskId);
-		init.put("type", type.name());
+		init.put("updateType", type.name());
 		locator = EasyMock.createMock(DomainObjectLocator.class);
 		update = new TaskUpdate(init, locator);
 	}
