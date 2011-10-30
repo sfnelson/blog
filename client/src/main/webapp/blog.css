@@ -1,0 +1,82 @@
+body {
+	margin: 0 30% 0 4em;
+}
+
+body > header {
+	padding-top: 4ex;
+    padding-bottom: 4em;
+	text-align: right;
+}
+
+body > header h1 {
+    font-family: georgia, garamond, serif;
+    font-weight: bold;
+	font-size: 150%;
+	font-style: italic;
+    line-height: 1.5em;
+	color: #777;
+}
+
+body > header h2 {
+	font-size: 90%;
+	text-align: right;
+	color: #aaa;
+}
+
+footer {
+	margin-top: 4ex;
+	border-top: solid 1px #eee;
+	padding: 2ex 0 4ex 0;
+	color: #aaa;
+	text-align: justify;
+}
+
+footer p {
+    font-size: 80%;
+}
+
+time {
+	position: absolute;
+	top: 1em;
+	right: 0;
+	font-size: 80%;
+	color: #aaa;
+}
+
+.goals {
+	vertical-align: top;
+}
+
+.goals h1 {
+	font-size: 90%;
+}
+
+.goals li {
+	margin-left: 1em;
+}
+
+.goals .complete:before {
+	display: inline-block;
+	width: 1.5em;
+	content: "\2714";
+}
+
+.goals .partial:before {
+	display: inline-block;
+	width: 1.5em;
+	content: "\007E";
+	font-weight: bold;
+}
+
+.goals .incomplete:before {
+	display: inline-block;
+	width: 1.5em;
+	content: "\0020";
+}
+
+#tasks {
+    position: absolute;
+    left: 70%;
+    right: 10%;
+    margin-left: 2em;
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style type="org.sfnelson.blog.client.ui.AuthWidget.Style">
+        .hidden {
+            display: none;
+        }
+        .popup {
+            position: absolute;
+            right: 0;
+        }
+        .close {
+            position: absolute;
+            display: block;
+            top: 0;
+            right: 0;
+            margin: 1ex 0.5em;
+            width: 1em;
+            height: 2ex;
+            line-height: 2ex;
+            text-align: center;
+            color: #888;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .provider {
+            display: block;
+            font-size: 150%;
+            padding: 2ex 2em;
+            text-align: center;
+            width: 6em;
+        }
+        .provider:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+    </ui:style>
+    <g:FlowPanel>
+        <g:Label ui:field="login" styleName="{style.hidden}">Login</g:Label>
+        <g:Label ui:field="email" styleName="{style.hidden}"></g:Label>
+        <g:DialogBox ui:field="box" text="Authenticate" modal="true" autoHideEnabled="false">
+            <g:FlowPanel>
+                <g:Anchor ui:field="close" styleName="{style.close}">&times;</g:Anchor>
+                <g:FlowPanel>
+                    <g:Anchor ui:field="google" styleName="{style.provider}">Google</g:Anchor>
+                    <g:Anchor ui:field="yahoo" styleName="{style.provider}">Yahoo!</g:Anchor>
+                    <g:Anchor ui:field="other" styleName="{style.provider}">Other</g:Anchor>
+                </g:FlowPanel>
+            </g:FlowPanel>
+        </g:DialogBox>
+    </g:FlowPanel>
+</ui:UiBinder>

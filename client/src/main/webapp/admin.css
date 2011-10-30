@@ -1,0 +1,160 @@
+body > header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6ex;
+    text-align: left;
+    padding: 0 1em 0 1em;
+    background-color: #f1f1f1;
+    border-bottom: solid 1px #d2d2d2;
+    color: #888;
+    z-index: 100;
+}
+
+body > header h1 {
+    font-weight: bold;
+    font-size: 150%;
+    line-height: 4ex;
+    color: #888;
+}
+
+body > footer {
+    position: relative;
+    clear: both;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2ex;
+    padding: 1ex 1em;
+    background-color: #f1f1f1;
+    border-top: solid 1px #d2d2d2;
+    color: #888;
+}
+
+body > footer p {
+    font-size: 80%;
+}
+
+nav {
+    position: absolute;
+    top: 6ex;
+    bottom: 4ex;
+    width: 8.5em;
+    color: #333;
+}
+
+nav li {
+    display: block;
+    padding: 0 1em;
+}
+
+nav li:hover {
+    background-color: #f1f1f1;
+}
+
+nav li a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+    font-size: 85%;
+    height: 4ex;
+    line-height: 4ex;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#entries {
+    position: relative;
+    margin: 6ex 25% 0 10em;
+    overflow-x: hidden;
+    border-left: solid 1px #ebebeb;
+    border-right: solid 1px #ebebeb;
+}
+
+article {
+    padding: 2ex 3em 4ex 1em;
+    border-top: solid 1px #eee;
+}
+
+article header {
+    position: relative;
+}
+
+article textarea {
+    width: 100%;
+    font-size: 80%;
+    height: 16ex;
+    overflow: visible;
+}
+
+article header h1 input {
+    width: 70%;
+    font-size: 100%;
+}
+
+article header time {
+	position: absolute;
+    top: 0;
+    right: 0;
+	font-size: 80%;
+	color: #aaa;
+}
+
+article footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2ex;
+    padding: 0 1em 1ex 1em;
+}
+
+#tasks {
+    position: absolute;
+    top: 6ex;
+    left: 75%;
+    right: 0;
+    color: #333;
+    border-left: solid 1px #ebebeb;
+    overflow-x: hidden;
+    padding: 2ex 1em 2ex 1em;
+}
+
+.changed {
+    background-color: #fffacd;
+}
+
+#auth {
+    display: block;
+    position: absolute;
+    top: 2.5ex;
+    right: 1em;
+    color: #aaa;
+    font-size: 80%;
+}
+
+.gwt-DialogBox {
+    background-color: white;
+    border: solid 1px #d2d2d2;
+    color: #888;
+    box-shadow: 0 0 5px #888;
+    z-index: 100;
+}
+
+.dialogTop {
+    background-color: #f1f1f1;
+    border-bottom: solid 1px #d2d2d2;
+}
+
+.dialogTop .Caption {
+    padding: 1ex 1em;
+    font-weight: bold;
+    font-size: 120%;
+    display: block;
+}
+
+.dialogCenter {
+    padding: 2px;
+}
