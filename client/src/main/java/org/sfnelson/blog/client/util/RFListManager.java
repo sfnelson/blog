@@ -17,13 +17,21 @@ import java.util.Set;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 28/10/11
  */
-public abstract class RFListManager<T extends EntityProxy, E extends Editor<T>> implements EntityProxyChange.Handler<T> {
+public abstract class RFListManager<T extends EntityProxy, E extends Editor<T>> {
 
-	private final List<EntityProxyId<T>> created = Lists.newArrayList();
-	private final List<EntityProxyId<T>> current = Lists.newArrayList();
+	private final List<EntityProxyId<? extends T>> created = Lists.newArrayList();
+	private final List<EntityProxyId<? extends T>> current = Lists.newArrayList();
 
-	public RFListManager(Class<T> type, EventBus eventBus) {
-		EntityProxyChange.registerForProxyType(eventBus, type, this);
+	@SuppressWarnings("unchecked")
+	public RFListManager(EventBus eventBus, Class<? extends T>... type) {
+		for (Class<? extends T> t: type) {
+			EntityProxyChange.registerForProxyType(eventBus, t, new EntityProxyChange.Handler() {
+				@Override
+				public void onProxyChange(EntityProxyChange event) {
+					RFListManager.this.onProxyChange(event);
+				}
+			});
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -31,8 +39,7 @@ public abstract class RFListManager<T extends EntityProxy, E extends Editor<T>> 
 		created.add(0, (EntityProxyId<T>) entity.stableId());
 	}
 
-	@Override
-	public void onProxyChange(EntityProxyChange<T> event) {
+	void onProxyChange(EntityProxyChange<? extends T> event) {
 		switch (event.getWriteOperation()) {
 			case PERSIST:
 				created.remove(event.getProxyId());
@@ -47,13 +54,13 @@ public abstract class RFListManager<T extends EntityProxy, E extends Editor<T>> 
 	}
 
 	@SuppressWarnings("unchecked")
-	public void update(List<T> update) {
-		Set<EntityProxyId<T>> toRemove = Sets.newHashSet();
+	public void update(List<? extends T> update) {
+		Set<EntityProxyId<? extends T>> toRemove = Sets.newHashSet();
 		toRemove.addAll(current);
 		for (T entity: update) {
 			toRemove.remove(entity.stableId());
 		}
-		for (EntityProxyId<T> id: toRemove) {
+		for (EntityProxyId<? extends T> id: toRemove) {
 			remove(id);
 			current.remove(id);
 		}
@@ -72,5 +79,5 @@ public abstract class RFListManager<T extends EntityProxy, E extends Editor<T>> 
 	}
 
 	protected abstract void add(int position, T entity);
-	protected abstract void remove(EntityProxyId<T> id);
+	protected abstract void remove(EntityProxyId<? extends T> id);
 }

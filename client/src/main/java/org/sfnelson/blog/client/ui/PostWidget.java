@@ -1,7 +1,6 @@
 package org.sfnelson.blog.client.ui;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.editor.client.Editor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.CssResource;
@@ -10,23 +9,21 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
-import org.sfnelson.blog.client.views.EntryView;
 import org.sfnelson.blog.client.request.PostProxy;
+import org.sfnelson.blog.client.views.PostView;
 import org.sfnelson.blog.client.widgets.ArticlePanel;
 import org.sfnelson.blog.client.widgets.ContentWidget;
 import org.sfnelson.blog.client.widgets.DateWidget;
 import org.sfnelson.blog.client.widgets.TitleWidget;
 
-import java.util.Date;
-
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 18/10/11
  */
-public class EntryWidget extends Composite implements EntryView, TitleWidget.HasTitleEditor,
+public class PostWidget extends Composite implements PostView, TitleWidget.HasTitleEditor,
 		ContentWidget.HasContentEditor {
 
-	interface Binder extends UiBinder<ArticlePanel, EntryWidget> {}
+	interface Binder extends UiBinder<ArticlePanel, PostWidget> {}
 
 	interface Style extends CssResource {
 		String article();
@@ -50,10 +47,10 @@ public class EntryWidget extends Composite implements EntryView, TitleWidget.Has
 	@UiField Button save;
 	@UiField Button cancel;
 
-	private Presenter presenter;
+	private EntryEditor<PostProxy> editor;
 
 	@Inject
-	EntryWidget() {
+	PostWidget() {
 		initWidget(GWT.<Binder>create(Binder.class).createAndBindUi(this));
 
 		title.setParent(this);
@@ -62,14 +59,14 @@ public class EntryWidget extends Composite implements EntryView, TitleWidget.Has
 		addDomHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				presenter.requestSelect();
+				editor.requestSelect();
 			}
 		}, ClickEvent.getType());
 	}
 
 	@Override
-	public void setPresenter(Presenter presenter) {
-		this.presenter = presenter;
+	public void setEditor(EntryEditor<PostProxy> editor) {
+		this.editor = editor;
 	}
 
 	@Override
@@ -86,37 +83,37 @@ public class EntryWidget extends Composite implements EntryView, TitleWidget.Has
 
 	@Override
 	public Editor<PostProxy> asEditor() {
-		return null;
+		return editor;
 	}
 
 	@Override
-	public Editor<String> getTitleEditor() {
+	public TitleWidget getTitleEditor() {
 		return title;
 	}
 
 	@Override
-	public Editor<Date> getPostedEditor() {
+	public DateWidget getPostedEditor() {
 		return posted;
 	}
 
 	@Override
-	public Editor<String> getContentEditor() {
+	public ContentWidget getContentEditor() {
 		return content;
 	}
 
 	@UiHandler("save")
 	void save(ClickEvent ev) {
-		presenter.requestSubmit();
+		editor.requestSubmit();
 	}
 
 	@UiHandler("cancel")
 	void cancel(ClickEvent ev) {
-		presenter.requestCancel();
+		editor.requestCancel();
 	}
 
 	@UiHandler("delete")
 	void delete(ClickEvent ev) {
-		presenter.requestDelete();
+		editor.requestDelete();
 	}
 
 	@Override
@@ -139,7 +136,7 @@ public class EntryWidget extends Composite implements EntryView, TitleWidget.Has
 			title.edit();
 
 			if (!editing) {
-				presenter.requestEdit();
+				editor.requestEdit();
 			}
 		}
 	}
@@ -150,8 +147,13 @@ public class EntryWidget extends Composite implements EntryView, TitleWidget.Has
 			content.edit();
 
 			if (!editing) {
-				presenter.requestEdit();
+				editor.requestEdit();
 			}
 		}
+	}
+
+	@Override
+	public void focus() {
+		startEditingTitle();
 	}
 }

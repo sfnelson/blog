@@ -1,121 +1,87 @@
 package org.sfnelson.blog.client.editors;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.editor.client.Editor;
-import com.google.gwt.editor.client.EditorDelegate;
-import com.google.gwt.editor.client.ValueAwareEditor;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
+import org.sfnelson.blog.client.events.CreateTaskUpdateEvent;
 import org.sfnelson.blog.client.request.RequestFactory;
 import org.sfnelson.blog.client.request.TaskProxy;
 import org.sfnelson.blog.client.request.TaskRequest;
 import org.sfnelson.blog.client.views.TaskView;
-
-import java.util.Date;
+import org.sfnelson.blog.shared.domain.TaskUpdateType;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 30/10/11
  */
-public class TaskEditor extends AbstractActivity implements ValueAwareEditor<TaskProxy>, TaskView.Presenter {
+public class TaskEditor extends ModalEditor<TaskProxy, TaskView> implements TaskView.Editor {
 
 	interface Driver extends RequestFactoryEditorDriver<TaskProxy, TaskEditor> {};
 
-	private final TaskView view;
-
-	Editor<String> title() {
-		return view.getTitleEditor();
-	}
-
+	private final Driver driver;
 	private final Provider<TaskRequest> request;
-	private final Driver driver = GWT.create(Driver.class);
-
-	private TaskProxy reset;
-	private TaskProxy value;
-	private TaskRequest edit;
-	private boolean created;
+	private final EventBus eventBus;
 
 	@Inject
-	TaskEditor(TaskView view, Provider<TaskRequest> request, RequestFactory rf) {
-		this.view = view;
+	TaskEditor(TaskView view, RequestFactory rf, EventBus eventBus, Provider<TaskRequest> request) {
+		super(view, eventBus, TaskProxy.class);
+		this.eventBus = eventBus;
+		view.setEditor(this);
+
 		this.request = request;
 
+		driver = GWT.create(Driver.class);
 		driver.initialize(rf, this);
-
-		view.setPresenter(this);
 	}
 
-	@Ignore
-	public TaskView getView() {
-		return view;
+	Editor<String> title() {
+		return getView().getTitleEditor();
+	}
+
+	@Override
+	protected RequestFactoryEditorDriver<TaskProxy, ? extends ModalEditor<TaskProxy, ?>> getDriver() {
+		return driver;
+	}
+
+	@Override
+	protected TaskRequest edit() {
+		TaskRequest context = request.get();
+		context.updateTask(getValue());
+		return context;
 	}
 
 	public TaskProxy create() {
-		created = true;
-		edit = request.get();
-		value = edit.create(TaskProxy.class);
-		value.setTitle("New Task");
-		driver.edit(value, edit);
+		TaskRequest context = request.get();
+		TaskProxy value = context.create(TaskProxy.class);
+		context.createTask(value);
+		value.setTitle("");
+		create(value, context);
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			@Override
+			public void execute() {
+				requestSelect();
+				getView().focus();
+			}
+		});
 		return value;
-	}
-
-	public void init(TaskProxy value) {
-		created = false;
-		edit = null;
-		this.value = value;
-		driver.display(value);
 	}
 
 	@Override
 	public void markComplete() {
-		TaskRequest rq = request.get();
-		TaskProxy task = rq.edit(value);
-		task.setCompleted(new Date());
-		rq.updateTask(task);
-		rq.fire();
+		eventBus.fireEvent(new CreateTaskUpdateEvent(getValue(), TaskUpdateType.COMPLETED));
 	}
 
 	@Override
 	public void markProgress() {
-		TaskRequest rq = request.get();
-		TaskProxy task = rq.edit(value);
-		task.setUpdated(new Date());
-		rq.updateTask(task);
-		rq.fire();
+		eventBus.fireEvent(new CreateTaskUpdateEvent(getValue(), TaskUpdateType.PROGRESS));
 	}
 
 	@Override
-	public void deleteTask() {
-		TaskRequest rq = request.get();
-		TaskProxy task = rq.edit(value);
-		task.setAbandoned(new Date());
-		rq.updateTask(task);
-		rq.fire();
-	}
-
-	@Override
-	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-	}
-
-	@Override
-	public void flush() {
-	}
-
-	@Override
-	public void onPropertyChange(String... paths) {
-	}
-
-	@Override
-	public void setValue(TaskProxy value) {
-		this.reset = this.value;
-		this.value = value;
-	}
-
-	@Override
-	public void setDelegate(EditorDelegate<TaskProxy> taskProxyEditorDelegate) {
+	public void markAbandoned() {
+		eventBus.fireEvent(new CreateTaskUpdateEvent(getValue(), TaskUpdateType.ABANDONED));
 	}
 }

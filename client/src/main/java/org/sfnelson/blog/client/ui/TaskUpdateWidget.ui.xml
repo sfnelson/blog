@@ -1,0 +1,83 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:widgets="urn:import:org.sfnelson.blog.client.widgets">
+    <ui:style type="org.sfnelson.blog.client.ui.TaskUpdateWidget.Style">
+        .controls {
+            text-align: right;
+            display: none;
+        }
+        .changed .controls, .editing .controls {
+            display: block;
+        }
+        .article {
+            border-left: solid 1px #f1f1f1;
+            padding: 0;
+        }
+        .article header {
+            display: block;
+            background-color: #f1f1f1;
+            height: 3ex;
+            line-height: 3ex;
+            margin: 0;
+        }
+        .article header h1 {
+            font-size: 75%;
+            height: 4ex;
+            line-height: 4ex;
+            font-weight: normal;
+        }
+        .content {
+            display: none;
+        }
+        .selected {
+            border-left: solid 1px #00bfff;
+        }
+        .selected .content, .editing .content {
+            display: block;
+            padding: 1ex 1em 2ex 1em;
+        }
+        .delete {
+            display: none;
+            position: absolute;
+            right: 2px;
+            font-size: 20px;
+            line-height: 20px;
+            text-align: center;
+            width: 20px;
+            padding: 1px;
+            color: #aaa;
+        }
+        .delete:hover {
+            color: #8b0000;
+        }
+        .selected .delete {
+            display: block;
+        }
+        .editing .delete {
+            display: none;
+        }
+        .type {
+            display: block;
+            font-size: 65%;
+            height: 100%;
+            color: #aaa;
+            float: left;
+            padding: 0 1em 0 0.5em;
+        }
+        .type:after {
+            content: " &gt;";
+        }
+    </ui:style>
+    <widgets:ArticlePanel styleName="{style.article}">
+        <g:Anchor ui:field="delete" styleName="{style.delete}" title="Delete">&#x2717;</g:Anchor>
+        <widgets:HeaderPanel>
+            <widgets:TaskUpdateTypeWidget ui:field="type" styleName="{style.type}"></widgets:TaskUpdateTypeWidget>
+            <widgets:TaskNameWidget ui:field="task"></widgets:TaskNameWidget>
+        </widgets:HeaderPanel>
+        <widgets:ContentWidget ui:field="content" styleName="{style.content}"></widgets:ContentWidget>
+        <widgets:FooterPanel styleName="{style.controls}">
+            <g:Button ui:field="save">Save</g:Button>
+            <g:Button ui:field="cancel">Cancel</g:Button>
+        </widgets:FooterPanel>
+    </widgets:ArticlePanel>
+</ui:UiBinder>

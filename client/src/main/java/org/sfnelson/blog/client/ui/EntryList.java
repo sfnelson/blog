@@ -16,14 +16,10 @@ import org.sfnelson.blog.client.views.EntryView;
 public class EntryList extends Composite implements BlogView {
 	interface Binder extends UiBinder<FlowPanel, EntryList> {}
 
-	private final Provider<EntryView> editorSource;
-
 	@UiField FlowPanel entries;
 
 	@Inject
-	EntryList(Provider<EntryView> editorSource) {
-		this.editorSource = editorSource;
-
+	EntryList() {
 		initWidget(GWT.<Binder> create(Binder.class).createAndBindUi(this));
 	}
 

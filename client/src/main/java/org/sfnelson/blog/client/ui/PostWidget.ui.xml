@@ -1,7 +1,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:widgets="urn:import:org.sfnelson.blog.client.widgets">
-    <ui:style type="org.sfnelson.blog.client.ui.EntryWidget.Style">
+    <ui:style type="org.sfnelson.blog.client.ui.PostWidget.Style">
         .controls {
             text-align: right;
             display: none;

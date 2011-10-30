@@ -8,14 +8,16 @@ import org.sfnelson.blog.client.request.TaskProxy;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 30/10/11
  */
-public interface TaskView extends IsWidget {
+public interface TaskView extends ModalEditorView<TaskProxy>, IsWidget {
 
-	void setPresenter(Presenter presenter);
-	Editor<String> getTitleEditor();
+	com.google.gwt.editor.client.Editor<String> getTitleEditor();
 
-	interface Presenter extends Editor<TaskProxy> {
+	void setEditor(Editor editor);
+	void focus();
+
+	interface Editor extends ModalEditorView.Editor<TaskProxy> {
 		void markComplete();
 		void markProgress();
-		void deleteTask();
+		void markAbandoned();
 	}
 }

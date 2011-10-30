@@ -3,6 +3,8 @@ package org.sfnelson.blog.client.ui;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -11,50 +13,133 @@ import com.google.inject.Inject;
 import org.sfnelson.blog.client.views.TaskView;
 import org.sfnelson.blog.client.views.TasksView;
 import org.sfnelson.blog.client.request.TaskProxy;
+import org.sfnelson.blog.client.widgets.TitleWidget;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 18/10/11
  */
-public class TaskWidget extends Composite implements TaskView {
-	interface TaskWidgetUiBinder extends UiBinder<HTMLPanel, TaskWidget> {
+public class TaskWidget extends Composite implements TaskView, TitleWidget.HasTitleEditor {
+
+	interface Binder extends UiBinder<HTMLPanel, TaskWidget> {}
+
+	interface Style extends CssResource {
+		String widget();
+		String marks();
+		String complete();
+		String progress();
+		String abandon();
+		String editing();
+		String selected();
+		String controls();
 	}
 
-	private static TaskWidgetUiBinder ourUiBinder = GWT.create(TaskWidgetUiBinder.class);
+	@UiField Style style;
 
-	@UiField Label title;
+	@UiField TitleWidget title;
+
 	@UiField Anchor complete;
 	@UiField Anchor partial;
-	@UiField Anchor delete;
+	@UiField Anchor abandon;
+	@UiField Button save;
+	@UiField Button cancel;
 
-	private TaskView.Presenter presenter;
+	private Editor editor;
+
+	private boolean editing;
+	private boolean selected;
 
 	@Inject
 	TaskWidget() {
-		initWidget(ourUiBinder.createAndBindUi(this));
+		initWidget(GWT.<Binder> create(Binder.class).createAndBindUi(this));
+
+		title.setParent(this);
+
+		addDomHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				editor.requestSelect();
+			}
+		}, ClickEvent.getType());
 	}
 
 	@Override
-	public void setPresenter(Presenter presenter) {
-		this.presenter = presenter;
+	public void setEditor(Editor editor) {
+		this.editor = editor;
 	}
 
-	public Editor<String> getTitleEditor() {
-		return title.asEditor();
+	public TitleWidget getTitleEditor() {
+		return title;
 	}
 
 	@UiHandler("complete")
 	void complete(ClickEvent event) {
-		presenter.markComplete();
+		editor.markComplete();
 	}
 
 	@UiHandler("partial")
 	void progress(ClickEvent event) {
-		presenter.markProgress();
+		editor.markProgress();
 	}
 
-	@UiHandler("delete")
-	void delete(ClickEvent event) {
-		presenter.deleteTask();
+	@UiHandler("abandon")
+	void abandon(ClickEvent event) {
+		editor.markAbandoned();
+	}
+
+	@UiHandler("save")
+	void save(ClickEvent event) {
+		editor.requestSubmit();
+	}
+
+	@UiHandler("cancel")
+	void cancel(ClickEvent event) {
+		editor.requestCancel();
+	}
+
+	@Override
+	public void edit() {
+		addStyleName(style.editing());
+		editing = true;
+	}
+
+	@Override
+	public void view() {
+		removeStyleName(style.editing());
+		title.done();
+		editing = false;
+	}
+
+	@Override
+	public void select() {
+		addStyleName(style.selected());
+		selected = true;
+	}
+
+	@Override
+	public void deselect() {
+		removeStyleName(style.selected());
+		selected = false;
+	}
+
+	@Override
+	public Editor asEditor() {
+		return editor;
+	}
+
+	@Override
+	public void startEditingTitle() {
+		if (selected) {
+			title.edit();
+
+			if (!editing) {
+				editor.requestEdit();
+			}
+		}
+	}
+
+	@Override
+	public void focus() {
+		startEditingTitle();
 	}
 }

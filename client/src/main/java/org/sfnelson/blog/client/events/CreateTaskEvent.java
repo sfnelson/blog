@@ -11,7 +11,7 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 public class CreateTaskEvent extends Event<CreateTaskEvent.Handler> {
 
 	public interface Handler {
-		void entryCreated(CreateTaskEvent event);
+		void onTaskCreated(CreateTaskEvent event);
 	}
 
 	private static final Event.Type<Handler> TYPE = new Event.Type<Handler>();
@@ -30,6 +30,6 @@ public class CreateTaskEvent extends Event<CreateTaskEvent.Handler> {
 
 	@Override
 	protected void dispatch(Handler handler) {
-		handler.entryCreated(this);
+		handler.onTaskCreated(this);
 	}
 }

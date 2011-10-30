@@ -2,10 +2,7 @@ package org.sfnelson.blog.client.widgets;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.editor.client.LeafValueEditor;
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.*;
 
@@ -13,7 +10,7 @@ import com.google.gwt.user.client.ui.*;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 27/10/11
  */
-public class TitleWidget<T> extends ComplexPanel implements LeafValueEditor<String> {
+public class TitleWidget extends ComplexPanel implements LeafValueEditor<String> {
 
 	public interface HasTitleEditor {
 		void startEditingTitle();
@@ -52,6 +49,18 @@ public class TitleWidget<T> extends ComplexPanel implements LeafValueEditor<Stri
 				}, 100);
 			}
 		});
+
+		edit.addKeyUpHandler(new KeyUpHandler() {
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				switch (event.getNativeKeyCode()) {
+					case KeyCodes.KEY_ENTER:
+						done(); break;
+					case KeyCodes.KEY_ESCAPE:
+						cancel(); break;
+				}
+			}
+		});
 	}
 
 	public void add(Widget w) {
@@ -88,6 +97,12 @@ public class TitleWidget<T> extends ComplexPanel implements LeafValueEditor<Stri
 	public void done() {
 		clear();
 		label.setText(getValue());
+		add(label);
+	}
+
+	public void cancel() {
+		clear();
+		edit.setValue(label.getText());
 		add(label);
 	}
 }

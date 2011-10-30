@@ -13,6 +13,8 @@ import com.google.inject.Provider;
 import com.google.web.bindery.requestfactory.shared.EntityProxyId;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import org.sfnelson.blog.client.editors.TaskEditor;
+import org.sfnelson.blog.client.events.CreateTaskEvent;
+import org.sfnelson.blog.client.events.EditorSelectionEvent;
 import org.sfnelson.blog.client.places.TaskPlace;
 import org.sfnelson.blog.client.request.TaskProxy;
 import org.sfnelson.blog.client.request.TaskRequest;
@@ -26,7 +28,8 @@ import java.util.Map;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 18/10/11
  */
-public class ShowTasks extends AbstractActivity implements ActivityMapper {
+public class ShowTasks extends AbstractActivity
+		implements ActivityMapper, CreateTaskEvent.Handler, EditorSelectionEvent.Handler<TaskProxy> {
 
 	private final TasksView view;
 	private final Provider<TaskEditor> editor;
@@ -35,6 +38,7 @@ public class ShowTasks extends AbstractActivity implements ActivityMapper {
 	private RFListManager<TaskProxy, TaskEditor> list;
 
 	private TaskPlace current;
+	private EntityProxyId<?> selection;
 
 	@Inject
 	ShowTasks(TasksView view, Provider<TaskRequest> rf, Provider<TaskEditor> editor) {
@@ -46,33 +50,27 @@ public class ShowTasks extends AbstractActivity implements ActivityMapper {
 	@Override
 	public Activity getActivity(Place place) {
 		if (place instanceof TaskPlace) {
-			setPlace((TaskPlace) place);
+			current = (TaskPlace) place;
 		}
 		else {
-			setPlace(null);
+			current = null;
 		}
 		return this;
 	}
 
-	private void setPlace(TaskPlace place) {
-		this.current = place;
-		if (list == null || place == null) return;
-		if (current.getAction().equals("create")) {
-			create();
-		}
-	}
-
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+		EditorSelectionEvent.register(this, eventBus);
+		CreateTaskEvent.register(this, eventBus);
 
-		list = new RFListManager<TaskProxy, TaskEditor>(TaskProxy.class, eventBus) {
+		list = new RFListManager<TaskProxy, TaskEditor>(eventBus, TaskProxy.class) {
 			@Override
 			protected void add(int position, TaskProxy entity) {
 				ShowTasks.this.add(position, entity);
 			}
 
 			@Override
-			protected void remove(EntityProxyId<TaskProxy> id) {
+			protected void remove(EntityProxyId<? extends TaskProxy> id) {
 				ShowTasks.this.remove(id);
 			}
 		};
@@ -87,8 +85,33 @@ public class ShowTasks extends AbstractActivity implements ActivityMapper {
 		}, 60000);
 
 		panel.setWidget(view);
+	}
 
-		setPlace(current);
+	@Override
+	public void onTaskCreated(CreateTaskEvent event) {
+		create();
+	}
+
+	@Override
+	public void onEventSelection(EditorSelectionEvent<TaskProxy> event) {
+		if (selection != null && selection.equals(event.getEntryId()) && event.getSelected()) {
+			return;
+		}
+
+		if (selection != null) {
+			TaskEditor editor = editors.get(selection);
+			if (editor != null) {
+				if (!editor.deselect()) return;
+			}
+			selection = null;
+		}
+
+		if (event.getSelected() && event.getEntryId() != null) {
+			TaskEditor editor = editors.get(event.getEntryId());
+			if (editor != null && editor.select()) {
+				selection = event.getEntryId();
+			}
+		}
 	}
 
 	private void refresh() {
@@ -109,7 +132,7 @@ public class ShowTasks extends AbstractActivity implements ActivityMapper {
 		view.addTask(position, editor.getView());
 	}
 
-	private void remove(EntityProxyId<TaskProxy> id) {
+	private void remove(EntityProxyId<? extends TaskProxy> id) {
 		if (editors.containsKey(id)) {
 			view.removeTask(editors.get(id).getView());
 		}

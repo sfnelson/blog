@@ -65,7 +65,13 @@ public class DomainObjectLocator extends Locator<DomainObject, String> implement
 
 	@Override
 	public String getId(DomainObject domainObject) {
-		return domainObject.getId().toString();
+		ObjectId id = domainObject.getId();
+		if (id != null) {
+			return id.toString();
+		}
+		else {
+			return null;
+		}
 	}
 
 	@Override

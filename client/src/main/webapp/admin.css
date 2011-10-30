@@ -119,7 +119,7 @@ article footer {
     color: #333;
     border-left: solid 1px #ebebeb;
     overflow-x: hidden;
-    padding: 2ex 1em 2ex 1em;
+    padding: 2ex 0 2ex 1em;
 }
 
 .changed {
