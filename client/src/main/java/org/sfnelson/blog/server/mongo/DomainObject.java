@@ -8,7 +8,7 @@ import org.bson.types.ObjectId;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 19/10/11
  */
-public class DomainObject {
+public class DomainObject<T extends DomainObject<T>> {
 
 	protected DBObject init;
 	protected BasicDBObject delta;
@@ -18,9 +18,11 @@ public class DomainObject {
 		delta = new BasicDBObject();
 	}
 
-	protected DomainObject(DBObject init) {
+	@SuppressWarnings("unchecked")
+	public T init(DBObject init) {
 		this.init = init;
-		this.delta = new BasicDBObject();
+		delta = new BasicDBObject();
+		return (T) this;
 	}
 
 	public ObjectId getId() {

@@ -1,6 +1,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:widgets="urn:import:org.sfnelson.blog.client.widgets">
+             xmlns:widgets="urn:import:org.sfnelson.blog.client.widgets"
+             xmlns:blogui="urn:import:org.sfnelson.blog.client.ui">
     <ui:style type="org.sfnelson.blog.client.ui.PostWidget.Style">
         .controls {
             text-align: right;
@@ -42,7 +43,7 @@
             <widgets:TitleWidget ui:field="title"></widgets:TitleWidget>
             <widgets:DateWidget ui:field="posted"></widgets:DateWidget>
         </widgets:HeaderPanel>
-        <widgets:ContentWidget ui:field="content"></widgets:ContentWidget>
+        <blogui:ContentWidget ui:field="content"></blogui:ContentWidget>
         <widgets:FooterPanel styleName="{style.controls}">
             <g:Button ui:field="save">Save</g:Button>
             <g:Button ui:field="cancel">Cancel</g:Button>

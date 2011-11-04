@@ -14,7 +14,7 @@ import com.google.inject.Provider;
 import com.google.web.bindery.requestfactory.shared.*;
 import org.sfnelson.blog.client.editors.EntryEditor;
 import org.sfnelson.blog.client.editors.PostEditor;
-import org.sfnelson.blog.client.editors.TaskUpdateEditor;
+import org.sfnelson.blog.client.editors.UpdateEditor;
 import org.sfnelson.blog.client.events.CreateEntryEvent;
 import org.sfnelson.blog.client.events.CreateTaskUpdateEvent;
 import org.sfnelson.blog.client.events.EditorSelectionEvent;
@@ -35,7 +35,7 @@ public class ShowBlog extends AbstractActivity implements ActivityMapper, Editor
 
 	private final Provider<EntryRequest> request;
 	private final Provider<PostEditor> posts;
-	private final Provider<TaskUpdateEditor> updates;
+	private final Provider<UpdateEditor> updates;
 
 	private final BlogView view;
 	private final PlaceController pc;
@@ -47,7 +47,7 @@ public class ShowBlog extends AbstractActivity implements ActivityMapper, Editor
 
 	@Inject
 	ShowBlog(BlogView view, Provider<EntryRequest> request, Provider<PostEditor> posts,
-			 Provider<TaskUpdateEditor> updates, PlaceController pc) {
+			 Provider<UpdateEditor> updates, PlaceController pc) {
 		this.view = view;
 		this.request = request;
 		this.pc = pc;
@@ -85,7 +85,7 @@ public class ShowBlog extends AbstractActivity implements ActivityMapper, Editor
 		}, eventBus);
 
 		list = new RFListManager<EntryProxy, EntryEditor<EntryProxy, ?>>(eventBus,
-				PostProxy.class, TaskUpdateProxy.class) {
+				PostProxy.class, UpdateProxy.class) {
 			@Override
 			protected void add(int position, EntryProxy entity) {
 				ShowBlog.this.add(position, entity);
@@ -134,7 +134,7 @@ public class ShowBlog extends AbstractActivity implements ActivityMapper, Editor
 	}
 
 	private void refresh() {
-		request.get().getEntries(0, Integer.MAX_VALUE).with("task", "progress")
+		request.get().getEntries(0, Integer.MAX_VALUE).with("task", "progress", "content")
 		.fire(new Receiver<List<EntryProxy>>() {
 			@Override
 			public void onSuccess(List<EntryProxy> response) {
@@ -153,8 +153,8 @@ public class ShowBlog extends AbstractActivity implements ActivityMapper, Editor
 			editor = e;
 		}
 		else {
-			TaskUpdateEditor e = this.updates.get();
-			e.init((TaskUpdateProxy) entry);
+			UpdateEditor e = this.updates.get();
+			e.init((UpdateProxy) entry);
 			editor = e;
 		}
 		editors.put(entry.stableId(), editor);
@@ -176,8 +176,8 @@ public class ShowBlog extends AbstractActivity implements ActivityMapper, Editor
 	}
 
 	private void createTaskUpdate(TaskProxy task, TaskUpdateType type) {
-		TaskUpdateEditor editor = this.updates.get();
-		TaskUpdateProxy entry = editor.create(task, type);
+		UpdateEditor editor = this.updates.get();
+		UpdateProxy entry = editor.create(task, type);
 		list.addCreated(entry);
 		editors.put(entry.stableId(), editor);
 		view.addEntry(0, editor.getView());

@@ -16,30 +16,34 @@ import static org.junit.Assert.assertEquals;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 31/10/11
  */
-public class TaskUpdateTest {
+public class UpdateTest {
 
 	private final ObjectId id = new ObjectId();
 	private final Integer version = 1;
-	private final String message = "Message";
+	private final ObjectId contentId = new ObjectId();
+	private final Content content = new Content().init(new BasicDBObject("_id", contentId));
 	private final Date created = new Date();
 	private final ObjectId taskId = new ObjectId();
-	private final Task task = new Task(new BasicDBObject("_id", taskId));
+	private final Task task = new Task(null).init(new BasicDBObject("_id", taskId));
 	private final TaskUpdateType type = TaskUpdateType.PROGRESS;
+	private final ObjectId authorId = new ObjectId();
+	private final Author author = new Author().init(new BasicDBObject("_id", authorId));
 
 	private DomainObjectLocator locator;
-	private TaskUpdate update;
+	private Update update;
 
 	@Before
 	public void setUp() throws Exception {
 		BasicDBObject init = new BasicDBObject();
 		init.put("_id", id);
 		init.put("version", version);
-		init.put("message", message);
+		init.put("content", contentId);
 		init.put("posted", created);
 		init.put("task", taskId);
 		init.put("updateType", type.name());
+		init.put("author", authorId);
 		locator = EasyMock.createMock(DomainObjectLocator.class);
-		update = new TaskUpdate(init, locator);
+		update = new Update(locator).init(init);
 	}
 
 	@Test
@@ -59,26 +63,38 @@ public class TaskUpdateTest {
 
 	@Test
 	public void testSetCreated() throws Exception {
-		update = new TaskUpdate(locator);
+		update = new Update(locator);
 		update.setPosted(created);
 		assertEquals(created, update.getPosted());
 	}
 
 	@Test
-	public void testGetMessage() throws Exception {
-		assertEquals(message, update.getContent());
+	public void testGetContent() throws Exception {
+		EasyMock.expect(locator.find(Content.class, contentId)).andReturn(content);
+		EasyMock.replay(locator);
+		assertEquals(content, update.getContent());
+		EasyMock.verify(locator);
 	}
 
 	@Test
-	public void testSetMessage() throws Exception {
-		update = new TaskUpdate(locator);
-		update.setContent(message);
-		assertEquals(message, update.getContent());
+	public void testSetContent() throws Exception {
+		update = new Update(locator);
+		EasyMock.replay(locator);
+		assertEquals(null, update.getContent());
+		EasyMock.verify(locator);
+		EasyMock.reset(locator);
+
+		update.setContent(content);
+
+		EasyMock.expect(locator.find(Content.class, contentId)).andReturn(content);
+		EasyMock.replay(locator);
+		assertEquals(content, update.getContent());
+		EasyMock.verify(locator);
 	}
 
 	@Test
 	public void testGetTask() throws Exception {
-		EasyMock.expect(locator.getTask(taskId)).andReturn(task);
+		EasyMock.expect(locator.find(Task.class, taskId)).andReturn(task);
 		EasyMock.replay(locator);
 		assertEquals(task, update.getTask());
 		EasyMock.verify(locator);
@@ -86,10 +102,15 @@ public class TaskUpdateTest {
 
 	@Test
 	public void testSetTask() throws Exception {
-		update = new TaskUpdate(locator);
+		update = new Update(locator);
+		EasyMock.replay(locator);
+		assertEquals(null, update.getTask());
+		EasyMock.verify(locator);
+		EasyMock.reset(locator);
+
 		update.setTask(task);
 
-		EasyMock.expect(locator.getTask(taskId)).andReturn(task);
+		EasyMock.expect(locator.find(Task.class, taskId)).andReturn(task);
 		EasyMock.replay(locator);
 		assertEquals(task, update.getTask());
 		EasyMock.verify(locator);
@@ -102,7 +123,7 @@ public class TaskUpdateTest {
 
 	@Test
 	public void testSetType() throws Exception {
-		update = new TaskUpdate(locator);
+		update = new Update(locator);
 		update.setType(TaskUpdateType.CREATED);
 		assertEquals(TaskUpdateType.CREATED, update.getType());
 		update.setType(TaskUpdateType.PROGRESS);
@@ -112,4 +133,29 @@ public class TaskUpdateTest {
 		update.setType(TaskUpdateType.ABANDONED);
 		assertEquals(TaskUpdateType.ABANDONED, update.getType());
 	}
+
+	@Test
+	public void testGetAuthor() throws Exception {
+		EasyMock.expect(locator.find(Author.class, authorId)).andReturn(author);
+		EasyMock.replay(locator);
+		assertEquals(author, update.getAuthor());
+		EasyMock.verify(locator);
+	}
+
+	@Test
+	public void testSetAuthor() throws Exception {
+		update = new Update(locator);
+		EasyMock.replay(locator);
+		assertEquals(null, update.getAuthor());
+		EasyMock.verify(locator);
+		EasyMock.reset(locator);
+
+		update.setAuthor(author);
+
+		EasyMock.expect(locator.find(Author.class, authorId)).andReturn(author);
+		EasyMock.replay(locator);
+		assertEquals(author, update.getAuthor());
+		EasyMock.verify(locator);
+	}
+
 }

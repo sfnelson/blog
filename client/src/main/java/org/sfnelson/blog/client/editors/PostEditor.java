@@ -8,10 +8,12 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
+import org.sfnelson.blog.client.request.ContentProxy;
 import org.sfnelson.blog.client.request.PostProxy;
 import org.sfnelson.blog.client.request.EntryRequest;
 import org.sfnelson.blog.client.request.RequestFactory;
 import org.sfnelson.blog.client.views.PostView;
+import org.sfnelson.blog.domain.Content;
 
 import java.util.Date;
 
@@ -24,7 +26,6 @@ public class PostEditor extends EntryEditor<PostProxy, PostView> {
 	interface Driver extends RequestFactoryEditorDriver<PostProxy, PostEditor> {};
 
 	private final Driver driver;
-	private final Provider<EntryRequest> request;
 
 	@Inject
 	PostEditor(PostView view, RequestFactory rf, Provider<EntryRequest> request, EventBus eventBus) {
@@ -32,8 +33,6 @@ public class PostEditor extends EntryEditor<PostProxy, PostView> {
 
 		driver = GWT.<Driver> create(Driver.class);
 		driver.initialize(rf, this);
-
-		this.request = request;
 	}
 
 	Editor<String> title() {
@@ -44,7 +43,7 @@ public class PostEditor extends EntryEditor<PostProxy, PostView> {
 		return getView().getPostedEditor();
 	}
 
-	Editor<String> content() {
+	ContentEditor content() {
 		return getView().getContentEditor();
 	}
 
@@ -53,8 +52,11 @@ public class PostEditor extends EntryEditor<PostProxy, PostView> {
 		PostProxy value = context.create(PostProxy.class);
 		value.setTitle(DateTimeFormat.getFormat("EEEE").format(new Date()));
 		value.setPosted(new Date());
-		value.setContent("<p>Content</p>");
-		context.create(value);
+		ContentProxy content = context.create(ContentProxy.class);
+		content.setType(Content.Type.WIKI);
+		value.setContent(content);
+		context.createContent(content);
+		context.createEntry(value);
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			@Override
 			public void execute() {

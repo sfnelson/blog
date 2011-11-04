@@ -2,9 +2,11 @@ package org.sfnelson.blog.client.editors;
 
 import com.google.inject.Provider;
 import com.google.web.bindery.event.shared.EventBus;
+import org.sfnelson.blog.client.request.ContentProxy;
 import org.sfnelson.blog.client.request.EntryProxy;
 import org.sfnelson.blog.client.request.EntryRequest;
 import org.sfnelson.blog.client.views.EntryView;
+import org.sfnelson.blog.server.domain.Entry;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -26,13 +28,18 @@ public abstract class EntryEditor<T extends EntryProxy, V extends EntryView<T>>
 	@Override
 	protected EntryRequest edit() {
 		EntryRequest context = request.get();
-		context.update(getValue());
+		if (getValue() != null) {
+			context.updateContent(getValue().getContent());
+		}
+		context.updateEntry(getValue());
 		return context;
 	}
 
 	@Override
 	public void requestDelete() {
 		requestCancel();
-		request.get().delete(getValue()).fire();
+		EntryRequest rq = request.get();
+		rq.deleteContent(getValue().getContent());
+		rq.deleteEntry(getValue()).fire();
 	}
 }

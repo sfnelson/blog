@@ -45,8 +45,19 @@ p a:visited {
 }
 
 code {
+    display: block;
 	color: #999;
 	font-family: 'Droid Sans Mono', fixed;
+    white-space: pre-wrap;
+    line-height: 1.2em;
+    margin: 1ex;
+}
+
+p code {
+    display: inline;
+    font-size: 90%;
+    margin: 0;
+    line-height: inherit;
 }
 
 em {
@@ -59,10 +70,6 @@ article {
 	text-align: justify;
 	line-height: 1.5em;
 	color: #777;
-}
-
-article li, article p, article dt, article dd {
-    font-size: 0.8em;
 }
 
 dl {
@@ -84,5 +91,46 @@ dd {
 }
 
 p {
-	padding-bottom: 1ex;
+	padding: 0.5ex 0;
+    text-align: justify;
+}
+
+sup {
+    vertical-align: super;
+    font-size: smaller;
+}
+
+sub {
+    vertical-align: sub;
+    font-size: smaller;
+}
+
+strong {
+    font-weight: bolder;
+}
+
+hr {
+    border: none;
+    border-top: solid 1px #eee;
+}
+
+ul {
+    list-style:  disc;
+    padding-left: 2em;
+}
+
+ol {
+    list-style-type: decimal;
+    padding-left: 2em;
+}
+
+article blockquote {
+    margin: 1ex 2em;
+    color: #777;
+    font-size: 0.7em;
+    text-align: justify;
+}
+
+article p, article li, article dt, article dl, article code {
+    font-size: 0.8em;
 }

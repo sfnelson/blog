@@ -1,9 +1,12 @@
 package org.sfnelson.blog.server.domain;
 
 import com.google.common.collect.Lists;
-import com.mongodb.BasicDBObject;
+import com.google.inject.Inject;
+import com.google.web.bindery.requestfactory.shared.Locator;
 import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
+import org.sfnelson.blog.domain.Comment;
+import org.sfnelson.blog.server.DomainObjectLocator;
 import org.sfnelson.blog.server.mongo.DomainObject;
 
 import java.util.AbstractList;
@@ -14,20 +17,14 @@ import java.util.List;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 19/10/11
  */
-public class Post extends DomainObject implements Entry {
+public class Post extends DomainObject<Post> implements Entry, org.sfnelson.blog.domain.Post {
 
-	private final TaskUpdate.SourcesTasks provider;
+	private final DomainObjectLocator locator;
 
-	public Post(TaskUpdate.SourcesTasks provider) {
-		super();
+	@Inject
+	Post(DomainObjectLocator locator) {
+		this.locator = locator;
 		delta.put("type", "post");
-		this.provider = provider;
-	}
-
-	public Post(DBObject init, TaskUpdate.SourcesTasks provider) {
-		super(init);
-
-		this.provider = provider;
 	}
 
 	public String getTitle() {
@@ -36,6 +33,17 @@ public class Post extends DomainObject implements Entry {
 
 	public void setTitle(String value) {
 		delta.put("title", value);
+	}
+
+	public Author getAuthor() {
+		ObjectId id = (ObjectId) get("author");
+		if (id == null) return null;
+		return locator.find(Author.class, id);
+	}
+
+	public void setAuthor(Author author) {
+		ObjectId id = author.getId();
+		delta.put("author", id);
 	}
 
 	@Override
@@ -49,40 +57,26 @@ public class Post extends DomainObject implements Entry {
 	}
 
 	@Override
-	public String getContent() {
-		return (String) get("content");
+	public Content getContent() {
+		ObjectId id = (ObjectId) get("content");
+		if (id == null) return null;
+		return locator.find(Content.class, id);
 	}
 
 	@Override
-	public void setContent(String content) {
-		delta.put("content", content);
+	public void setContent(Content content) {
+		if (content == null) {
+			delta.put("content", null);
+		}
+		else {
+			if (content.getId() == null) {
+				locator.getContentService().createContent(content);
+			}
+			delta.put("content", content.getId());
+		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<TaskUpdate> getProgress() {
-		List<DBObject> progress = (List<DBObject>) get("progress");
-		if (progress == null) return Lists.newArrayList();
-		else return new UpdateList(progress, provider);
-	}
-
-	private static class UpdateList extends AbstractList<TaskUpdate> {
-
-		private final List<DBObject> raw;
-		private final TaskUpdate.SourcesTasks provider;
-
-		public UpdateList(List<DBObject> raw, TaskUpdate.SourcesTasks provider) {
-			this.raw = raw;
-			this.provider = provider;
-		}
-
-		@Override
-		public TaskUpdate get(int index) {
-			return new TaskUpdate(raw.get(index), provider);
-		}
-
-		@Override
-		public int size() {
-			return raw.size();
-		}
+	public List<Comment> getComments() {
+		return null;
 	}
 }

@@ -3,11 +3,10 @@ package org.sfnelson.blog.server.mongo;
 import com.google.inject.Inject;
 import com.mongodb.*;
 import org.bson.types.ObjectId;
-import org.sfnelson.blog.server.domain.Entry;
+import org.sfnelson.blog.server.domain.Content;
 import org.sfnelson.blog.server.domain.Post;
 import org.sfnelson.blog.server.domain.Task;
-import org.sfnelson.blog.server.domain.TaskUpdate;
-import org.sfnelson.blog.server.mongo.DomainObject;
+import org.sfnelson.blog.server.domain.Update;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -50,16 +49,26 @@ public class Database {
 
 	public void persist(Object object) {
 		DomainObject o = (DomainObject) object;
-		o.delta.append("version", 1);
-		getCollection(o.getClass()).insert(o.delta);
+		if (o.init.get("_id") != null) {
+			update(object);
+		}
+		else {
+			ObjectId id = new ObjectId();
+			o.delta.append("_id", id);
+			o.delta.append("version", 1);
+			getCollection(o.getClass()).insert(o.delta);
+			o.init(find(o.getClass(), o.getId()));
+		}
 	}
 
 	public void update(Object object) {
 		DomainObject o = (DomainObject) object;
+		if (o.delta.isEmpty()) return;
 		BasicDBObject update = new BasicDBObject();
 		update.append("$set", o.delta);
 		update.append("$inc", new BasicDBObject("version", 1));
 		getCollection(o.getClass()).update(o.init, update);
+		o.init(find(o.getClass(), o.getId()));
 	}
 
 	public void remove(Object object) {
@@ -74,8 +83,11 @@ public class Database {
 		if (type == Post.class) {
 			return db.getCollection("entries");
 		}
-		if (type == TaskUpdate.class) {
+		if (type == Update.class) {
 			return db.getCollection("entries");
+		}
+		if (type == Content.class) {
+			return db.getCollection("content");
 		}
 
 		throw new UnsupportedOperationException("don't know how to map " + type);

@@ -4,14 +4,24 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.matcher.Matchers;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
 import com.google.web.bindery.requestfactory.server.DefaultExceptionHandler;
 import com.google.web.bindery.requestfactory.server.ExceptionHandler;
 import com.google.web.bindery.requestfactory.server.ServiceLayerDecorator;
+import com.google.web.bindery.requestfactory.shared.Locator;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import org.sfnelson.blog.client.request.RequestFactory;
 import org.sfnelson.blog.server.mongo.Database;
+import org.sfnelson.blog.server.security.LoginChecker;
+import org.sfnelson.blog.server.security.LoginRequiredException;
+import org.sfnelson.blog.server.security.RequiresLogin;
+import org.sfnelson.blog.server.service.ContentService;
 import org.sfnelson.blog.server.service.EntryService;
 import org.sfnelson.blog.server.service.TaskService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.*;
 
@@ -29,12 +39,17 @@ public class ServletConfig extends GuiceServletContextListener {
 				serve("/feed").with(RssServlet.class);
 				serve("/oauth").with(OAuthServlet.class);
 
-				bind(ExceptionHandler.class).to(DefaultExceptionHandler.class);
 				bind(ServiceLayerDecorator.class).to(InjectingServiceLayerDecorator.class);
 				bind(Database.class).asEagerSingleton();
 
-				bind(EntryService.class).to(EntryManager.class).in(Singleton.class);
-				bind(TaskService.class).to(TaskManager.class).in(Singleton.class);
+				bind(EntryService.class).to(EntryManager.class);
+				bind(ContentService.class).to(EntryManager.class);
+				bind(TaskService.class).to(TaskManager.class);
+				bind(Locator.class).to(DomainObjectLocator.class);
+
+				bindInterceptor(Matchers.any(), Matchers.annotatedWith(RequiresLogin.class), new LoginChecker());
+
+				System.setProperty("gwt.rpc.dumpPayload", "true");
 			}
 
 			@Provides
@@ -58,6 +73,19 @@ public class ServletConfig extends GuiceServletContextListener {
 					@Override
 					public <T extends ConstraintValidator<?, ?>> T getInstance(Class<T> key) {
 						return injector.getInstance(key);
+					}
+				};
+			}
+
+			@Provides
+			@Singleton
+			public ExceptionHandler getExceptionHandler() {
+				return new ExceptionHandler() {
+					Logger logger = LoggerFactory.getLogger(RequestFactory.class);
+					@Override
+					public ServerFailure createServerFailure(Throwable throwable) {
+						logger.error(throwable.getMessage(), throwable);
+						return new ServerFailure(throwable.getMessage(), throwable.getClass().getName(), null, true);
 					}
 				};
 			}

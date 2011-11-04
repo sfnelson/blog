@@ -1,7 +1,6 @@
 package org.sfnelson.blog.server.service;
 
 import org.sfnelson.blog.server.domain.Task;
-import org.sfnelson.blog.server.domain.TaskUpdate;
 
 import java.util.List;
 

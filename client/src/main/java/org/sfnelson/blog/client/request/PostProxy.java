@@ -12,9 +12,9 @@ import java.util.Date;
  * Date: 19/10/11
  */
 @ProxyFor(value = Post.class, locator = DomainObjectLocator.class)
-public interface PostProxy extends EntryProxy {
-	String getTitle();
+public interface PostProxy extends EntryProxy, org.sfnelson.blog.domain.Post {
 	void setTitle(String title);
-
+	ContentProxy getContent();
+	AuthorProxy getAuthor();
 	EntityProxyId<PostProxy> stableId();
 }

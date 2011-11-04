@@ -81,6 +81,7 @@ public class AuthManager {
 			AuthSuccess authSuccess =
 					(AuthSuccess) verification.getAuthResponse();
 
+			req.getSession().setAttribute("oauth-id", authSuccess.getIdentity());
 			if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX))
 			{
 				FetchResponse fetchResp = (FetchResponse) authSuccess

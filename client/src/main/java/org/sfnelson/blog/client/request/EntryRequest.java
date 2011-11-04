@@ -14,12 +14,16 @@ import java.util.List;
  * Date: 19/10/11
  */
 @Service(value = EntryService.class, locator = ServiceLocator.class)
-@ExtraTypes({PostProxy.class, TaskUpdateProxy.class})
+@ExtraTypes({PostProxy.class, UpdateProxy.class})
 public interface EntryRequest extends RequestContext {
 	Request<List<EntryProxy>> getEntries(int start, int limit);
 	Request<List<PostProxy>> getPosts(int start, int limit);
 
-	Request<Void> create(EntryProxy post);
-	Request<Void> update(EntryProxy post);
-	Request<Void> delete(EntryProxy post);
+	Request<Void> createEntry(EntryProxy post);
+	Request<Void> updateEntry(EntryProxy post);
+	Request<Void> deleteEntry(EntryProxy post);
+
+	Request<Void> createContent(ContentProxy post);
+	Request<Void> updateContent(ContentProxy post);
+	Request<Void> deleteContent(ContentProxy post);
 }

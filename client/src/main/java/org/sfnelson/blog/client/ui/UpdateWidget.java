@@ -1,7 +1,6 @@
 package org.sfnelson.blog.client.ui;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.editor.client.Editor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.CssResource;
@@ -10,21 +9,19 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
-import org.sfnelson.blog.client.request.TaskProxy;
-import org.sfnelson.blog.client.request.TaskUpdateProxy;
-import org.sfnelson.blog.client.views.TaskUpdateView;
-import org.sfnelson.blog.client.widgets.*;
-import org.sfnelson.blog.shared.domain.TaskUpdateType;
-
-import java.util.Date;
+import org.sfnelson.blog.client.request.UpdateProxy;
+import org.sfnelson.blog.client.views.UpdateView;
+import org.sfnelson.blog.client.widgets.ArticlePanel;
+import org.sfnelson.blog.client.widgets.TaskNameWidget;
+import org.sfnelson.blog.client.widgets.TaskUpdateTypeWidget;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 31/10/11
  */
-public class TaskUpdateWidget extends Composite implements TaskUpdateView, ContentWidget.HasContentEditor {
+public class UpdateWidget extends Composite implements UpdateView, ContentWidget.HasContentEditor {
 
-	interface Binder extends UiBinder<ArticlePanel, TaskUpdateWidget> {}
+	interface Binder extends UiBinder<ArticlePanel, UpdateWidget> {}
 
 	interface Style extends CssResource {
 		String controls();
@@ -49,10 +46,10 @@ public class TaskUpdateWidget extends Composite implements TaskUpdateView, Conte
 	private boolean selected;
 	private boolean editing;
 
-	private EntryEditor<TaskUpdateProxy> editor;
+	private EntryEditor<UpdateProxy> editor;
 
 	@Inject
-	TaskUpdateWidget() {
+	UpdateWidget() {
 		initWidget(GWT.<Binder> create(Binder.class).createAndBindUi(this));
 
 		content.setParent(this);
@@ -81,7 +78,7 @@ public class TaskUpdateWidget extends Composite implements TaskUpdateView, Conte
 	}
 
 	@Override
-	public void setEditor(EntryEditor<TaskUpdateProxy> editor) {
+	public void setEditor(EntryEditor<UpdateProxy> editor) {
 		this.editor = editor;
 	}
 
@@ -111,7 +108,7 @@ public class TaskUpdateWidget extends Composite implements TaskUpdateView, Conte
 	}
 
 	@Override
-	public Editor<TaskUpdateProxy> asEditor() {
+	public Editor<UpdateProxy> asEditor() {
 		return editor;
 	}
 

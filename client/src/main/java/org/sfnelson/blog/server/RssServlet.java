@@ -6,6 +6,7 @@ import com.sun.syndication.feed.synd.*;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedOutput;
 import org.sfnelson.blog.server.domain.Post;
+import org.sfnelson.blog.shared.content.render.ContentRenderer;
 
 import javax.inject.Singleton;
 import javax.servlet.ServletException;
@@ -48,7 +49,7 @@ public class RssServlet extends HttpServlet {
 			feedEntry.setPublishedDate(entry.getPosted());
 			SyndContent content = new SyndContentImpl();
 			content.setType("text/html");
-			content.setValue(entry.getContent());
+			content.setValue(new ContentRenderer().render(entry.getContent()).asString());
 			feedEntry.setDescription(content);
 			entries.add(feedEntry);
 		}

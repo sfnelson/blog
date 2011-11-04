@@ -13,18 +13,14 @@ import java.util.Date;
  * Date: 18/10/11
  */
 @ProxyFor(value = Task.class, locator = DomainObjectLocator.class)
-public interface TaskProxy extends EntityProxy {
+public interface TaskProxy extends EntityProxy, org.sfnelson.blog.domain.Task {
 	void setTitle(String title);
-	String getTitle();
-	void setDescription(String description);
-	String getDescription();
-	Date getCreated();
+	void setContent(ContentProxy content);
+	ContentProxy getContent();
+	AuthorProxy getOwner();
 	void setCreated(Date date);
-	Date getCompleted();
 	void setCompleted(Date date);
-	Date getUpdated();
-	void setUpdated(Date date);
-	Date getAbandoned();
+	void setLastUpdate(Date date);
 	void setAbandoned(Date date);
 
 	EntityProxyId<TaskProxy> stableId();

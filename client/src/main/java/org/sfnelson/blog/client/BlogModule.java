@@ -31,7 +31,7 @@ public class BlogModule extends AbstractGinModule {
 		bind(AuthView.class).to(AuthWidget.class).in(Singleton.class);
 		bind(PostView.class).to(PostWidget.class);
 		bind(TaskView.class).to(TaskWidget.class);
-		bind(TaskUpdateView.class).to(TaskUpdateWidget.class);
+		bind(UpdateView.class).to(UpdateWidget.class);
 	}
 
 	@Provides

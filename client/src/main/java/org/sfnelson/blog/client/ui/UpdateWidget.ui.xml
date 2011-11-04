@@ -1,7 +1,8 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:widgets="urn:import:org.sfnelson.blog.client.widgets">
-    <ui:style type="org.sfnelson.blog.client.ui.TaskUpdateWidget.Style">
+             xmlns:widgets="urn:import:org.sfnelson.blog.client.widgets"
+             xmlns:blog="urn:import:org.sfnelson.blog.client.ui">
+    <ui:style type="org.sfnelson.blog.client.ui.UpdateWidget.Style">
         .controls {
             text-align: right;
             display: none;
@@ -74,7 +75,7 @@
             <widgets:TaskUpdateTypeWidget ui:field="type" styleName="{style.type}"></widgets:TaskUpdateTypeWidget>
             <widgets:TaskNameWidget ui:field="task"></widgets:TaskNameWidget>
         </widgets:HeaderPanel>
-        <widgets:ContentWidget ui:field="content" styleName="{style.content}"></widgets:ContentWidget>
+        <blog:ContentWidget ui:field="content" styleName="{style.content}"></blog:ContentWidget>
         <widgets:FooterPanel styleName="{style.controls}">
             <g:Button ui:field="save">Save</g:Button>
             <g:Button ui:field="cancel">Cancel</g:Button>

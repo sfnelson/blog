@@ -1,0 +1,31 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style type="org.sfnelson.blog.client.ui.ContentWidget.Style">
+        .controls {
+            display: none;
+        }
+        .edit .controls {
+            display: block;
+        }
+        .edit .viewer {
+            display: none;
+        }
+        .preview .viewer {
+            display: block;
+        }
+        .preview .previewButton {
+            display: none;
+        }
+        .viewer {
+            min-height: 2em;
+        }
+    </ui:style>
+    <g:HTMLPanel>
+        <div class="{style.controls}">
+            <g:TextArea ui:field="value"></g:TextArea>
+            <g:Button ui:field="preview" styleName="{style.previewButton}">Preview</g:Button>
+            <g:ValuePicker ui:field="type"></g:ValuePicker>
+        </div>
+        <g:HTML ui:field="viewer" styleName="{style.viewer}"></g:HTML>
+    </g:HTMLPanel>
+</ui:UiBinder>

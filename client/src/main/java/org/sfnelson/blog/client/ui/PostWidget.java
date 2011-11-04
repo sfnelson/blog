@@ -12,7 +12,6 @@ import com.google.inject.Inject;
 import org.sfnelson.blog.client.request.PostProxy;
 import org.sfnelson.blog.client.views.PostView;
 import org.sfnelson.blog.client.widgets.ArticlePanel;
-import org.sfnelson.blog.client.widgets.ContentWidget;
 import org.sfnelson.blog.client.widgets.DateWidget;
 import org.sfnelson.blog.client.widgets.TitleWidget;
 
