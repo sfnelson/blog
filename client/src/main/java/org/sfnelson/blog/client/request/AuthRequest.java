@@ -13,6 +13,7 @@ import org.sfnelson.blog.server.ServiceLocator;
 @Service(value = AuthManager.class, locator = ServiceLocator.class)
 public interface AuthRequest extends RequestContext {
 	Request<AuthProxy> login(String provider, String returnURL);
+	Request<AuthProxy> cookie(String authId);
 	Request<AuthProxy> state();
 	Request<AuthProxy> logout();
 }

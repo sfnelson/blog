@@ -1,6 +1,7 @@
 package org.sfnelson.blog.server;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.sun.org.apache.regexp.internal.RE;
 import org.apache.http.HttpRequest;
@@ -19,6 +20,7 @@ import org.openid4java.message.ParameterList;
 import org.openid4java.message.ax.AxMessage;
 import org.openid4java.message.ax.FetchRequest;
 import org.openid4java.message.ax.FetchResponse;
+import org.sfnelson.blog.server.mongo.Database;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -32,13 +34,19 @@ import java.util.List;
 public class AuthManager {
 
 	private final ConsumerManager manager;
+	private final Database database;
+	private final Provider<Auth> authProvider;
 
 	@Inject
-	AuthManager() {
-		manager = new ConsumerManager();
+	AuthManager(Database database, Provider<Auth> authProvider) {
+		this.manager = new ConsumerManager();
+		this.database = database;
+		this.authProvider = authProvider;
 	}
 
 	public Auth login(String authString, String returnURL) throws DiscoveryException, MessageException, ConsumerException {
+		logout();
+
 		String url = RequestFactoryServlet.getThreadLocalRequest().getRequestURL().toString();
 		url = url.substring(0, url.indexOf("gwtRequest"));
 		url += "oauth";
@@ -80,8 +88,17 @@ public class AuthManager {
 		{
 			AuthSuccess authSuccess =
 					(AuthSuccess) verification.getAuthResponse();
+			String id = authSuccess.getIdentity();
 
-			req.getSession().setAttribute("oauth-id", authSuccess.getIdentity());
+			req.getSession().setAttribute("oauth-id", id);
+
+			Auth auth = authProvider.get().init(database.find(Auth.class, id));
+			if (!auth.getAuthenticated()) {
+				auth.setAuthor(false);
+				database.persist(auth, id);
+				auth = authProvider.get().init(database.find(Auth.class, id));
+			}
+
 			if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX))
 			{
 				FetchResponse fetchResp = (FetchResponse) authSuccess
@@ -89,7 +106,10 @@ public class AuthManager {
 
 				List emails = fetchResp.getAttributeValues("email");
 				String email = (String) emails.get(0);
-				req.getSession().setAttribute("oauth-email", email);
+				if (auth.getEmail() == null || !auth.getEmail().equals(email)) {
+					auth.setEmail(email);
+					database.update(auth);
+				}
 			}
 
 			return (String) req.getSession().getAttribute("openid-returnURL");  // success
@@ -98,21 +118,29 @@ public class AuthManager {
 		return null;
 	}
 
+	public Auth cookie(String oauthId) {
+		String id = (String) getSession().getAttribute("oauth-id");
+
+		if (id == null) {
+			getSession().setAttribute("oauth-id", oauthId);
+		}
+
+		return state();
+	}
+
 	public Auth state() {
 		HttpSession session = getSession();
-		String email = (String) session.getAttribute("oauth-email");
-		if (email == null) {
-			return new Auth();
-		}
-		else {
-			return new Auth(email, false);
-		}
+		String id = (String) session.getAttribute("oauth-id");
+
+		if (id == null) return new Auth(null);
+		else return authProvider.get().init(database.find(Auth.class, id));
 	}
 
 	public Auth logout() {
 		HttpSession session = getSession();
+		session.setAttribute("oauth-id", null);
 		session.setAttribute("oauth-email", null);
-		return new Auth();
+		return new Auth(null);
 	}
 
 	private HttpSession getSession() {

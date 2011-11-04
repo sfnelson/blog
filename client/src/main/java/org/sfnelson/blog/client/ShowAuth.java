@@ -6,6 +6,7 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
@@ -51,8 +52,15 @@ public class ShowAuth extends AbstractActivity implements ActivityMapper, AuthWi
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		view.setPresenter(this);
-		request.get().state().fire(new Receiver());
 		panel.setWidget(view);
+
+		String oauthId = Cookies.getCookie("oauth-id");
+		if (oauthId != null) {
+			request.get().cookie(oauthId).fire(new Receiver());
+		}
+		else {
+			request.get().state().fire(new Receiver());
+		}
 	}
 
 	@Override
@@ -67,6 +75,7 @@ public class ShowAuth extends AbstractActivity implements ActivityMapper, AuthWi
 
 	@Override
 	public void logout() {
+		Cookies.removeCookie("oauth-id");
 		request.get().logout().fire(new Receiver());
 	}
 
@@ -85,6 +94,7 @@ public class ShowAuth extends AbstractActivity implements ActivityMapper, AuthWi
 			}
 			else {
 				view.setEmail(response.getEmail());
+				Cookies.setCookie("oauth-id", response.getAuthId());
 			}
 		}
 	}

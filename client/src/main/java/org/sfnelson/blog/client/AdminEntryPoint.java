@@ -6,6 +6,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
+import com.google.gwt.user.client.Cookies;
 import org.sfnelson.blog.client.places.ManagerPlace;
 import org.sfnelson.blog.client.widgets.RootPanel;
 

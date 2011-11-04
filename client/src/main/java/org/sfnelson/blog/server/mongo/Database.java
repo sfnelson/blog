@@ -3,6 +3,7 @@ package org.sfnelson.blog.server.mongo;
 import com.google.inject.Inject;
 import com.mongodb.*;
 import org.bson.types.ObjectId;
+import org.sfnelson.blog.server.Auth;
 import org.sfnelson.blog.server.domain.Content;
 import org.sfnelson.blog.server.domain.Post;
 import org.sfnelson.blog.server.domain.Task;
@@ -43,21 +44,24 @@ public class Database {
 		return getCollection(Post.class).find().sort(orderBy);
 	}
 
-	public DBObject find(Class<? extends DomainObject> type, ObjectId id) {
+	public DBObject find(Class<? extends DomainObject> type, Object id) {
 		return getCollection(type).findOne(new BasicDBObject("_id", id));
 	}
 
 	public void persist(Object object) {
+		persist(object, new ObjectId());
+	}
+
+	public void persist(Object object, Object id) {
 		DomainObject o = (DomainObject) object;
 		if (o.init.get("_id") != null) {
 			update(object);
 		}
 		else {
-			ObjectId id = new ObjectId();
 			o.delta.append("_id", id);
 			o.delta.append("version", 1);
 			getCollection(o.getClass()).insert(o.delta);
-			o.init(find(o.getClass(), o.getId()));
+			o.init(find(o.getClass(), id));
 		}
 	}
 
@@ -88,6 +92,9 @@ public class Database {
 		}
 		if (type == Content.class) {
 			return db.getCollection("content");
+		}
+		if (type == Auth.class) {
+			return db.getCollection("users");
 		}
 
 		throw new UnsupportedOperationException("don't know how to map " + type);

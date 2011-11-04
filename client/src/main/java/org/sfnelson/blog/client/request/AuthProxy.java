@@ -12,6 +12,7 @@ import org.sfnelson.blog.server.Auth;
 public interface AuthProxy extends ValueProxy {
 	String getRedirectURL();
 	String getEmail();
+	String getAuthId();
 	boolean getAuthenticated();
 	boolean getAuthor();
 }

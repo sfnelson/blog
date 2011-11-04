@@ -17,6 +17,11 @@ public class Author extends DomainObject<Author> implements org.sfnelson.blog.do
 	}
 
 	@Override
+	public ObjectId getId() {
+		return (ObjectId) super.getId();
+	}
+
+	@Override
 	public String getDisplayName() {
 		return (String) get("displayName");
 	}

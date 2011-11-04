@@ -20,13 +20,13 @@ public class DomainObject<T extends DomainObject<T>> {
 
 	@SuppressWarnings("unchecked")
 	public T init(DBObject init) {
-		this.init = init;
+		this.init = (init == null) ? new BasicDBObject() : init;
 		delta = new BasicDBObject();
 		return (T) this;
 	}
 
-	public ObjectId getId() {
-		return (ObjectId) get("_id");
+	public Object getId() {
+		return get("_id");
 	}
 
 	public Integer getVersion() {

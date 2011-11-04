@@ -80,7 +80,7 @@ public class DomainObjectLocator extends Locator<DomainObject, String> {
 
 	@Override
 	public String getId(DomainObject domainObject) {
-		ObjectId id = domainObject.getId();
+		ObjectId id = (ObjectId) domainObject.getId();
 		if (id != null) {
 			return id.toString();
 		}
