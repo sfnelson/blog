@@ -131,13 +131,14 @@ article textarea {
 }
 
 article header h1 input {
+    position: relative;
     width: 70%;
     font-size: 100%;
 }
 
 article header time {
     position: absolute;
-    top: 0;
+    top: 1em;
     right: 0;
     font-size: 80%;
     color: #aaa;
@@ -146,8 +147,8 @@ article header time {
 article footer {
     position: absolute;
     bottom: 0;
-    left: 0;
     right: 0;
     height: 2ex;
     padding: 0 1em 1ex 1em;
+    border: none;
 }

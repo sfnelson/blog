@@ -1,6 +1,7 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
@@ -17,21 +18,24 @@ public class ListItem extends Inline {
 	}
 
 	@Override
-	protected void open(SafeHtmlBuilder builder) {
-		builder.appendHtmlConstant("<li>");
+	protected void open(SafeHtmlBuilder builder, Input input) {
+		builder.appendHtmlConstant(input.annotate("li"));
 	}
 
 	@Override
-	protected void close(SafeHtmlBuilder builder) {
+	protected void close(SafeHtmlBuilder builder, Input input) {
 		builder.appendHtmlConstant("</li>");
 	}
 
 	@Override
 	public boolean checkTerminal(Input input) {
 		switch (input.current()) {
-			case '\n': break;
-			case 0: return false;
-			default: return true;
+			case '\n':
+				break;
+			case 0:
+				return false;
+			default:
+				return true;
 		}
 		// new line. either this item is continued on the new line or we're done.
 		int spaces = 0;

@@ -2,12 +2,13 @@ package org.sfnelson.blog.shared.content.render.wiki;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
-* Author: Stephen Nelson <stephen@sfnelson.org>
-* Date: 1/11/11
-*/
+ * Author: Stephen Nelson <stephen@sfnelson.org>
+ * Date: 1/11/11
+ */
 public abstract class Inline implements Element, Parent {
 
 	private Parent parent;
@@ -19,29 +20,41 @@ public abstract class Inline implements Element, Parent {
 	@Override
 	public SafeHtml parse(Input input) {
 		SafeHtmlBuilder builder = new SafeHtmlBuilder();
-		open(builder);
+		open(builder, input);
 		while (checkTerminal(input)) {
 			Element e = null;
 			switch (input.current()) {
-				case '*' : input.forward(); e = new Bold(this); break;
-				case '_' : input.forward(); e = new Italic(this); break;
-				case '`' : input.forward(); e = new Code(this); break;
-				case '^' : input.forward(); e = new Superscript(this); break;
-				case ',' :
+				case '*':
+					input.forward();
+					e = new Bold(this);
+					break;
+				case '_':
+					input.forward();
+					e = new Italic(this);
+					break;
+				case '`':
+					input.forward();
+					e = new Code(this);
+					break;
+				case '^':
+					input.forward();
+					e = new Superscript(this);
+					break;
+				case ',':
 					if (input.peek(1) == ',') {
 						input.forward();
 						input.forward();
 						e = new Subscript(this);
 					}
 					break;
-				case '~' :
+				case '~':
 					if (input.peek(1) == '~') {
 						input.forward();
 						input.forward();
 						e = new Strikeout(this);
 					}
 					break;
-				case '{' :
+				case '{':
 					if (input.peek(1) == '{' && input.peek(2) == '{') {
 						input.forward();
 						input.forward();
@@ -56,7 +69,7 @@ public abstract class Inline implements Element, Parent {
 			builder.append(e.parse(input));
 		}
 		eatTerminal(input);
-		close(builder);
+		close(builder, input);
 		return builder.toSafeHtml();
 	}
 
@@ -65,6 +78,7 @@ public abstract class Inline implements Element, Parent {
 		return parent.handleNewline(input);
 	}
 
-	protected abstract void open(SafeHtmlBuilder builder);
-	protected abstract void close(SafeHtmlBuilder builder);
+	protected abstract void open(SafeHtmlBuilder builder, Input input);
+
+	protected abstract void close(SafeHtmlBuilder builder, Input input);
 }

@@ -213,8 +213,8 @@
                 <artifactId>gwt-maven-plugin</artifactId>
                 <version>2.4.0</version>
                 <configuration>
-                    <module>org.sfnelson.blog.Admin</module>
-                    <runTarget>/publish.html</runTarget>
+                    <module>org.sfnelson.blog.Blog</module>
+                    <runTarget>/index.html</runTarget>
                     <strict>true</strict>
                     <logLevel>INFO</logLevel>
                     <style>${gwt.style}</style>

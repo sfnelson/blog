@@ -1,6 +1,7 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
@@ -9,12 +10,12 @@ import org.sfnelson.blog.shared.content.render.Input;
  */
 public class Quote extends Inline {
 	@Override
-	protected void open(SafeHtmlBuilder builder) {
-		builder.appendHtmlConstant("<blockquote>");
+	protected void open(SafeHtmlBuilder builder, Input input) {
+		builder.appendHtmlConstant(input.annotate("blockquote"));
 	}
 
 	@Override
-	protected void close(SafeHtmlBuilder builder) {
+	protected void close(SafeHtmlBuilder builder, Input input) {
 		builder.appendHtmlConstant("</blockquote>");
 	}
 
@@ -26,9 +27,9 @@ public class Quote extends Inline {
 					input.forward();
 					while (input.peek(1) == ' ') input.forward();
 					return true;
-				}
-				else return false;
-			case 0: return false;
+				} else return false;
+			case 0:
+				return false;
 		}
 		return true;
 	}

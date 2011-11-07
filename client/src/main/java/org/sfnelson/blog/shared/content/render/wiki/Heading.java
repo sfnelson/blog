@@ -1,6 +1,7 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
@@ -17,27 +18,30 @@ public class Heading extends Inline {
 	}
 
 	@Override
-	protected void open(SafeHtmlBuilder builder) {
-		builder.appendHtmlConstant("<h"+depth+">");
+	protected void open(SafeHtmlBuilder builder, Input input) {
+		builder.appendHtmlConstant(input.annotate("h" + depth));
 	}
 
 	@Override
-	protected void close(SafeHtmlBuilder builder) {
-		builder.appendHtmlConstant("</h"+depth+">\n");
+	protected void close(SafeHtmlBuilder builder, Input input) {
+		builder.appendHtmlConstant("</h" + depth + ">\n");
 	}
 
 	@Override
 	public boolean checkTerminal(Input input) {
 		switch (input.current()) {
-			case '=' :
+			case '=':
 				for (int i = 1; i < depth; i++) {
 					if (input.peek(i) != '=') return true;
 				}
 				if (input.peek(depth) != '\n') return true;
 				else return false;
-			case '\n': return false;
-			case 0   : return false;
-			default  : return true;
+			case '\n':
+				return false;
+			case 0:
+				return false;
+			default:
+				return true;
 		}
 	}
 

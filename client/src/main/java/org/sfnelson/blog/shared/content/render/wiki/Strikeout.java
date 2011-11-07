@@ -1,12 +1,13 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
-* Author: Stephen Nelson <stephen@sfnelson.org>
-* Date: 1/11/11
-*/
+ * Author: Stephen Nelson <stephen@sfnelson.org>
+ * Date: 1/11/11
+ */
 public class Strikeout extends Inline {
 
 	public Strikeout(Parent parent) {
@@ -16,10 +17,14 @@ public class Strikeout extends Inline {
 	@Override
 	public boolean checkTerminal(Input input) {
 		switch (input.current()) {
-			case '~': return input.peek(1) != '~';
-			case '\n': return handleNewline(input);
-			case 0: return false;
-			default: return true;
+			case '~':
+				return input.peek(1) != '~';
+			case '\n':
+				return handleNewline(input);
+			case 0:
+				return false;
+			default:
+				return true;
 		}
 	}
 
@@ -32,12 +37,12 @@ public class Strikeout extends Inline {
 	}
 
 	@Override
-	protected void open(SafeHtmlBuilder builder) {
-		builder.appendHtmlConstant("<span style='text-decoration: line-through;'>");
+	protected void open(SafeHtmlBuilder builder, Input input) {
+		builder.appendHtmlConstant(input.annotate("span style='text-decoration: line-through;'"));
 	}
 
 	@Override
-	protected void close(SafeHtmlBuilder builder) {
+	protected void close(SafeHtmlBuilder builder, Input input) {
 		builder.appendHtmlConstant("</span>");
 	}
 }

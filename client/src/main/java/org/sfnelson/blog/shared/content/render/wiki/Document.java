@@ -2,6 +2,7 @@ package org.sfnelson.blog.shared.content.render.wiki;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
@@ -22,8 +23,7 @@ public class Document implements Element {
 					for (int i = 0; i <= 6; i++) {
 						if (input.current() == '=') {
 							input.forward();
-						}
-						else {
+						} else {
 							block = new Heading(i);
 							break;
 						}
@@ -32,7 +32,8 @@ public class Document implements Element {
 				case '-':
 					for (int i = 0; true; i++) {
 						switch (input.peek(i)) {
-							case '-' : continue;
+							case '-':
+								continue;
 							case '\n':
 							case 0:
 								if (i >= 4) {

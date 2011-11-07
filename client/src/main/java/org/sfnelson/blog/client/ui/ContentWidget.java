@@ -31,6 +31,8 @@ public class ContentWidget extends Composite implements ValueAwareEditor<Content
 	}
 
 	interface Style extends CssResource {
+		String content();
+
 		String controls();
 
 		String edit();
@@ -175,13 +177,13 @@ public class ContentWidget extends Composite implements ValueAwareEditor<Content
 		}
 		switch (type.getValue()) {
 			case HTML:
-				toRender = renderer.renderHTML(value.getValue());
+				toRender = renderer.renderHTML(value.getValue(), true);
 				break;
 			case WIKI:
-				toRender = renderer.renderWiki(value.getValue());
+				toRender = renderer.renderWiki(value.getValue(), true);
 				break;
 			default:
-				toRender = renderer.renderText(value.getValue());
+				toRender = renderer.renderText(value.getValue(), true);
 				break;
 		}
 		viewer.setHTML(toRender);

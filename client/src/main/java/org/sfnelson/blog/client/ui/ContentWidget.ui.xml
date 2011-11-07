@@ -1,29 +1,70 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style type="org.sfnelson.blog.client.ui.ContentWidget.Style">
+        .content {
+            position: relative;
+        }
+
         .controls {
             display: none;
         }
+
+        .content {
+            padding-bottom: 2ex;
+        }
+
+        .content.edit {
+            padding-bottom: 0;
+        }
+
+        .content.preview {
+            padding-bottom: 4ex;
+        }
+
         .edit .value {
             border: dotted 1px #eee;
         }
+
         .edit .controls {
             display: block;
         }
+
         .edit .viewer {
             display: none;
         }
-        .preview .viewer {
-            display: block;
+
+        .previewButton {
+            position: relative;
+            top: -0.8ex;
         }
+
         .preview .previewButton {
             display: none;
         }
+
+        .preview .value {
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 0;
+            bottom: 4ex;
+            right: 50%;
+            width: auto;
+            height: auto;
+            padding-right: 0.25em;
+        }
+
+        .preview .viewer {
+            display: block;
+            margin-left: 50%;
+            padding-left: 0.25em;
+        }
+
         .viewer {
             min-height: 2em;
         }
     </ui:style>
-    <g:HTMLPanel>
+    <g:HTMLPanel styleName="{style.content}">
         <div class="{style.controls}">
             <g:TextArea ui:field="value" styleName="{style.value}"></g:TextArea>
             <g:Button ui:field="preview" styleName="{style.previewButton}">Preview</g:Button>

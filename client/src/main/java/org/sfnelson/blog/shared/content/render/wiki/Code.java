@@ -1,12 +1,13 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
-* Author: Stephen Nelson <stephen@sfnelson.org>
-* Date: 1/11/11
-*/
+ * Author: Stephen Nelson <stephen@sfnelson.org>
+ * Date: 1/11/11
+ */
 public class Code extends Inline {
 
 	public Code(Parent parent) {
@@ -16,10 +17,14 @@ public class Code extends Inline {
 	@Override
 	public boolean checkTerminal(Input input) {
 		switch (input.current()) {
-			case '`': return false;
-			case '\n': return handleNewline(input);
-			case 0: return false;
-			default: return true;
+			case '`':
+				return false;
+			case '\n':
+				return handleNewline(input);
+			case 0:
+				return false;
+			default:
+				return true;
 		}
 	}
 
@@ -29,12 +34,12 @@ public class Code extends Inline {
 	}
 
 	@Override
-	protected void open(SafeHtmlBuilder builder) {
-		builder.appendHtmlConstant("<code>");
+	protected void open(SafeHtmlBuilder builder, Input input) {
+		builder.appendHtmlConstant(input.annotate("code"));
 	}
 
 	@Override
-	protected void close(SafeHtmlBuilder builder) {
+	protected void close(SafeHtmlBuilder builder, Input input) {
 		builder.appendHtmlConstant("</code>");
 	}
 }
