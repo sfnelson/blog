@@ -1,14 +1,14 @@
 package org.sfnelson.blog.server;
 
+import java.io.IOException;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.openid4java.OpenIDException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.openid4java.OpenIDException;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -35,10 +35,9 @@ public class OAuthServlet extends HttpServlet {
 			resp.setStatus(HttpServletResponse.SC_OK);
 			resp.setContentType("text/html");
 			resp.getWriter().append("<html><head><title>Done</title>" +
-				"<script>window.opener.location.href='" + returnURL + "#auth:ready';</script>" +
-				"</head></html>\r\n\r\n");
-		}
-		catch (OpenIDException ex) {
+					"<script>window.opener.location.href='" + returnURL + "#auth:ready';</script>" +
+					"</head></html>\r\n\r\n");
+		} catch (OpenIDException ex) {
 			throw new ServletException(ex);
 		}
 	}

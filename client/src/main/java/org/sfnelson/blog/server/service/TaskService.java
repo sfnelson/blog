@@ -1,8 +1,8 @@
 package org.sfnelson.blog.server.service;
 
-import org.sfnelson.blog.server.domain.Task;
-
 import java.util.List;
+
+import org.sfnelson.blog.server.domain.Task;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface TaskService {
 	List<Task> getCurrentTasks(int start, int limit);
+
 	void createTask(Task task);
+
 	void updateTask(Task task);
 }

@@ -1,13 +1,12 @@
 package org.sfnelson.blog.server.domain;
 
+import java.util.Date;
+
 import com.google.inject.Inject;
-import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
 import org.sfnelson.blog.server.DomainObjectLocator;
 import org.sfnelson.blog.server.mongo.DomainObject;
 import org.sfnelson.blog.shared.domain.TaskUpdateType;
-
-import java.util.Date;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -45,8 +44,7 @@ public class Update extends DomainObject<Update> implements Entry {
 		if (author != null) {
 			ObjectId id = author.getId();
 			delta.put("author", id);
-		}
-		else {
+		} else {
 			delta.remove("author");
 		}
 	}
@@ -62,8 +60,7 @@ public class Update extends DomainObject<Update> implements Entry {
 	public void setContent(Content content) {
 		if (content == null) {
 			delta.put("content", null);
-		}
-		else {
+		} else {
 			if (content.getId() == null) {
 				locator.getContentService().createContent(content);
 			}

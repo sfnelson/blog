@@ -9,14 +9,20 @@ import com.google.gwt.user.client.ui.IsWidget;
 public interface AuthView extends IsWidget {
 
 	void setPresenter(Presenter presenter);
+
 	void setLogin();
+
 	void setEmail(String address);
+
 	void showDialog(String url);
+
 	void hideDialog();
 
 	interface Presenter {
 		void login(String value);
+
 		void update();
+
 		void logout();
 	}
 }

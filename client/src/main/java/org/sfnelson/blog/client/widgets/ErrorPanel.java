@@ -3,7 +3,10 @@ package org.sfnelson.blog.client.widgets;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
+
 import com.google.inject.Inject;
 import org.sfnelson.blog.client.BlogResources;
 import org.sfnelson.blog.client.views.ErrorView;
@@ -50,7 +53,7 @@ public class ErrorPanel extends Composite implements ErrorView {
 			}
 		}, 5000);
 	}
-	
+
 	void hide() {
 		container.removeStyleName(style.show());
 	}

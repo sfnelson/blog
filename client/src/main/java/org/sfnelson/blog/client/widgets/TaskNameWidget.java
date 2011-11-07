@@ -1,14 +1,13 @@
 package org.sfnelson.blog.client.widgets;
 
 import com.google.gwt.editor.client.EditorDelegate;
-import com.google.gwt.editor.client.HasEditorDelegate;
 import com.google.gwt.editor.client.ValueAwareEditor;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.web.bindery.event.shared.HandlerRegistration;
+
 import org.sfnelson.blog.client.request.TaskProxy;
 
 /**

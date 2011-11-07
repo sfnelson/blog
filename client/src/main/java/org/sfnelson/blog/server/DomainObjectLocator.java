@@ -1,8 +1,9 @@
 package org.sfnelson.blog.server;
 
+import com.google.web.bindery.requestfactory.shared.Locator;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.web.bindery.requestfactory.shared.Locator;
 import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
 import org.sfnelson.blog.server.domain.*;
@@ -41,20 +42,15 @@ public class DomainObjectLocator extends Locator<DomainObject, String> {
 	public DomainObject create(Class<? extends DomainObject> clazz) {
 		if (clazz == Post.class) {
 			return posts.get();
-		}
-		else if (clazz == Task.class) {
+		} else if (clazz == Task.class) {
 			return tasks.get();
-		}
-		else if (clazz == Update.class) {
+		} else if (clazz == Update.class) {
 			return updates.get();
-		}
-		else if (clazz == Author.class) {
+		} else if (clazz == Author.class) {
 			return authors.get();
-		}
-		else if (clazz == Content.class) {
+		} else if (clazz == Content.class) {
 			return content.get();
-		}
-		else {
+		} else {
 			throw new ClassCastException("unknown type: " + clazz);
 		}
 	}
@@ -83,8 +79,7 @@ public class DomainObjectLocator extends Locator<DomainObject, String> {
 		ObjectId id = (ObjectId) domainObject.getId();
 		if (id != null) {
 			return id.toString();
-		}
-		else {
+		} else {
 			return null;
 		}
 	}

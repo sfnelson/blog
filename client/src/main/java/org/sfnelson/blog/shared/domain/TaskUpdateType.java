@@ -1,9 +1,9 @@
 package org.sfnelson.blog.shared.domain;
 
 /**
-* Author: Stephen Nelson <stephen@sfnelson.org>
-* Date: 31/10/11
-*/
+ * Author: Stephen Nelson <stephen@sfnelson.org>
+ * Date: 31/10/11
+ */
 public enum TaskUpdateType {
 
 	CREATED("CREATED"),

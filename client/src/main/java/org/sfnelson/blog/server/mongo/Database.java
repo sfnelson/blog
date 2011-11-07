@@ -56,8 +56,7 @@ public class Database {
 		DomainObject o = (DomainObject) object;
 		if (o.init.get("_id") != null) {
 			update(object);
-		}
-		else {
+		} else {
 			o.delta.append("_id", id);
 			o.delta.append("version", 1);
 			getCollection(o.getClass()).insert(o.delta);

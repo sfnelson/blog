@@ -1,21 +1,21 @@
 package org.sfnelson.blog.server;
 
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.sun.syndication.feed.synd.*;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedOutput;
-import org.sfnelson.blog.server.domain.Post;
-import org.sfnelson.blog.shared.content.render.ContentRenderer;
-
 import javax.inject.Singleton;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
+import org.sfnelson.blog.server.domain.Post;
+import org.sfnelson.blog.shared.content.render.ContentRenderer;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -62,8 +62,7 @@ public class RssServlet extends HttpServlet {
 			resp.setStatus(HttpServletResponse.SC_OK);
 			resp.setContentType("application/rss+xml");
 			output.output(feed, resp.getWriter());
-		}
-		catch (FeedException ex) {
+		} catch (FeedException ex) {
 			resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}

@@ -6,6 +6,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.gwt.place.shared.PlaceController;
+
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import org.sfnelson.blog.client.request.AuthRequest;

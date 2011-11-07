@@ -1,10 +1,10 @@
 package org.sfnelson.blog.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.UmbrellaException;
+
+import com.google.inject.Inject;
 import org.sfnelson.blog.client.views.ErrorView;
 
 /**
@@ -46,16 +46,14 @@ public class ExceptionHandler implements GWT.UncaughtExceptionHandler {
 	private Throwable unpack(UmbrellaException e) {
 		if (e.getCauses().size() == 1) {
 			return e.getCauses().iterator().next();
-		}
-		else {
+		} else {
 			String message = null;
 			Throwable last = null;
 			for (Throwable t : e.getCauses()) {
 				if (message == null || message.equals(t.getMessage())) {
 					message = t.getMessage();
 					last = t;
-				}
-				else {
+				} else {
 					return e; // different messages, return all.
 				}
 			}

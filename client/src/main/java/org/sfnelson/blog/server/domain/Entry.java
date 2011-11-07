@@ -8,9 +8,14 @@ import java.util.Date;
  */
 public interface Entry extends org.sfnelson.blog.domain.Entry {
 	Date getPosted();
+
 	void setPosted(Date posted);
+
 	Author getAuthor();
+
 	void setAuthor(Author author);
+
 	Content getContent();
+
 	void setContent(Content message);
 }

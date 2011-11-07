@@ -1,12 +1,9 @@
 package org.sfnelson.blog.client.editors;
 
-import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorDelegate;
 import com.google.gwt.editor.client.ValueAwareEditor;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
-
-import java.util.Date;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>

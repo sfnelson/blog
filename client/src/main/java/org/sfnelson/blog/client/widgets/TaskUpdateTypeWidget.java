@@ -1,10 +1,9 @@
 package org.sfnelson.blog.client.widgets;
 
-import com.google.gwt.editor.client.EditorDelegate;
 import com.google.gwt.editor.client.LeafValueEditor;
-import com.google.gwt.editor.client.ValueAwareEditor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+
 import org.sfnelson.blog.shared.domain.TaskUpdateType;
 
 /**
@@ -26,8 +25,7 @@ public class TaskUpdateTypeWidget extends Composite implements LeafValueEditor<T
 		this.type = type;
 		if (type != null) {
 			this.value.setText(type.name());
-		}
-		else {
+		} else {
 			this.value.setText("");
 		}
 	}

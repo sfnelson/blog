@@ -1,13 +1,13 @@
 package org.sfnelson.blog.client.request;
 
+import java.util.List;
+
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.Service;
-import org.sfnelson.blog.server.ServiceLocator;
-import org.sfnelson.blog.server.TaskManager;
-import org.sfnelson.blog.server.service.TaskService;
 
-import java.util.List;
+import org.sfnelson.blog.server.ServiceLocator;
+import org.sfnelson.blog.server.service.TaskService;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -16,6 +16,8 @@ import java.util.List;
 @Service(value = TaskService.class, locator = ServiceLocator.class)
 public interface TaskRequest extends RequestContext {
 	Request<List<TaskProxy>> getCurrentTasks(int start, int limit);
+
 	Request<Void> createTask(TaskProxy task);
+
 	Request<Void> updateTask(TaskProxy task);
 }

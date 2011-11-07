@@ -6,6 +6,8 @@ package org.sfnelson.blog.client.request;
  */
 public interface RequestFactory extends com.google.web.bindery.requestfactory.shared.RequestFactory {
 	TaskRequest taskRequest();
+
 	EntryRequest entryRequest();
+
 	AuthRequest authRequest();
 }

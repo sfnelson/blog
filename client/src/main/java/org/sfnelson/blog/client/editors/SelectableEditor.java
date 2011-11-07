@@ -7,6 +7,7 @@ package org.sfnelson.blog.client.editors;
 public interface SelectableEditor {
 
 	boolean select();
+
 	boolean deselect();
 
 }

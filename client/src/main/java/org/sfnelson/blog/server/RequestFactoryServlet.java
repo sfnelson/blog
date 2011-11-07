@@ -1,9 +1,9 @@
 package org.sfnelson.blog.server;
 
-import com.google.inject.Inject;
 import com.google.web.bindery.requestfactory.server.ExceptionHandler;
 import com.google.web.bindery.requestfactory.server.ServiceLayerDecorator;
 
+import com.google.inject.Inject;
 import javax.inject.Singleton;
 
 /**

@@ -3,6 +3,7 @@ package org.sfnelson.blog.client.events;
 import com.google.web.bindery.event.shared.Event;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
+
 import org.sfnelson.blog.client.request.TaskProxy;
 import org.sfnelson.blog.shared.domain.TaskUpdateType;
 

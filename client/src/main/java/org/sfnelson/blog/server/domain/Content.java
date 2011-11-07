@@ -1,7 +1,6 @@
 package org.sfnelson.blog.server.domain;
 
 import com.google.inject.Inject;
-import com.mongodb.DBObject;
 import org.sfnelson.blog.server.mongo.DomainObject;
 
 /**

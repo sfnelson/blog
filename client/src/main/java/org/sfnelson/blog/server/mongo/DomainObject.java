@@ -2,7 +2,6 @@ package org.sfnelson.blog.server.mongo;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import org.bson.types.ObjectId;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>

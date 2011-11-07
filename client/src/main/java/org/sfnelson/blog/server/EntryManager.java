@@ -1,19 +1,17 @@
 package org.sfnelson.blog.server;
 
+import java.util.Date;
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.web.bindery.requestfactory.shared.Locator;
 import com.mongodb.DBObject;
 import org.sfnelson.blog.server.domain.*;
 import org.sfnelson.blog.server.mongo.Database;
-import org.sfnelson.blog.server.mongo.DomainObject;
 import org.sfnelson.blog.server.security.RequiresLogin;
 import org.sfnelson.blog.server.service.ContentService;
 import org.sfnelson.blog.server.service.EntryService;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -101,7 +99,7 @@ public class EntryManager implements EntryService, ContentService {
 
 	public List<Post> getEntries() {
 		List<Post> entries = Lists.newArrayList();
-		for (DBObject entry: database.findPosts()) {
+		for (DBObject entry : database.findPosts()) {
 			entries.add(posts.get().init(entry));
 		}
 		return entries;
@@ -111,11 +109,10 @@ public class EntryManager implements EntryService, ContentService {
 	public List<Entry> getEntries(int start, int limit) {
 		List<Entry> entries = Lists.newArrayList();
 		int count = 0;
-		for (DBObject entry: database.findEntries().skip(start)) {
+		for (DBObject entry : database.findEntries().skip(start)) {
 			if (entry.get("type").equals("post")) {
 				entries.add(posts.get().init(entry));
-			}
-			else {
+			} else {
 				entries.add(updates.get().init(entry));
 			}
 			if (++count >= limit) break;
@@ -127,7 +124,7 @@ public class EntryManager implements EntryService, ContentService {
 	public List<Post> getPosts(int start, int limit) {
 		List<Post> entries = Lists.newArrayList();
 		int count = 0;
-		for (DBObject entry: database.findPosts().skip(start)) {
+		for (DBObject entry : database.findPosts().skip(start)) {
 			entries.add(posts.get().init(entry));
 			if (++count >= limit) break;
 		}

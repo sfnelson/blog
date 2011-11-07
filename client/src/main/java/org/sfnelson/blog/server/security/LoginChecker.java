@@ -1,11 +1,9 @@
 package org.sfnelson.blog.server.security;
 
+import javax.servlet.http.HttpSession;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.sfnelson.blog.server.RequestFactoryServlet;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>

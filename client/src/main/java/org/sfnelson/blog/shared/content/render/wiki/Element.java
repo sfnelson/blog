@@ -1,6 +1,7 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
+
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**

@@ -1,17 +1,17 @@
 package org.sfnelson.blog.server;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
+import java.util.Set;
+
 import com.google.web.bindery.requestfactory.server.ServiceLayerDecorator;
 import com.google.web.bindery.requestfactory.shared.Locator;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.Service;
 import com.google.web.bindery.requestfactory.shared.ServiceLocator;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import java.security.Provider;
-import java.util.Set;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -40,7 +40,7 @@ public class InjectingServiceLayerDecorator extends ServiceLayerDecorator {
 		if (serviceLocator == null) return null;
 
 		return injector.getInstance(serviceLocator)
-					.getInstance(requestContext.getAnnotation(Service.class).value());
+				.getInstance(requestContext.getAnnotation(Service.class).value());
 	}
 
 	@Override

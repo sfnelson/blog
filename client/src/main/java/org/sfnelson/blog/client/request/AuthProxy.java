@@ -2,6 +2,7 @@ package org.sfnelson.blog.client.request;
 
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 import com.google.web.bindery.requestfactory.shared.ValueProxy;
+
 import org.sfnelson.blog.server.Auth;
 
 /**
@@ -11,8 +12,12 @@ import org.sfnelson.blog.server.Auth;
 @ProxyFor(Auth.class)
 public interface AuthProxy extends ValueProxy {
 	String getRedirectURL();
+
 	String getEmail();
+
 	String getAuthId();
+
 	boolean getAuthenticated();
+
 	boolean getAuthor();
 }

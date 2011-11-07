@@ -6,11 +6,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.impl.FocusImpl;
-
-import java.util.Iterator;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>

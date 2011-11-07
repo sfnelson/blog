@@ -1,14 +1,12 @@
 package org.sfnelson.blog.client.widgets;
 
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseEvent;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
+
 import org.sfnelson.blog.client.views.NavigationView;
 
 /**

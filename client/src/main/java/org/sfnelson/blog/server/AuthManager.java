@@ -1,11 +1,12 @@
 package org.sfnelson.blog.server;
 
+import java.security.MessageDigest;
+import java.util.List;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.Singleton;
-import com.sun.org.apache.regexp.internal.RE;
-import org.apache.http.HttpRequest;
-import org.apache.http.io.SessionInputBuffer;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.openid4java.association.AssociationException;
 import org.openid4java.consumer.ConsumerException;
 import org.openid4java.consumer.ConsumerManager;
@@ -21,12 +22,6 @@ import org.openid4java.message.ax.AxMessage;
 import org.openid4java.message.ax.FetchRequest;
 import org.openid4java.message.ax.FetchResponse;
 import org.sfnelson.blog.server.mongo.Database;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.security.MessageDigest;
-import java.util.List;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -87,8 +82,7 @@ public class AuthManager {
 
 		// examine the verification result and extract the verified identifier
 		Identifier verified = verification.getVerifiedId();
-		if (verified != null)
-		{
+		if (verified != null) {
 			AuthSuccess authSuccess =
 					(AuthSuccess) verification.getAuthResponse();
 			byte[] idHash = digest.digest(authSuccess.getIdentity().getBytes());
@@ -103,8 +97,7 @@ public class AuthManager {
 				auth = authProvider.get().init(database.find(Auth.class, id));
 			}
 
-			if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX))
-			{
+			if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX)) {
 				FetchResponse fetchResp = (FetchResponse) authSuccess
 						.getExtension(AxMessage.OPENID_NS_AX);
 

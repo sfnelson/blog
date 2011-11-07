@@ -1,17 +1,16 @@
 package org.sfnelson.blog.client.util;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import java.util.List;
+import java.util.Set;
+
 import com.google.gwt.editor.client.Editor;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.EntityProxyChange;
 import com.google.web.bindery.requestfactory.shared.EntityProxyId;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -24,7 +23,7 @@ public abstract class RFListManager<T extends EntityProxy, E extends Editor<T>> 
 
 	@SuppressWarnings("unchecked")
 	public RFListManager(EventBus eventBus, Class<? extends T>... type) {
-		for (Class<? extends T> t: type) {
+		for (Class<? extends T> t : type) {
 			EntityProxyChange.registerForProxyType(eventBus, t, new EntityProxyChange.Handler() {
 				@Override
 				public void onProxyChange(EntityProxyChange event) {
@@ -57,10 +56,10 @@ public abstract class RFListManager<T extends EntityProxy, E extends Editor<T>> 
 	public void update(List<? extends T> update) {
 		Set<EntityProxyId<? extends T>> toRemove = Sets.newHashSet();
 		toRemove.addAll(current);
-		for (T entity: update) {
+		for (T entity : update) {
 			toRemove.remove(entity.stableId());
 		}
-		for (EntityProxyId<? extends T> id: toRemove) {
+		for (EntityProxyId<? extends T> id : toRemove) {
 			remove(id);
 			current.remove(id);
 		}
@@ -70,8 +69,7 @@ public abstract class RFListManager<T extends EntityProxy, E extends Editor<T>> 
 			EntityProxyId<T> id = (EntityProxyId<T>) entity.stableId();
 			if (current.size() > i && current.get(i).equals(id)) {
 				continue;
-			}
-			else {
+			} else {
 				add(created.size() + i, entity);
 				current.add(i, id);
 			}
@@ -79,5 +77,6 @@ public abstract class RFListManager<T extends EntityProxy, E extends Editor<T>> 
 	}
 
 	protected abstract void add(int position, T entity);
+
 	protected abstract void remove(EntityProxyId<? extends T> id);
 }

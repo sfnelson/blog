@@ -1,6 +1,7 @@
 package org.sfnelson.blog.client.views;
 
 import com.google.gwt.user.client.ui.IsWidget;
+
 import org.sfnelson.blog.client.request.TaskProxy;
 import org.sfnelson.blog.client.util.EditorList;
 

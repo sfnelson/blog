@@ -1,9 +1,8 @@
 package org.sfnelson.blog.client.views;
 
-import com.google.gwt.editor.client.Editor;
-import com.google.gwt.editor.client.IsEditor;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
+
 import org.sfnelson.blog.client.editors.RootEditor;
 
 /**
@@ -13,15 +12,22 @@ import org.sfnelson.blog.client.editors.RootEditor;
 public interface ModalEditorView extends IsWidget {
 
 	void focus();
+
 	void edit();
+
 	void view();
+
 	void select();
+
 	void deselect();
 
 	interface Editor<T extends EntityProxy> extends RootEditor<T> {
 		void requestEdit();
+
 		void requestSubmit();
+
 		void requestCancel();
+
 		void requestSelect();
 	}
 }

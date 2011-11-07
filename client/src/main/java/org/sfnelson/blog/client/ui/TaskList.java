@@ -1,27 +1,27 @@
 package org.sfnelson.blog.client.ui;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import org.sfnelson.blog.client.editors.EditorSource;
 import org.sfnelson.blog.client.editors.ModalEditor;
-import org.sfnelson.blog.client.editors.RootEditor;
+import org.sfnelson.blog.client.request.TaskProxy;
 import org.sfnelson.blog.client.util.EditorList;
 import org.sfnelson.blog.client.views.TaskView;
 import org.sfnelson.blog.client.views.TasksView;
-import org.sfnelson.blog.client.request.TaskProxy;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 18/10/11
  */
 public class TaskList extends Composite implements TasksView {
-	interface Binder extends UiBinder<FlowPanel, TaskList> {}
+	interface Binder extends UiBinder<FlowPanel, TaskList> {
+	}
 
 	private class Source implements EditorSource<TaskProxy> {
 		@Override
@@ -43,14 +43,15 @@ public class TaskList extends Composite implements TasksView {
 	private final Provider<TaskView> viewProvider;
 	private final EditorList<TaskProxy> list;
 
-	@UiField FlowPanel tasks;
+	@UiField
+	FlowPanel tasks;
 
 	@Inject
 	TaskList(Provider<TaskView> viewProvider) {
 		this.viewProvider = viewProvider;
 		this.list = new EditorList<TaskProxy>(new Source());
 
-		initWidget(GWT.<Binder> create(Binder.class).createAndBindUi(this));
+		initWidget(GWT.<Binder>create(Binder.class).createAndBindUi(this));
 	}
 
 	@Override

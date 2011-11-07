@@ -1,6 +1,5 @@
 package org.sfnelson.blog.server.service;
 
-import org.bson.types.ObjectId;
 import org.sfnelson.blog.server.domain.Content;
 
 /**
@@ -9,6 +8,8 @@ import org.sfnelson.blog.server.domain.Content;
  */
 public interface ContentService {
 	public void createContent(Content content);
+
 	public void updateContent(Content content);
+
 	public void deleteContent(Content content);
 }

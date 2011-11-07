@@ -3,6 +3,7 @@ package org.sfnelson.blog.client.request;
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.EntityProxyId;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
+
 import org.sfnelson.blog.server.DomainObjectLocator;
 import org.sfnelson.blog.server.domain.Author;
 

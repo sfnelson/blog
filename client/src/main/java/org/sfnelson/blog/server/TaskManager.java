@@ -1,18 +1,17 @@
 package org.sfnelson.blog.server;
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.mongodb.DBObject;
+import org.sfnelson.blog.server.domain.Task;
 import org.sfnelson.blog.server.domain.Update;
 import org.sfnelson.blog.server.mongo.Database;
-import org.sfnelson.blog.server.domain.Task;
 import org.sfnelson.blog.server.security.RequiresLogin;
 import org.sfnelson.blog.server.service.TaskService;
 import org.sfnelson.blog.shared.domain.TaskUpdateType;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>

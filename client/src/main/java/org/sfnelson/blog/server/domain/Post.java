@@ -1,17 +1,13 @@
 package org.sfnelson.blog.server.domain;
 
-import com.google.common.collect.Lists;
+import java.util.Date;
+import java.util.List;
+
 import com.google.inject.Inject;
-import com.google.web.bindery.requestfactory.shared.Locator;
-import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
 import org.sfnelson.blog.domain.Comment;
 import org.sfnelson.blog.server.DomainObjectLocator;
 import org.sfnelson.blog.server.mongo.DomainObject;
-
-import java.util.AbstractList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -67,8 +63,7 @@ public class Post extends DomainObject<Post> implements Entry, org.sfnelson.blog
 	public void setContent(Content content) {
 		if (content == null) {
 			delta.put("content", null);
-		}
-		else {
+		} else {
 			if (content.getId() == null) {
 				locator.getContentService().createContent(content);
 			}
