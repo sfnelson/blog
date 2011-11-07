@@ -2,9 +2,6 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style type="org.sfnelson.blog.client.ui.AuthWidget.Style">
-        .hidden {
-            display: none;
-        }
 
         .login {
             color: transparent;
@@ -48,6 +45,10 @@
         .provider:hover {
             background-color: #f1f1f1;
             cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
         }
     </ui:style>
     <g:FlowPanel>

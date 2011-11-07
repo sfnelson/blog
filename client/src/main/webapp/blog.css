@@ -3,8 +3,7 @@ body {
 }
 
 body > header {
-    padding-top: 4ex;
-    padding-bottom: 4em;
+    padding: 4ex 0;
     text-align: right;
 }
 

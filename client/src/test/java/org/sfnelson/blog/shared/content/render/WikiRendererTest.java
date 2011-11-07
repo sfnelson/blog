@@ -2,6 +2,7 @@ package org.sfnelson.blog.shared.content.render;
 
 import org.junit.Test;
 import org.sfnelson.blog.domain.Content;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -84,13 +85,13 @@ public class WikiRendererTest {
 	@Test
 	public void testStrikeout() throws Exception {
 		Content content = new TestContent("~~strikeout~~", Content.Type.WIKI);
-		assertEquals("<p><span style='text-decoration: line-through;'>strikeout</span></p>",
+		assertEquals("<p><strike>strikeout</strike></p>",
 				new ContentRenderer().render(content).asString());
 		content = new TestContent("~~foo", Content.Type.WIKI);
-		assertEquals("<p><span style='text-decoration: line-through;'>foo</span></p>",
+		assertEquals("<p><strike>foo</strike></p>",
 				new ContentRenderer().render(content).asString());
 		content = new TestContent("~~foo\n\n", Content.Type.WIKI);
-		assertEquals("<p><span style='text-decoration: line-through;'>foo</span></p>",
+		assertEquals("<p><strike>foo</strike></p>",
 				new ContentRenderer().render(content).asString());
 	}
 
@@ -109,14 +110,14 @@ public class WikiRendererTest {
 	@Test
 	public void testStrike() throws Exception {
 		Content content = new TestContent("*~~strike~~ works too*", Content.Type.WIKI);
-		assertEquals("<p><strong><span style='text-decoration: line-through;'>strike</span> works too</strong></p>",
+		assertEquals("<p><strong><strike>strike</strike> works too</strong></p>",
 				new ContentRenderer().render(content).asString());
 	}
 
 	@Test
 	public void testAsWellAs() throws Exception {
 		Content content = new TestContent("~~as well as _this_ way round~~", Content.Type.WIKI);
-		assertEquals("<p><span style='text-decoration: line-through;'>as well as <em>this</em> way round</span></p>", new ContentRenderer().render(content).asString());
+		assertEquals("<p><strike>as well as <em>this</em> way round</strike></p>", new ContentRenderer().render(content).asString());
 	}
 
 	@Test
@@ -172,9 +173,7 @@ public class WikiRendererTest {
 				"-----\n" +
 				"---- no rule\n" +
 				"----", Content.Type.WIKI);
-		assertEquals("<hr />\n" +
-				"<hr />\n" +
-				"<p>---- no rule</p><hr />\n",
+		assertEquals("<hr><hr><p>---- no rule</p><hr>",
 				new ContentRenderer().render(content).asString());
 	}
 
@@ -209,8 +208,8 @@ public class WikiRendererTest {
 	public void testList2() throws Exception {
 		Content content = new TestContent(
 				"  * A long list\n" +
-				"  item. It just\n" +
-				"    goes on and on!", Content.Type.WIKI);
+						"  item. It just\n" +
+						"    goes on and on!", Content.Type.WIKI);
 		assertEquals("<ul><li>A long list item. It just goes on and on!</li></ul>",
 				new ContentRenderer().render(content).asString());
 	}
@@ -219,7 +218,7 @@ public class WikiRendererTest {
 	public void testList3() throws Exception {
 		Content content = new TestContent(
 				"  * List A\n" +
-				" * List B\n", Content.Type.WIKI);
+						" * List B\n", Content.Type.WIKI);
 		assertEquals("<ul><li>List A</li></ul><ul><li>List B</li></ul>",
 				new ContentRenderer().render(content).asString());
 	}
@@ -228,7 +227,7 @@ public class WikiRendererTest {
 	public void testList4() throws Exception {
 		Content content = new TestContent(
 				"  * *Item A\n  is bold*\n" +
-				"  * _Item B\n  is italic", Content.Type.WIKI);
+						"  * _Item B\n  is italic", Content.Type.WIKI);
 		assertEquals("<ul><li><strong>Item A is bold</strong></li><li><em>Item B is italic</em></li></ul>",
 				new ContentRenderer().render(content).asString());
 	}
@@ -237,8 +236,8 @@ public class WikiRendererTest {
 	public void testList5() throws Exception {
 		Content content = new TestContent(
 				"  # List A\n" +
-				"  * List B\n" +
-				"Not a list", Content.Type.WIKI);
+						"  * List B\n" +
+						"Not a list", Content.Type.WIKI);
 		assertEquals("<ol><li>List A</li></ol><ul><li>List B</li></ul><p>Not a list</p>",
 				new ContentRenderer().render(content).asString());
 	}
@@ -258,7 +257,7 @@ public class WikiRendererTest {
 		assertEquals("<p>Foo <code>bar</code> baz</p>",
 				new ContentRenderer().render(content).asString());
 		content = new TestContent("Foo ~~bar~~ baz", Content.Type.WIKI);
-		assertEquals("<p>Foo <span style='text-decoration: line-through;'>bar</span> baz</p>",
+		assertEquals("<p>Foo <strike>bar</strike> baz</p>",
 				new ContentRenderer().render(content).asString());
 		content = new TestContent("Foo ^bar^ baz", Content.Type.WIKI);
 		assertEquals("<p>Foo <sup>bar</sup> baz</p>",

@@ -2,9 +2,9 @@ package org.sfnelson.blog.shared.content.render;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.SimpleHtmlSanitizer;
 
 import org.sfnelson.blog.domain.Content;
+import org.sfnelson.blog.shared.content.render.html.HtmlSanitizer;
 import org.sfnelson.blog.shared.content.render.wiki.Document;
 
 /**
@@ -44,7 +44,7 @@ public class ContentRenderer {
 	}
 
 	public SafeHtml renderHTML(String value, boolean annotated) {
-		return SimpleHtmlSanitizer.sanitizeHtml(value);
+		return HtmlSanitizer.sanitizeHtml(value);
 	}
 
 	public SafeHtml renderWiki(String value, boolean annotated) {

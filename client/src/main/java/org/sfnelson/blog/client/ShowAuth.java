@@ -1,36 +1,37 @@
 package org.sfnelson.blog.client;
 
+import java.util.Date;
+
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import org.sfnelson.blog.client.places.AuthPlace;
-import org.sfnelson.blog.client.places.ManagerPlace;
+import org.sfnelson.blog.client.places.AuthorPlace;
+import org.sfnelson.blog.client.places.BlogPlace;
 import org.sfnelson.blog.client.request.AuthProxy;
 import org.sfnelson.blog.client.request.AuthRequest;
 import org.sfnelson.blog.client.ui.AuthWidget;
 import org.sfnelson.blog.client.views.AuthView;
 
-import java.util.Date;
-
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 29/10/11
  */
-public class ShowAuth extends AbstractActivity implements ActivityMapper, AuthWidget.Presenter {
+public class ShowAuth extends AbstractActivity implements AuthWidget.Presenter {
 
 	private final Provider<AuthRequest> request;
 	private final AuthView view;
 	private final PlaceController pc;
 
-	private AuthPlace current;
+	private Place current;
+	private AuthProxy credentials;
 
 	@Inject
 	ShowAuth(Provider<AuthRequest> request, AuthView view, PlaceController pc) {
@@ -39,15 +40,9 @@ public class ShowAuth extends AbstractActivity implements ActivityMapper, AuthWi
 		this.pc = pc;
 	}
 
-	@Override
-	public Activity getActivity(Place place) {
-		if (place instanceof AuthPlace) {
-			this.current = (AuthPlace) place;
-			if (current.getAction().equals("ready")) {
-				update();
-				view.hideDialog();
-			}
-		}
+	public ShowAuth goTo(Place place) {
+		this.current = place;
+		checkPlace();
 		return this;
 	}
 
@@ -59,8 +54,7 @@ public class ShowAuth extends AbstractActivity implements ActivityMapper, AuthWi
 		String oauthId = Cookies.getCookie("oauth-id");
 		if (oauthId != null) {
 			request.get().cookie(oauthId).fire(new Receiver());
-		}
-		else {
+		} else {
 			request.get().state().fire(new Receiver());
 		}
 	}
@@ -81,25 +75,44 @@ public class ShowAuth extends AbstractActivity implements ActivityMapper, AuthWi
 		request.get().logout().fire(new Receiver());
 	}
 
+	private void checkPlace() {
+		if (current != null && credentials != null) {
+			if (current instanceof AuthPlace) {
+				if (((AuthPlace) current).getAction().equals("ready")) {
+					update();
+					view.hideDialog();
+				}
+			}
+
+			if (credentials.getAuthor()) {
+				if (!(current instanceof AuthorPlace)) {
+					pc.goTo(new AuthorPlace(""));
+				}
+			} else {
+				if (!(current instanceof BlogPlace)) {
+					pc.goTo(BlogPlace.PLACE);
+				}
+			}
+		}
+	}
+
 	private class Receiver extends com.google.web.bindery.requestfactory.shared.Receiver<AuthProxy> {
 		@Override
 		public void onSuccess(AuthProxy response) {
-			if (current != null) {
-				// we've received our auth response, update the place.
-				pc.goTo(ManagerPlace.PLACE);
-			}
 			if (!response.getAuthenticated()) {
 				view.setLogin();
 				if (response.getRedirectURL() != null) {
 					view.showDialog(response.getRedirectURL());
 				}
-			}
-			else {
+			} else {
 				view.setEmail(response.getEmail());
 				Date expires = new Date();
 				expires.setTime(expires.getTime() + 14 * 24 * 60 * 60 * 1000); // two weeks.
 				Cookies.setCookie("oauth-id", response.getAuthId(), expires);
 			}
+
+			ShowAuth.this.credentials = response;
+			checkPlace();
 		}
 	}
 }

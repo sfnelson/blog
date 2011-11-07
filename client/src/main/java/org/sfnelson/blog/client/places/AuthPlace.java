@@ -6,7 +6,7 @@ import com.google.gwt.place.shared.Prefix;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
- * Date: 30/10/11
+ * Date: 8/11/11
  */
 public class AuthPlace extends Place {
 

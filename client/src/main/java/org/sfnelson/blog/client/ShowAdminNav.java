@@ -4,6 +4,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
 import com.google.inject.Inject;
 import org.sfnelson.blog.client.events.CreatePostEvent;
 import org.sfnelson.blog.client.events.CreateTaskEvent;
@@ -13,12 +14,12 @@ import org.sfnelson.blog.client.views.NavigationView;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 26/10/11
  */
-public class AdminApp extends AbstractActivity implements NavigationView.Presenter<Scheduler.ScheduledCommand> {
+public class ShowAdminNav extends AbstractActivity implements NavigationView.Presenter<Scheduler.ScheduledCommand> {
 
-	private final NavigationView view;
+	private final NavigationView<Scheduler.ScheduledCommand> view;
 
 	@Inject
-	AdminApp(NavigationView<Scheduler.ScheduledCommand> view) {
+	ShowAdminNav(NavigationView<Scheduler.ScheduledCommand> view) {
 		this.view = view;
 	}
 

@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class HtmlRendererTest {
 	@Test
 	public void testRender() throws Exception {
-		TestContent content = new TestContent("Test <b>Content</b> <iframe>", Content.Type.HTML);
-		assertEquals("Test <b>Content</b> &lt;iframe&gt;", new ContentRenderer().render(content).asString());
+		TestContent content = new TestContent("<p>Test <b>Content</b></p> <iframe>", Content.Type.HTML);
+		assertEquals("<p>Test <b>Content</b></p> &lt;iframe&gt;", new ContentRenderer().render(content).asString());
 	}
 }

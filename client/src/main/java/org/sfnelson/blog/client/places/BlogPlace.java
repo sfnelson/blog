@@ -8,21 +8,22 @@ import com.google.gwt.place.shared.Prefix;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 26/10/11
  */
-public class ManagerPlace extends Place {
+public class BlogPlace extends Place {
 
-	public static final ManagerPlace PLACE = new ManagerPlace();
+	public static final BlogPlace PLACE = new BlogPlace();
 
-	ManagerPlace() {}
+	BlogPlace() {
+	}
 
-	@Prefix("manage")
-	public static class Tokenizer implements PlaceTokenizer<ManagerPlace> {
+	@Prefix("view")
+	public static class Tokenizer implements PlaceTokenizer<BlogPlace> {
 		@Override
-		public ManagerPlace getPlace(String token) {
+		public BlogPlace getPlace(String token) {
 			return PLACE;
 		}
 
 		@Override
-		public String getToken(ManagerPlace place) {
+		public String getToken(BlogPlace place) {
 			return "";
 		}
 	}

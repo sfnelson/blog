@@ -1,5 +1,10 @@
 package org.sfnelson.blog.server;
 
+import com.google.web.bindery.requestfactory.server.ExceptionHandler;
+import com.google.web.bindery.requestfactory.server.ServiceLayerDecorator;
+import com.google.web.bindery.requestfactory.shared.Locator;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
@@ -7,23 +12,16 @@ import com.google.inject.Singleton;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
-import com.google.web.bindery.requestfactory.server.DefaultExceptionHandler;
-import com.google.web.bindery.requestfactory.server.ExceptionHandler;
-import com.google.web.bindery.requestfactory.server.ServiceLayerDecorator;
-import com.google.web.bindery.requestfactory.shared.Locator;
-import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import javax.validation.*;
 import org.sfnelson.blog.client.request.RequestFactory;
 import org.sfnelson.blog.server.mongo.Database;
 import org.sfnelson.blog.server.security.LoginChecker;
-import org.sfnelson.blog.server.security.LoginRequiredException;
 import org.sfnelson.blog.server.security.RequiresLogin;
 import org.sfnelson.blog.server.service.ContentService;
 import org.sfnelson.blog.server.service.EntryService;
 import org.sfnelson.blog.server.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.validation.*;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -36,7 +34,7 @@ public class ServletConfig extends GuiceServletContextListener {
 			@Override
 			protected void configureServlets() {
 				serve("/gwtRequest").with(RequestFactoryServlet.class);
-				serve("/feed").with(RssServlet.class);
+				serve("/feed.xml").with(RssServlet.class);
 				serve("/oauth").with(OAuthServlet.class);
 
 				bind(ServiceLayerDecorator.class).to(InjectingServiceLayerDecorator.class);
@@ -82,6 +80,7 @@ public class ServletConfig extends GuiceServletContextListener {
 			public ExceptionHandler getExceptionHandler() {
 				return new ExceptionHandler() {
 					Logger logger = LoggerFactory.getLogger(RequestFactory.class);
+
 					@Override
 					public ServerFailure createServerFailure(Throwable throwable) {
 						logger.error(throwable.getMessage(), throwable);

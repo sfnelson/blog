@@ -38,11 +38,12 @@ public class Strikeout extends Inline {
 
 	@Override
 	protected void open(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant(input.annotate("span style='text-decoration: line-through;'"));
+		//builder.appendHtmlConstant(input.annotate("span style='text-decoration: line-through;'"));
+		builder.appendHtmlConstant(input.annotate("strike"));
 	}
 
 	@Override
 	protected void close(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant("</span>");
+		builder.appendHtmlConstant("</strike>");
 	}
 }

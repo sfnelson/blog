@@ -12,12 +12,20 @@ import com.google.gwt.place.shared.PlaceController;
 @GinModules(BlogModule.class)
 public interface Injector extends Ginjector {
 	EventBus getEventBus();
+
 	PlaceController getPlaceController();
+
 	HistoryMapper getHistoryMapper();
-	ShowBlog getBlog();
-	ShowTasks getTasks();
-	ShowAuth getAuth();
-	AdminApp getAdminApp();
+
+	EntryViewMapper getEntries();
+
+	TaskViewMapper getTasks();
+
+	NavViewMapper getNav();
+
+	AuthViewMapper getAuth();
+
 	ExceptionHandler getExceptionHandler();
+
 	BlogResources getResources();
 }

@@ -78,6 +78,10 @@ article {
     outline: none;
 }
 
+article p {
+    line-height: 1.5em;
+}
+
 article header {
     position: relative;
 }

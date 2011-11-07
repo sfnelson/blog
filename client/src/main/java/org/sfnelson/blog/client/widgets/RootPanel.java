@@ -21,11 +21,16 @@ public class RootPanel implements AcceptsOneWidget {
 
 	@Override
 	public void setWidget(IsWidget w) {
+		com.google.gwt.user.client.ui.RootPanel panel;
 		if (id != null) {
-			com.google.gwt.user.client.ui.RootPanel.get(id).add(w);
+			panel = com.google.gwt.user.client.ui.RootPanel.get(id);
+		} else {
+			panel = com.google.gwt.user.client.ui.RootPanel.get();
 		}
-		else {
-			com.google.gwt.user.client.ui.RootPanel.get().add(w);
+		if (w == null) {
+			panel.clear();
+		} else {
+			panel.add(w);
 		}
 	}
 }

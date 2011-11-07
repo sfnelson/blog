@@ -6,13 +6,13 @@ import com.google.gwt.place.shared.Prefix;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
- * Date: 26/10/11
+ * Date: 30/10/11
  */
-public class TaskPlace extends Place {
+public class AuthorPlace extends Place {
 
 	private final String action;
 
-	public TaskPlace(String action) {
+	public AuthorPlace(String action) {
 		this.action = action;
 	}
 
@@ -21,14 +21,14 @@ public class TaskPlace extends Place {
 	}
 
 	public String toString() {
-		return "task:" + action;
+		return "author:" + action;
 	}
 
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
-		TaskPlace p = (TaskPlace) obj;
+		AuthorPlace p = (AuthorPlace) obj;
 		if (action == null) return p.action == null;
 		return action.equals(p.action);
 	}
@@ -37,16 +37,16 @@ public class TaskPlace extends Place {
 		return action == null ? 0 : getClass().hashCode() ^ action.hashCode();
 	}
 
-	@Prefix("task")
-	public static class Tokenizer implements PlaceTokenizer<TaskPlace> {
+	@Prefix("publish")
+	public static class Tokenizer implements PlaceTokenizer<AuthorPlace> {
 
 		@Override
-		public TaskPlace getPlace(String token) {
-			return new TaskPlace(token);
+		public AuthorPlace getPlace(String token) {
+			return new AuthorPlace(token);
 		}
 
 		@Override
-		public String getToken(TaskPlace place) {
+		public String getToken(AuthorPlace place) {
 			return place.getAction();
 		}
 	}

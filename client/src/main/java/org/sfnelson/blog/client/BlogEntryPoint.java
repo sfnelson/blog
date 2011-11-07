@@ -10,7 +10,7 @@ import com.google.web.bindery.requestfactory.shared.EntityProxyId;
 
 import com.google.common.collect.Lists;
 import org.sfnelson.blog.client.editors.SelectableEditor;
-import org.sfnelson.blog.client.places.ManagerPlace;
+import org.sfnelson.blog.client.places.BlogPlace;
 import org.sfnelson.blog.client.widgets.RootPanel;
 
 /**
@@ -28,24 +28,23 @@ public class BlogEntryPoint implements EntryPoint {
 
 		EventBus eventBus = injector.getEventBus();
 
-		injector.getAdminApp().start(new RootPanel("navigation"), eventBus);
-
 		new ActivityManager(injector.getAuth(), eventBus).setDisplay(new RootPanel("auth"));
-		new ActivityManager(injector.getBlog(), eventBus).setDisplay(new RootPanel("entries"));
+		new ActivityManager(injector.getNav(), eventBus).setDisplay(new RootPanel("navigation"));
+		new ActivityManager(injector.getEntries(), eventBus).setDisplay(new RootPanel("entries"));
 		new ActivityManager(injector.getTasks(), eventBus).setDisplay(new RootPanel("tasks"));
 
 		PlaceController pc = injector.getPlaceController();
 		HistoryMapper hm = injector.getHistoryMapper();
 
 		PlaceHistoryHandler hh = new PlaceHistoryHandler(hm);
-		hh.register(pc, (com.google.web.bindery.event.shared.EventBus) eventBus, ManagerPlace.PLACE);
+		hh.register(pc, (com.google.web.bindery.event.shared.EventBus) eventBus, BlogPlace.PLACE);
 
 		hh.handleCurrentHistory();
 
 		new SelectionManager(new EditorMapper() {
-			private java.util.List<EditorMapper> mappers = Lists.newArrayList(
-					injector.getBlog().getEditorMapper(),
-					injector.getTasks().getEditorMapper());
+			private java.util.List<EditorMapper> mappers = Lists.<EditorMapper>newArrayList(
+					injector.getEntries(),
+					injector.getTasks());
 
 			@Override
 			public SelectableEditor getEditor(EntityProxyId<?> entity) {
