@@ -6,11 +6,11 @@ import org.sfnelson.blog.domain.Content;
 * Author: Stephen Nelson <stephen@sfnelson.org>
 * Date: 2/11/11
 */
-class TestContent implements Content {
+class ContentImplForTesting implements Content {
 	private String input;
 	private Type type;
 
-	public TestContent(String input, Type type) {
+	public ContentImplForTesting(String input, Type type) {
 		this.input = input;
 		this.type = type;
 	}
