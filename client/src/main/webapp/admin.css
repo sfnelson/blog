@@ -9,7 +9,7 @@ body > header {
     background-color: #f1f1f1;
     border-bottom: solid 1px #d2d2d2;
     color: #888;
-    z-index: 100;
+    z-index: 10;
 }
 
 body > header h1 {
@@ -68,7 +68,6 @@ nav li a {
 #entries {
     position: relative;
     margin: 6ex 25% 0 10em;
-    overflow-x: hidden;
     border-left: solid 1px #ebebeb;
     border-right: solid 1px #ebebeb;
 }
@@ -76,6 +75,7 @@ nav li a {
 article {
     padding: 2ex 3em 4ex 1em;
     border-top: solid 1px #eee;
+    outline: none;
 }
 
 article header {
@@ -95,11 +95,11 @@ article header h1 input {
 }
 
 article header time {
-	position: absolute;
+    position: absolute;
     top: 0;
     right: 0;
-	font-size: 80%;
-	color: #aaa;
+    font-size: 80%;
+    color: #aaa;
 }
 
 article footer {

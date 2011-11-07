@@ -9,7 +9,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.user.client.ui.Composite;
+
 import com.google.inject.Inject;
 import org.sfnelson.blog.client.views.AuthView;
 
@@ -19,21 +19,38 @@ import org.sfnelson.blog.client.views.AuthView;
  */
 public class AuthWidget extends Composite implements AuthView {
 
-	interface Binder extends UiBinder<FlowPanel, AuthWidget> {}
+	interface Binder extends UiBinder<FlowPanel, AuthWidget> {
+	}
+
 	interface Style extends CssResource {
+		String login();
+
+		String email();
+
+		String provider();
+
 		String close();
+
 		String hidden();
 	}
 
-	@UiField Style style;
-	@UiField Label login;
-	@UiField Label email;
-	@UiField DialogBox box;
-	@UiField Anchor close;
+	@UiField
+	Style style;
+	@UiField
+	Label login;
+	@UiField
+	Label email;
+	@UiField
+	DialogBox box;
+	@UiField
+	Anchor close;
 
-	@UiField Anchor google;
-	@UiField Anchor yahoo;
-	@UiField Anchor other;
+	@UiField
+	Anchor google;
+	@UiField
+	Anchor yahoo;
+	@UiField
+	Anchor other;
 
 	private Presenter presenter;
 

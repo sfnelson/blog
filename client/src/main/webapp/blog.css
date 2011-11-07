@@ -1,34 +1,35 @@
 body {
-	margin: 0 30% 0 4em;
+    margin: 0 30% 0 2em;
 }
 
 body > header {
-	padding-top: 4ex;
+    padding-top: 4ex;
     padding-bottom: 4em;
-	text-align: right;
+    text-align: right;
 }
 
 body > header h1 {
     font-family: georgia, garamond, serif;
     font-weight: bold;
-	font-size: 150%;
-	font-style: italic;
+    font-size: 150%;
+    font-style: italic;
     line-height: 1.5em;
-	color: #777;
+    color: #777;
 }
 
 body > header h2 {
-	font-size: 90%;
-	text-align: right;
-	color: #aaa;
+    font-size: 90%;
+    text-align: right;
+    color: #aaa;
 }
 
 footer {
-	margin-top: 4ex;
-	border-top: solid 1px #eee;
-	padding: 2ex 0 4ex 0;
-	color: #aaa;
-	text-align: justify;
+    margin-top: 4ex;
+    margin-left: 2em;
+    border-top: solid 1px #eee;
+    padding: 2ex 0 4ex 0;
+    color: #aaa;
+    text-align: justify;
 }
 
 footer p {
@@ -36,47 +37,117 @@ footer p {
 }
 
 time {
-	position: absolute;
-	top: 1em;
-	right: 0;
-	font-size: 80%;
-	color: #aaa;
+    position: absolute;
+    top: 1em;
+    right: 0;
+    font-size: 80%;
+    color: #aaa;
 }
 
 .goals {
-	vertical-align: top;
+    vertical-align: top;
 }
 
 .goals h1 {
-	font-size: 90%;
+    font-size: 90%;
 }
 
 .goals li {
-	margin-left: 1em;
+    margin-left: 1em;
 }
 
 .goals .complete:before {
-	display: inline-block;
-	width: 1.5em;
-	content: "\2714";
+    display: inline-block;
+    width: 1.5em;
+    content: "\2714";
 }
 
 .goals .partial:before {
-	display: inline-block;
-	width: 1.5em;
-	content: "\007E";
-	font-weight: bold;
+    display: inline-block;
+    width: 1.5em;
+    content: "\007E";
+    font-weight: bold;
 }
 
 .goals .incomplete:before {
-	display: inline-block;
-	width: 1.5em;
-	content: "\0020";
+    display: inline-block;
+    width: 1.5em;
+    content: "\0020";
 }
 
 #tasks {
     position: absolute;
     left: 70%;
-    right: 10%;
+    right: 3em;
+    color: #333;
+    padding: 0 0 0 3em;
+}
+
+#auth {
+    display: block;
+    top: 0;
+    right: 0;
+    position: absolute;
+    padding: 0.5ex 1em;
+    font-size: 80%;
+    color: #aaa;
+}
+
+nav {
+    position: absolute;
+    margin-top: -2em;
     margin-left: 2em;
+    padding: 0;
+}
+
+nav ul {
+    padding: 0;
+    font-size: 80%;
+}
+
+nav li {
+    display: inline-block;
+    margin: 0 1em 0 0;
+    padding: 0;
+}
+
+nav li a {
+    display: block;
+    height: 2.5em;
+    line-height: 2.5em;
+    color: #f1f1f1;
+}
+
+nav li a:hover {
+    color: #aaa;
+    border-bottom: solid 3px #eee;
+}
+
+article textarea {
+    width: 100%;
+    font-size: 80%;
+    height: 24ex;
+    overflow: visible;
+}
+
+article header h1 input {
+    width: 70%;
+    font-size: 100%;
+}
+
+article header time {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 80%;
+    color: #aaa;
+}
+
+article footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2ex;
+    padding: 0 1em 1ex 1em;
 }

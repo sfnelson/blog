@@ -5,10 +5,23 @@
         .hidden {
             display: none;
         }
-        .popup {
-            position: absolute;
-            right: 0;
+
+        .login {
+            color: transparent;
         }
+
+        .login:hover {
+            color: #aaa;
+        }
+
+        .email {
+            color: #f1f1f1;
+        }
+
+        .email:hover {
+            color: #aaa;
+        }
+
         .close {
             position: absolute;
             display: block;
@@ -23,6 +36,7 @@
             font-weight: bold;
             cursor: pointer;
         }
+
         .provider {
             display: block;
             font-size: 150%;
@@ -30,14 +44,15 @@
             text-align: center;
             width: 6em;
         }
+
         .provider:hover {
             background-color: #f1f1f1;
             cursor: pointer;
         }
     </ui:style>
     <g:FlowPanel>
-        <g:Label ui:field="login" styleName="{style.hidden}">Login</g:Label>
-        <g:Label ui:field="email" styleName="{style.hidden}"></g:Label>
+        <g:Label ui:field="login" styleName="{style.login} {style.hidden}">Login</g:Label>
+        <g:Label ui:field="email" styleName="{style.email} {style.hidden}"></g:Label>
         <g:DialogBox ui:field="box" text="Authenticate" modal="true" autoHideEnabled="false">
             <g:FlowPanel>
                 <g:Anchor ui:field="close" styleName="{style.close}">&times;</g:Anchor>

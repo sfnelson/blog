@@ -3,6 +3,7 @@ package org.sfnelson.blog.client.editors;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorDelegate;
 import com.google.gwt.editor.client.ValueAwareEditor;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 
 import java.util.Date;
@@ -11,21 +12,13 @@ import java.util.Date;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 31/10/11
  */
-public abstract class HasValueEditor<T extends EntityProxy, View> implements ValueAwareEditor<T> {
+public abstract class HasValueEditor<T extends EntityProxy> implements ValueAwareEditor<T> {
 
-	private final View view;
+	private EditorDelegate<T> delegate;
+	private HandlerRegistration registration;
 
 	private T lastValue;
 	private T value;
-
-	protected HasValueEditor(View view) {
-		this.view = view;
-	}
-
-	@Editor.Ignore
-	public View getView() {
-		return view;
-	}
 
 	public abstract void init(T value);
 
@@ -48,6 +41,10 @@ public abstract class HasValueEditor<T extends EntityProxy, View> implements Val
 		// keep an up-to-date version of the proxy.
 		this.lastValue = this.value;
 		this.value = value;
+
+		if (delegate != null && registration == null) {
+			registration = delegate.subscribe();
+		}
 	}
 
 	protected void reset() {
@@ -57,7 +54,11 @@ public abstract class HasValueEditor<T extends EntityProxy, View> implements Val
 	}
 
 	@Override
-	public void setDelegate(EditorDelegate<T> entryProxyEditorDelegate) {
-		// nothing to do.
+	public void setDelegate(EditorDelegate<T> delegate) {
+		this.delegate = delegate;
+
+		if (value != null && registration == null) {
+			registration = delegate.subscribe();
+		}
 	}
 }

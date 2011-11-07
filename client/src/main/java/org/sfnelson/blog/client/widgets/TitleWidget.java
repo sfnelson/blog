@@ -4,7 +4,12 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.editor.client.LeafValueEditor;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
+
+import org.sfnelson.blog.client.editors.RootEditor;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -12,14 +17,10 @@ import com.google.gwt.user.client.ui.*;
  */
 public class TitleWidget extends ComplexPanel implements LeafValueEditor<String> {
 
-	public interface HasTitleEditor {
-		void startEditingTitle();
-	}
-
 	private final Label label;
 	private final TextBox edit;
 
-	private HasTitleEditor parent;
+	private RootEditor.HasDelegates parent;
 
 	public TitleWidget() {
 		setElement(DOM.createElement("H1"));
@@ -33,7 +34,7 @@ public class TitleWidget extends ComplexPanel implements LeafValueEditor<String>
 		label.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				parent.startEditingTitle();
+				parent.startEditing(TitleWidget.this);
 			}
 		});
 
@@ -50,15 +51,28 @@ public class TitleWidget extends ComplexPanel implements LeafValueEditor<String>
 			}
 		});
 
-		edit.addKeyUpHandler(new KeyUpHandler() {
+		edit.addKeyDownHandler(new KeyDownHandler() {
 			@Override
-			public void onKeyUp(KeyUpEvent event) {
+			public void onKeyDown(KeyDownEvent event) {
 				switch (event.getNativeKeyCode()) {
 					case KeyCodes.KEY_ENTER:
-						done(); break;
+						parent.doneEditing(TitleWidget.this);
+						break;
 					case KeyCodes.KEY_ESCAPE:
-						cancel(); break;
+						parent.cancelEditing(TitleWidget.this);
+						break;
+					case KeyCodes.KEY_TAB:
+						if (event.isShiftKeyDown()) {
+							parent.editPrevious(TitleWidget.this);
+						} else {
+							parent.editNext(TitleWidget.this);
+						}
+						break;
+					default:
+						return;
 				}
+				event.preventDefault();
+				event.stopPropagation();
 			}
 		});
 	}
@@ -67,7 +81,7 @@ public class TitleWidget extends ComplexPanel implements LeafValueEditor<String>
 		add(w, getElement());
 	}
 
-	public void setParent(HasTitleEditor parent) {
+	public void setParent(RootEditor.HasDelegates parent) {
 		this.parent = parent;
 	}
 

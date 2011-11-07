@@ -1,185 +1,124 @@
 package org.sfnelson.blog.client;
 
-import com.google.common.collect.Maps;
+import java.util.List;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.web.bindery.requestfactory.shared.EntityProxyChange;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.web.bindery.requestfactory.shared.*;
-import org.sfnelson.blog.client.editors.EntryEditor;
-import org.sfnelson.blog.client.editors.PostEditor;
-import org.sfnelson.blog.client.editors.UpdateEditor;
-import org.sfnelson.blog.client.events.CreateEntryEvent;
-import org.sfnelson.blog.client.events.CreateTaskUpdateEvent;
+import org.sfnelson.blog.client.editors.RootEditor;
+import org.sfnelson.blog.client.events.CreatePostEvent;
+import org.sfnelson.blog.client.events.CreateUpdateEvent;
 import org.sfnelson.blog.client.events.EditorSelectionEvent;
-import org.sfnelson.blog.client.places.EntryPlace;
-import org.sfnelson.blog.client.request.*;
-import org.sfnelson.blog.client.util.RFListManager;
+import org.sfnelson.blog.client.request.EntryProxy;
+import org.sfnelson.blog.client.request.EntryRequest;
+import org.sfnelson.blog.client.request.PostProxy;
+import org.sfnelson.blog.client.request.UpdateProxy;
 import org.sfnelson.blog.client.views.BlogView;
-import org.sfnelson.blog.shared.domain.TaskUpdateType;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
- * Date: 18/10/11
+ * Date: 5/11/11
  */
-public class ShowBlog extends AbstractActivity implements ActivityMapper, EditorSelectionEvent.Handler {
-
-	private final Provider<EntryRequest> request;
-	private final Provider<PostEditor> posts;
-	private final Provider<UpdateEditor> updates;
+public class ShowBlog extends AbstractActivity
+		implements ActivityMapper, CreatePostEvent.Handler, CreateUpdateEvent.Handler {
 
 	private final BlogView view;
-	private final PlaceController pc;
-
-	private EntryPlace place;
-	private EntityProxyId<EntryProxy> selection = null;
-
-	private RFListManager<EntryProxy, EntryEditor<EntryProxy, ?>> list;
+	private final EventBus eventBus;
+	private final Provider<EntryRequest> request;
 
 	@Inject
-	ShowBlog(BlogView view, Provider<EntryRequest> request, Provider<PostEditor> posts,
-			 Provider<UpdateEditor> updates, PlaceController pc) {
+	ShowBlog(BlogView view, EventBus eventBus, Provider<EntryRequest> request) {
 		this.view = view;
+		this.eventBus = eventBus;
 		this.request = request;
-		this.pc = pc;
-		this.posts = posts;
-		this.updates = updates;
 	}
 
 	@Override
 	public Activity getActivity(Place place) {
-		if (place instanceof EntryPlace) {
-			this.place = (EntryPlace) place;
-		}
-		else {
-			this.place = null;
-		}
-
 		return this;
 	}
 
+	public EditorMapper getEditorMapper() {
+		return view.getList();
+	}
+
 	@Override
-	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-		EditorSelectionEvent.register(this, eventBus);
+	public void start(AcceptsOneWidget panel, final EventBus eventBus) {
+		view.getList().clear();
 
-		CreateEntryEvent.register(new CreateEntryEvent.Handler() {
-			@Override
-			public void onEntryCreated(CreateEntryEvent event) {
-				createPost();
-			}
-		}, eventBus);
-		CreateTaskUpdateEvent.register(new CreateTaskUpdateEvent.Handler() {
-			@Override
-			public void onTaskUpdateCreated(CreateTaskUpdateEvent event) {
-				createTaskUpdate(event.getTask(), event.getType());
-			}
-		}, eventBus);
+		CreatePostEvent.register(this, eventBus);
+		CreateUpdateEvent.register(this, eventBus);
 
-		list = new RFListManager<EntryProxy, EntryEditor<EntryProxy, ?>>(eventBus,
-				PostProxy.class, UpdateProxy.class) {
-			@Override
-			protected void add(int position, EntryProxy entity) {
-				ShowBlog.this.add(position, entity);
-			}
-
-			@Override
-			protected void remove(EntityProxyId<? extends EntryProxy> id) {
-				ShowBlog.this.remove(id);
-			}
-		};
-
-		refresh();
-
-		Scheduler.get().scheduleFixedPeriod(new Scheduler.RepeatingCommand() {
-			@Override
-			public boolean execute() {
-				refresh();
-				return true;
-			}
-		}, 60000);
-
+		EntityProxyChange.registerForProxyType(eventBus, PostProxy.class,
+				new EntityProxyChange.Handler<PostProxy>() {
+					@Override
+					public void onProxyChange(EntityProxyChange<PostProxy> event) {
+						ShowBlog.this.onProxyChange(event);
+					}
+				});
+		EntityProxyChange.registerForProxyType(eventBus, UpdateProxy.class,
+				new EntityProxyChange.Handler<UpdateProxy>() {
+					@Override
+					public void onProxyChange(EntityProxyChange<UpdateProxy> event) {
+						ShowBlog.this.onProxyChange(event);
+					}
+				});
 
 		panel.setWidget(view);
+
+		request.get().getEntries(0, 10).with("task", "progress", "content")
+				.fire(new Receiver<List<EntryProxy>>() {
+					@Override
+					public void onSuccess(List<EntryProxy> response) {
+						view.getList().addAll(response);
+					}
+				});
 	}
 
 	@Override
-	public void onEventSelection(EditorSelectionEvent event) {
-		if (selection != null && selection.equals(event.getEntryId()) && event.getSelected()) {
-			return;
-		}
-
-		if (selection != null) {
-			EntryEditor<?, ?> editor = editors.get(selection);
-			if (editor != null) {
-				if (!editor.deselect()) return;
-			}
-			selection = null;
-		}
-
-		if (event.getSelected() && event.getEntryId() != null) {
-			EntryEditor<?, ?> editor = editors.get(event.getEntryId());
-			if (editor != null && editor.select()) {
-				selection = event.getEntryId();
-			}
-		}
-	}
-
-	private void refresh() {
-		request.get().getEntries(0, Integer.MAX_VALUE).with("task", "progress", "content")
-		.fire(new Receiver<List<EntryProxy>>() {
+	public void onEntryCreated(CreatePostEvent event) {
+		final PostProxy post = view.getList().create(0, PostProxy.class);
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			@Override
-			public void onSuccess(List<EntryProxy> response) {
-				list.update(response);
+			public void execute() {
+				eventBus.fireEvent(new EditorSelectionEvent(post, EditorSelectionEvent.Type.SELECT));
 			}
 		});
 	}
 
-	private Map<EntityProxyId<?>, EntryEditor<?, ?>> editors = Maps.newHashMap();
-
-	private void add(int position, EntryProxy entry) {
-		EntryEditor<?, ?> editor;
-		if (entry instanceof PostProxy) {
-			PostEditor e = this.posts.get();
-			e.init((PostProxy) entry);
-			editor = e;
-		}
-		else {
-			UpdateEditor e = this.updates.get();
-			e.init((UpdateProxy) entry);
-			editor = e;
-		}
-		editors.put(entry.stableId(), editor);
-		view.addEntry(position, editor.getView());
+	@Override
+	public void onTaskUpdateCreated(final CreateUpdateEvent event) {
+		final UpdateProxy update = view.getList().create(0, UpdateProxy.class,
+				new RootEditor.Initializer<UpdateProxy>() {
+					@Override
+					public void initialize(UpdateProxy value) {
+						value.setTask(event.getTask());
+						value.setType(event.getType());
+					}
+				});
+		Scheduler.get().scheduleDeferred(new Command() {
+			@Override
+			public void execute() {
+				eventBus.fireEvent(new EditorSelectionEvent(update, EditorSelectionEvent.Type.SELECT));
+			}
+		});
 	}
 
-	private void remove(EntityProxyId<? extends EntryProxy> id) {
-		if (editors.containsKey(id)) {
-			view.removeEntry(editors.get(id).getView());
+	void onProxyChange(EntityProxyChange<? extends EntryProxy> event) {
+		switch (event.getWriteOperation()) {
+			case DELETE:
+				view.getList().remove(event.getProxyId());
+				break;
 		}
-	}
-
-	private void createPost() {
-		PostEditor editor = this.posts.get();
-		PostProxy entry = editor.create();
-		list.addCreated(entry);
-		editors.put(entry.stableId(), editor);
-		view.addEntry(0, editor.getView());
-	}
-
-	private void createTaskUpdate(TaskProxy task, TaskUpdateType type) {
-		UpdateEditor editor = this.updates.get();
-		UpdateProxy entry = editor.create(task, type);
-		list.addCreated(entry);
-		editors.put(entry.stableId(), editor);
-		view.addEntry(0, editor.getView());
 	}
 }

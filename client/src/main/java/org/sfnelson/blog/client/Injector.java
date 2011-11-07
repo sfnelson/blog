@@ -18,4 +18,6 @@ public interface Injector extends Ginjector {
 	ShowTasks getTasks();
 	ShowAuth getAuth();
 	AdminApp getAdminApp();
+	ExceptionHandler getExceptionHandler();
+	BlogResources getResources();
 }

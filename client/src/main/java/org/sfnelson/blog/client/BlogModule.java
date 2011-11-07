@@ -14,6 +14,7 @@ import org.sfnelson.blog.client.request.RequestFactory;
 import org.sfnelson.blog.client.request.TaskRequest;
 import org.sfnelson.blog.client.ui.*;
 import org.sfnelson.blog.client.views.*;
+import org.sfnelson.blog.client.widgets.ErrorPanel;
 import org.sfnelson.blog.client.widgets.NavWidget;
 
 /**
@@ -29,6 +30,7 @@ public class BlogModule extends AbstractGinModule {
 		bind(BlogView.class).to(EntryList.class).in(Singleton.class);
 		bind(TasksView.class).to(TaskList.class).in(Singleton.class);
 		bind(AuthView.class).to(AuthWidget.class).in(Singleton.class);
+		bind(ErrorView.class).to(ErrorPanel.class).in(Singleton.class);
 		bind(PostView.class).to(PostWidget.class);
 		bind(TaskView.class).to(TaskWidget.class);
 		bind(UpdateView.class).to(UpdateWidget.class);

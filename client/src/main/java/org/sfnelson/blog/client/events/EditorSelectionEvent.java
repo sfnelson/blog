@@ -6,7 +6,6 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.EntityProxyId;
-import org.sfnelson.blog.client.request.EntryProxy;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -16,8 +15,15 @@ public class EditorSelectionEvent<T extends EntityProxy> extends Event<EditorSel
 
 	private static final Event.Type<Handler<?>> TYPE = new Event.Type<Handler<?>>();
 
+	public enum Type {
+		SELECT,
+		PREVIOUS,
+		NEXT,
+		BLUR;
+	}
+
 	public interface Handler<T extends EntityProxy> extends EventHandler {
-		void onEventSelection(EditorSelectionEvent<T> event);
+		void onSelectionEvent(EditorSelectionEvent<T> event);
 	}
 
 	public static <T extends EntityProxy> HandlerRegistration register(Handler<T> handler, EventBus eventBus) {
@@ -25,11 +31,11 @@ public class EditorSelectionEvent<T extends EntityProxy> extends Event<EditorSel
 	}
 
 	private final T value;
-	private final boolean selected;
+	private final Type type;
 
-	public EditorSelectionEvent(T value, boolean selected) {
+	public EditorSelectionEvent(T value, Type type) {
 		this.value = value;
-		this.selected = selected;
+		this.type = type;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -37,18 +43,18 @@ public class EditorSelectionEvent<T extends EntityProxy> extends Event<EditorSel
 		return (EntityProxyId<T>) value.stableId();
 	}
 
-	public boolean getSelected() {
-		return selected;
+	public Type getType() {
+		return type;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Type<Handler<T>> getAssociatedType() {
-		return (Type) TYPE;
+	public Event.Type<Handler<T>> getAssociatedType() {
+		return (Event.Type) TYPE;
 	}
 
 	@Override
 	protected void dispatch(Handler<T> handler) {
-		handler.onEventSelection(this);
+		handler.onSelectionEvent(this);
 	}
 }

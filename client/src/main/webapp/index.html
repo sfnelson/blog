@@ -9,13 +9,14 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <link rel="alternate" type="application/rss+xml" title="Feed" href="/blog/feed.xml"/>
+    <link rel="alternate" type="application/rss+xml" title="Feed" href="feed"/>
 
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono|Droid+Serif|Droid+Sans&v2' rel='stylesheet'
           type='text/css'/>
     <link rel="stylesheet" href="reset.css"/>
     <link rel="stylesheet" href="main.css"/>
     <link rel="stylesheet" href="blog.css"/>
+    <!--<link rel="stylesheet" href="admin.css"/>-->
 
     <script type="text/javascript" language="javascript" src="blog/blog.nocache.js"></script>
 </head>
@@ -23,19 +24,25 @@
 <body>
 
 <header>
-    <hgroup>
-        <h1><a href="/blog/">&ldquo;So how is your thesis going?&rdquo;</a></h1>
+    <h1 id="title">&ldquo;So how is your thesis going?&rdquo;</h1>
 
-        <h2>some answers to the perennial question</h2>
-    </hgroup>
+    <h2>some answers to the perennial question</h2>
+
+    <div id="auth"></div>
 </header>
 
-<div id="entries"></div>
+<nav id="navigation"></nav>
+
+<section id="tasks"></section>
+
+<section id="entries"></section>
 
 <footer>
     <p>This personal blog catalogs my attempt at keeping my thoughts in order and
         remain sane while finishing a PhD. If you're here and you're not me or my
         advisors, then you're probably in the wrong place.</p>
+
+    <p>&copy; Stephen Nelson 2011</p>
 </footer>
 
 </body>

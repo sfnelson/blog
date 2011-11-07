@@ -25,6 +25,7 @@ import org.sfnelson.blog.server.mongo.Database;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.security.MessageDigest;
 import java.util.List;
 
 /**
@@ -36,12 +37,14 @@ public class AuthManager {
 	private final ConsumerManager manager;
 	private final Database database;
 	private final Provider<Auth> authProvider;
+	private final MessageDigest digest;
 
 	@Inject
-	AuthManager(Database database, Provider<Auth> authProvider) {
+	AuthManager(Database database, Provider<Auth> authProvider) throws Exception {
 		this.manager = new ConsumerManager();
 		this.database = database;
 		this.authProvider = authProvider;
+		this.digest = MessageDigest.getInstance("MD5");
 	}
 
 	public Auth login(String authString, String returnURL) throws DiscoveryException, MessageException, ConsumerException {
@@ -88,7 +91,8 @@ public class AuthManager {
 		{
 			AuthSuccess authSuccess =
 					(AuthSuccess) verification.getAuthResponse();
-			String id = authSuccess.getIdentity();
+			byte[] idHash = digest.digest(authSuccess.getIdentity().getBytes());
+			String id = new String(idHash);
 
 			req.getSession().setAttribute("oauth-id", id);
 

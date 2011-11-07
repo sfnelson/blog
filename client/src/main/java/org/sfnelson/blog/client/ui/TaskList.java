@@ -1,16 +1,20 @@
 package org.sfnelson.blog.client.ui;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import org.sfnelson.blog.client.editors.EditorSource;
+import org.sfnelson.blog.client.editors.ModalEditor;
+import org.sfnelson.blog.client.editors.RootEditor;
+import org.sfnelson.blog.client.util.EditorList;
 import org.sfnelson.blog.client.views.TaskView;
 import org.sfnelson.blog.client.views.TasksView;
 import org.sfnelson.blog.client.request.TaskProxy;
-
-import java.util.List;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -19,19 +23,38 @@ import java.util.List;
 public class TaskList extends Composite implements TasksView {
 	interface Binder extends UiBinder<FlowPanel, TaskList> {}
 
+	private class Source implements EditorSource<TaskProxy> {
+		@Override
+		@SuppressWarnings("unchecked")
+		public <X extends TaskProxy> ModalEditor<X, ?> create(int index, Class<X> type) {
+			TaskView view = viewProvider.get();
+			tasks.insert(view, index);
+			return (ModalEditor<X, ?>) view.asEditor();
+		}
+
+		@Override
+		public void dispose(Object o) {
+			if (o instanceof TaskView.TaskEditor) {
+				tasks.remove(((TaskView.TaskEditor) o).asWidget());
+			}
+		}
+	}
+
+	private final Provider<TaskView> viewProvider;
+	private final EditorList<TaskProxy> list;
+
 	@UiField FlowPanel tasks;
 
-	public TaskList() {
+	@Inject
+	TaskList(Provider<TaskView> viewProvider) {
+		this.viewProvider = viewProvider;
+		this.list = new EditorList<TaskProxy>(new Source());
+
 		initWidget(GWT.<Binder> create(Binder.class).createAndBindUi(this));
 	}
 
 	@Override
-	public void addTask(int position, TaskView task) {
-		tasks.insert(task, position);
-	}
-
-	@Override
-	public void removeTask(TaskView task) {
-		tasks.remove(task);
+	public EditorList<TaskProxy> getList() {
+		return list;
 	}
 }

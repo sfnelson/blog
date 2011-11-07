@@ -18,6 +18,8 @@ import org.sfnelson.blog.client.request.AuthRequest;
 import org.sfnelson.blog.client.ui.AuthWidget;
 import org.sfnelson.blog.client.views.AuthView;
 
+import java.util.Date;
+
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 29/10/11
@@ -94,7 +96,9 @@ public class ShowAuth extends AbstractActivity implements ActivityMapper, AuthWi
 			}
 			else {
 				view.setEmail(response.getEmail());
-				Cookies.setCookie("oauth-id", response.getAuthId());
+				Date expires = new Date();
+				expires.setTime(expires.getTime() + 14 * 24 * 60 * 60 * 1000); // two weeks.
+				Cookies.setCookie("oauth-id", response.getAuthId(), expires);
 			}
 		}
 	}

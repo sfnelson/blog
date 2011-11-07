@@ -42,8 +42,13 @@ public class Update extends DomainObject<Update> implements Entry {
 
 	@Override
 	public void setAuthor(Author author) {
-		ObjectId id = author.getId();
-		delta.put("author", id);
+		if (author != null) {
+			ObjectId id = author.getId();
+			delta.put("author", id);
+		}
+		else {
+			delta.remove("author");
+		}
 	}
 
 	@Override

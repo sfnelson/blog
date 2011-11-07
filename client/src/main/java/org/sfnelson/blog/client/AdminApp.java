@@ -5,8 +5,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.Event;
-import org.sfnelson.blog.client.events.CreateEntryEvent;
+import org.sfnelson.blog.client.events.CreatePostEvent;
 import org.sfnelson.blog.client.events.CreateTaskEvent;
 import org.sfnelson.blog.client.views.NavigationView;
 
@@ -30,7 +29,7 @@ public class AdminApp extends AbstractActivity implements NavigationView.Present
 		view.addTarget(new Scheduler.ScheduledCommand() {
 			@Override
 			public void execute() {
-				eventBus.fireEvent(new CreateEntryEvent());
+				eventBus.fireEvent(new CreatePostEvent());
 			}
 		}, "Create Post");
 

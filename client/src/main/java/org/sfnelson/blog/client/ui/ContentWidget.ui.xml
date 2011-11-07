@@ -4,6 +4,9 @@
         .controls {
             display: none;
         }
+        .edit .value {
+            border: dotted 1px #eee;
+        }
         .edit .controls {
             display: block;
         }
@@ -22,7 +25,7 @@
     </ui:style>
     <g:HTMLPanel>
         <div class="{style.controls}">
-            <g:TextArea ui:field="value"></g:TextArea>
+            <g:TextArea ui:field="value" styleName="{style.value}"></g:TextArea>
             <g:Button ui:field="preview" styleName="{style.previewButton}">Preview</g:Button>
             <g:ValuePicker ui:field="type"></g:ValuePicker>
         </div>

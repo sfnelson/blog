@@ -5,16 +5,14 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.web.bindery.requestfactory.shared.Locator;
 import com.mongodb.DBObject;
-import org.sfnelson.blog.server.domain.Content;
-import org.sfnelson.blog.server.domain.Entry;
-import org.sfnelson.blog.server.domain.Update;
+import org.sfnelson.blog.server.domain.*;
 import org.sfnelson.blog.server.mongo.Database;
-import org.sfnelson.blog.server.domain.Post;
 import org.sfnelson.blog.server.mongo.DomainObject;
 import org.sfnelson.blog.server.security.RequiresLogin;
 import org.sfnelson.blog.server.service.ContentService;
 import org.sfnelson.blog.server.service.EntryService;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,9 +34,30 @@ public class EntryManager implements EntryService, ContentService {
 
 	@Override
 	@RequiresLogin
-	public void createEntry(Entry update) {
-		if (update != null) {
-			database.persist(update);
+	public void createEntry(Entry entry) {
+		if (entry != null) {
+			database.persist(entry);
+
+			if (entry instanceof Update) {
+				Update update = (Update) entry;
+				Task task = update.getTask();
+				Date when = update.getPosted();
+				switch (update.getType()) {
+					case CREATED:
+						task.setCreated(when);
+						break;
+					case ABANDONED:
+						task.setAbandoned(when);
+						break;
+					case PROGRESS:
+						task.setLastUpdate(when);
+						break;
+					case COMPLETED:
+						task.setCompleted(when);
+						break;
+				}
+				database.update(task);
+			}
 		}
 	}
 

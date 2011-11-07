@@ -1,0 +1,23 @@
+.error {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2ex;
+    display: none;
+    text-align: center;
+    z-index: 100;
+}
+
+.errorMessage {
+    display: inline-block;
+    background-color: #fffacd;
+    box-shadow: #aaa 0 0 5px;
+    height: 100%;
+    font-size: 80%;
+    padding: 0 1em;
+}
+
+.show {
+    display: block;
+}

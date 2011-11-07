@@ -4,8 +4,8 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.EntityProxyChange;
-import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.WriteOperation;
+
 import org.sfnelson.blog.client.events.EditorSelectionEvent;
 import org.sfnelson.blog.client.views.ModalEditorView;
 
@@ -13,76 +13,91 @@ import org.sfnelson.blog.client.views.ModalEditorView;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 31/10/11
  */
-public abstract class ModalEditor<T extends EntityProxy, V extends ModalEditorView<T>>
-		extends HasValueEditor<T, V> implements ModalEditorView.Editor<T> {
+public abstract class ModalEditor<T extends EntityProxy, V extends ModalEditorView> extends HasValueEditor<T>
+		implements ModalEditorView.Editor<T> {
 
+	private final V view;
 	private final EventBus eventBus;
 	private final Class<T> type;
 
-	private RequestContext edit;
+	private boolean editing;
 	private boolean created;
 
 	protected ModalEditor(V view, EventBus eventBus, Class<T> type) {
-		super(view);
+		this.view = view;
 		this.eventBus = eventBus;
 		this.type = type;
 	}
 
-	protected abstract RequestFactoryEditorDriver<T, ? extends ModalEditor<T, ?>> getDriver();
+	@Ignore
+	public V asWidget() {
+		return view;
+	}
 
-	protected T create(T value, RequestContext context) {
+	@Override
+	public <X extends T> X create(Class<X> type, Initializer<X> initializer) {
 		created = true;
-		edit = context;
-		setValue(value);
-		getDriver().edit(value, context);
-		getView().edit();
+		editing = true;
+		X value = doCreate(type, initializer);
+		view.edit();
 		return value;
 	}
+
+	@Ignore
+	protected abstract RequestFactoryEditorDriver<T, ?> getDriver();
+
+	@Ignore
+	protected abstract <X extends T> X doCreate(Class<X> type, Initializer<X> initializer);
+
+	@Ignore
+	protected abstract void doEdit(T value);
 
 	@Override
 	public void init(T entry) {
 		created = false;
-		edit = null;
-		setValue(entry);
+		editing = false;
 		getDriver().display(entry);
-		getView().view();
+		view.view();
 	}
 
 	public boolean select() {
-		getView().select();
+		view.select();
+		if (editing) {
+			view.focus();
+		}
 		return true;
 	}
 
 	public boolean deselect() {
-		if (edit != null) {
+		if (editing) {
 			if (getDriver().isDirty()) return false;
 			requestCancel();
 		}
-		getView().deselect();
+		view.deselect();
 		return true;
 	}
 
 	@Override
 	public void requestSelect() {
-		eventBus.fireEvent(new EditorSelectionEvent(getValue(), true));
+		eventBus.fireEvent(new EditorSelectionEvent<T>(getValue(), EditorSelectionEvent.Type.SELECT));
 	}
 
 	@Override
 	public void requestEdit() {
-		if (edit != null) return;
-		edit = edit();
-		getDriver().edit(getValue(), edit);
-		getView().edit();
+		if (editing) return;
+		editing = true;
+		doEdit(getValue());
+		view.edit();
 	}
-
-	protected abstract RequestContext edit();
 
 	@Override
 	public void requestSubmit() {
-		if (edit == null) return;
+		if (!editing) return;
 		getDriver().flush().fire();
-		edit = null;
-		getView().view();
+		getDriver().display(getValue());
+		reset();
+		editing = false;
+		view.view();
 		if (created) {
 			created = false;
 		}
@@ -90,11 +105,11 @@ public abstract class ModalEditor<T extends EntityProxy, V extends ModalEditorVi
 
 	@Override
 	public void requestCancel() {
-		if (edit == null) return;
+		if (!editing) return;
 		reset();
 		getDriver().display(getValue());
-		edit = null;
-		getView().view();
+		editing = false;
+		view.view();
 		if (created) {
 			eventBus.fireEventFromSource(
 					new EntityProxyChange<T>(getValue(), WriteOperation.DELETE),

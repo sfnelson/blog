@@ -1,53 +1,55 @@
 @font-face {
-	font-family: "Junction";
-	src: url("junction.ttf");
+    font-family: "Junction";
+    src: url("junction.ttf");
 }
 
 body, header, h1, h2, h3, h4, h5, h6 {
-	font-family: helvetica, sans-serif;
-	line-height: 1em;
+    font-family: helvetica, sans-serif;
+    line-height: 1em;
 }
 
 article {
-	display: block;
-	position: relative;
-	border-top: solid 1px #eee;
-	padding: 1ex 0;
+    display: block;
+    position: relative;
+    padding: 0;
+    outline: none;
 }
 
 article header {
-	margin-bottom: 0.5em;
+    border-top: solid 1px #eee;
+    margin-bottom: 0.5em;
+    padding: 1ex 0;
 }
 
 article h1 {
-	font-size: 120%;
-	font-weight: bold;
-	color: #777;
-	padding-bottom: 1ex;
+    font-size: 120%;
+    font-weight: bold;
+    color: #777;
+    padding-bottom: 1ex;
 }
 
 a {
-	color: #668;
-	text-decoration: none;
+    color: #668;
+    text-decoration: none;
 }
 
 header a {
-	text-decoration: none;
-	color: #777;
+    text-decoration: none;
+    color: #777;
 }
 
 p a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 p a:visited {
-	color: #448;
+    color: #448;
 }
 
 code {
     display: block;
-	color: #999;
-	font-family: 'Droid Sans Mono', fixed;
+    color: #999;
+    font-family: 'Droid Sans Mono', fixed;
     white-space: pre-wrap;
     line-height: 1.2em;
     margin: 1ex;
@@ -61,15 +63,15 @@ p code {
 }
 
 em {
-	font-style: italic;
-	color: #999;
+    font-style: italic;
+    color: #999;
 }
 
 article {
-	font-family: "Junction", "Times New Roman", "Times", serif;
-	text-align: justify;
-	line-height: 1.5em;
-	color: #777;
+    font-family: "Junction", "Times New Roman", "Times", serif;
+    text-align: justify;
+    line-height: 1.5em;
+    color: #777;
 }
 
 dl {
@@ -91,7 +93,7 @@ dd {
 }
 
 p {
-	padding: 0.5ex 0;
+    padding: 0.5ex 0;
     text-align: justify;
 }
 
@@ -115,7 +117,7 @@ hr {
 }
 
 ul {
-    list-style:  disc;
+    list-style: disc;
     padding-left: 2em;
 }
 
@@ -133,4 +135,28 @@ article blockquote {
 
 article p, article li, article dt, article dl, article code {
     font-size: 0.8em;
+}
+
+.gwt-DialogBox {
+    background-color: white;
+    border: solid 1px #d2d2d2;
+    color: #888;
+    box-shadow: 0 0 5px #888;
+    z-index: 100;
+}
+
+.dialogTop {
+    background-color: #f1f1f1;
+    border-bottom: solid 1px #d2d2d2;
+}
+
+.dialogTop .Caption {
+    padding: 1ex 1em;
+    font-weight: bold;
+    font-size: 120%;
+    display: block;
+}
+
+.dialogCenter {
+    padding: 2px;
 }

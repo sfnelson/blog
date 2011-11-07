@@ -1,6 +1,8 @@
 package org.sfnelson.blog.client.views;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import org.sfnelson.blog.client.request.TaskProxy;
+import org.sfnelson.blog.client.util.EditorList;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -8,7 +10,6 @@ import com.google.gwt.user.client.ui.IsWidget;
  */
 public interface TasksView extends IsWidget {
 
-	void addTask(int position, TaskView task);
-	void removeTask(TaskView task);
+	EditorList<TaskProxy> getList();
 
 }

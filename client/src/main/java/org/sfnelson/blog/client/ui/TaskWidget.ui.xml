@@ -4,55 +4,78 @@
     <ui:style type="org.sfnelson.blog.client.ui.TaskWidget.Style">
         .widget {
             position: relative;
-            padding: 0.3ex 0.5em;
+            margin: 0.3ex 0;
+            padding: 0 1.5em 0 0;
             height: 3ex;
             line-height: 3ex;
-            border-left: solid 1px transparent;
+            border-right: solid 0.5em transparent;
             color: #888;
         }
+
         .widget h1 {
             line-height: 3ex;
         }
-        .selected {
-            border-left: solid 1px #00bfff;
+
+        .widget h1 div {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 80%;
         }
+
+        .selected {
+            border-color: #87ceeb;
+        }
+
         .marks {
             position: absolute;
-            right: 0;
             top: 0;
+            right: 0;
+            width: 5em;
             display: none;
         }
+
         .selected .marks {
             display: block;
         }
+
         .editing .marks {
             display: none;
         }
+
         .complete, .progress, .abandon {
             color: #ddd;
             border: solid 1px transparent;
-            display: inline-block;
-            padding: 0.1ex 0.3em;
-            margin-left: 1px;
+            float: left;
+            text-align: center;
+            width: 1.5em;
+            margin: 0;
+            padding: 0.1ex 0;
+            background-color: white;
         }
+
         .complete:hover {
             color: green;
             border-color: green;
         }
+
         .progress:hover {
             color: blue;
             border-color: blue;
         }
+
         .abandon:hover {
             color: #8b0000;
             border-color: #8b0000;
         }
+
         .controls {
             position: absolute;
             right: 0;
             top: 0;
             display: none;
         }
+
         .editing .controls {
             display: block;
         }

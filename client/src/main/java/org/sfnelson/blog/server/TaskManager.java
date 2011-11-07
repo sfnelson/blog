@@ -4,11 +4,14 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.mongodb.DBObject;
+import org.sfnelson.blog.server.domain.Update;
 import org.sfnelson.blog.server.mongo.Database;
 import org.sfnelson.blog.server.domain.Task;
 import org.sfnelson.blog.server.security.RequiresLogin;
 import org.sfnelson.blog.server.service.TaskService;
+import org.sfnelson.blog.shared.domain.TaskUpdateType;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,11 +22,13 @@ public class TaskManager implements TaskService {
 
 	private final Database database;
 	private final Provider<Task> tasks;
+	private final Provider<Update> updates;
 
 	@Inject
-	TaskManager(Database database, Provider<Task> tasks) {
+	TaskManager(Database database, Provider<Task> tasks, Provider<Update> updates) {
 		this.database = database;
 		this.tasks = tasks;
+		this.updates = updates;
 	}
 
 	@Override
@@ -44,6 +49,12 @@ public class TaskManager implements TaskService {
 		if (task.getContent() != null) {
 			database.update(task.getContent());
 		}
+		Update update = updates.get();
+		update.setTask(task);
+		update.setType(TaskUpdateType.CREATED);
+		update.setPosted(task.getCreated());
+		update.setAuthor(task.getOwner());
+		database.persist(update);
 	}
 
 	@Override
