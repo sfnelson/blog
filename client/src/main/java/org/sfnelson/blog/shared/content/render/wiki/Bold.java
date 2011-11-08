@@ -1,7 +1,5 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
@@ -11,6 +9,7 @@ import org.sfnelson.blog.shared.content.render.Input;
 public class Bold extends Inline {
 
 	public Bold(Parent parent) {
+		super("strong");
 		setParent(parent);
 	}
 
@@ -31,15 +30,5 @@ public class Bold extends Inline {
 	@Override
 	public void eatTerminal(Input input) {
 		if (input.current() == '*') input.forward();
-	}
-
-	@Override
-	protected void open(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant(input.annotate("strong"));
-	}
-
-	@Override
-	protected void close(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant("</strong>");
 	}
 }

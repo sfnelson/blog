@@ -11,7 +11,13 @@ import org.sfnelson.blog.shared.content.render.Input;
  */
 public abstract class Inline implements Element, Parent {
 
+	private final String tag;
+
 	private Parent parent;
+
+	public Inline(String tag) {
+		this.tag = tag;
+	}
 
 	protected void setParent(Parent parent) {
 		this.parent = parent;
@@ -78,7 +84,11 @@ public abstract class Inline implements Element, Parent {
 		return parent.handleNewline(input);
 	}
 
-	protected abstract void open(SafeHtmlBuilder builder, Input input);
+	protected void open(SafeHtmlBuilder builder, Input input) {
+		builder.append(input.annotateOpen(tag));
+	}
 
-	protected abstract void close(SafeHtmlBuilder builder, Input input);
+	protected void close(SafeHtmlBuilder builder, Input input) {
+		builder.append(input.annotateClose(tag));
+	}
 }

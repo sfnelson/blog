@@ -151,20 +151,20 @@ public class WikiRendererTest {
 				"==== Level 4 ====\n" +
 				"===== Level 5 =====\n" +
 				"====== Level 6 ======\n", Content.Type.WIKI);
-		assertEquals("<h1> Heading </h1>\n" +
-				"<h2> Subheading </h2>\n" +
-				"<h3> Level 3 </h3>\n" +
-				"<h4> Level 4 </h4>\n" +
-				"<h5> Level 5 </h5>\n" +
-				"<h6> Level 6 </h6>\n", new ContentRenderer().render(content).asString());
+		assertEquals("<h1> Heading </h1>" +
+				"<h2> Subheading </h2>" +
+				"<h3> Level 3 </h3>" +
+				"<h4> Level 4 </h4>" +
+				"<h5> Level 5 </h5>" +
+				"<h6> Level 6 </h6>", new ContentRenderer().render(content).asString());
 
 		content = new ContentImplForTesting("=Heading?", Content.Type.WIKI);
-		assertEquals("<h1>Heading?</h1>\n", new ContentRenderer().render(content).asString());
+		assertEquals("<h1>Heading?</h1>", new ContentRenderer().render(content).asString());
 		content = new ContentImplForTesting("=Heading!\n\n", Content.Type.WIKI);
-		assertEquals("<h1>Heading!</h1>\n", new ContentRenderer().render(content).asString());
+		assertEquals("<h1>Heading!</h1>", new ContentRenderer().render(content).asString());
 
 		content = new ContentImplForTesting("foo\n=bar", Content.Type.WIKI);
-		assertEquals("<p>foo</p><h1>bar</h1>\n", new ContentRenderer().render(content).asString());
+		assertEquals("<p>foo</p><h1>bar</h1>", new ContentRenderer().render(content).asString());
 	}
 
 	@Test
@@ -173,7 +173,7 @@ public class WikiRendererTest {
 				"-----\n" +
 				"---- no rule\n" +
 				"----", Content.Type.WIKI);
-		assertEquals("<hr><hr><p>---- no rule</p><hr>",
+		assertEquals("<hr /><hr /><p>---- no rule</p><hr />",
 				new ContentRenderer().render(content).asString());
 	}
 

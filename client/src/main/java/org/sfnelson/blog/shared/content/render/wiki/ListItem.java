@@ -1,7 +1,5 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
@@ -13,18 +11,9 @@ public class ListItem extends Inline {
 	private final int indent;
 
 	public ListItem(int indent) {
+		super("li");
 		this.indent = indent;
 		setParent(this);
-	}
-
-	@Override
-	protected void open(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant(input.annotate("li"));
-	}
-
-	@Override
-	protected void close(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant("</li>");
 	}
 
 	@Override

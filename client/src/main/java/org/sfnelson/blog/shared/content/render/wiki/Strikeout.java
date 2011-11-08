@@ -1,7 +1,5 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
@@ -11,6 +9,7 @@ import org.sfnelson.blog.shared.content.render.Input;
 public class Strikeout extends Inline {
 
 	public Strikeout(Parent parent) {
+		super("strike");
 		setParent(parent);
 	}
 
@@ -34,16 +33,5 @@ public class Strikeout extends Inline {
 			input.forward();
 			input.forward();
 		}
-	}
-
-	@Override
-	protected void open(SafeHtmlBuilder builder, Input input) {
-		//builder.appendHtmlConstant(input.annotate("span style='text-decoration: line-through;'"));
-		builder.appendHtmlConstant(input.annotate("strike"));
-	}
-
-	@Override
-	protected void close(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant("</strike>");
 	}
 }

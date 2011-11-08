@@ -1,7 +1,5 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
@@ -11,6 +9,7 @@ import org.sfnelson.blog.shared.content.render.Input;
 public class Paragraph extends Inline implements Parent {
 
 	public Paragraph() {
+		super("p");
 		setParent(this);
 	}
 
@@ -53,15 +52,5 @@ public class Paragraph extends Inline implements Parent {
 	public void eatTerminal(Input input) {
 		if (input.current() == '\n') input.forward();
 		if (input.current() == '\n') input.forward();
-	}
-
-	@Override
-	protected void open(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant(input.annotate("p"));
-	}
-
-	@Override
-	protected void close(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant("</p>");
 	}
 }

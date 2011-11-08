@@ -1,7 +1,5 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
@@ -11,6 +9,7 @@ import org.sfnelson.blog.shared.content.render.Input;
 public class InlineCodeBlock extends Inline {
 
 	public InlineCodeBlock(Parent parent) {
+		super("code");
 		setParent(parent);
 	}
 
@@ -37,15 +36,5 @@ public class InlineCodeBlock extends Inline {
 			input.forward();
 			input.forward();
 		}
-	}
-
-	@Override
-	protected void open(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant(input.annotate("code"));
-	}
-
-	@Override
-	protected void close(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant("</code>");
 	}
 }

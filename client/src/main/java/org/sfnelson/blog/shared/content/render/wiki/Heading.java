@@ -1,7 +1,5 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
@@ -13,18 +11,9 @@ public class Heading extends Inline {
 	private final int depth;
 
 	public Heading(int depth) {
+		super("h" + depth);
 		this.depth = depth;
 		setParent(this);
-	}
-
-	@Override
-	protected void open(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant(input.annotate("h" + depth));
-	}
-
-	@Override
-	protected void close(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant("</h" + depth + ">\n");
 	}
 
 	@Override

@@ -1,7 +1,5 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
@@ -11,6 +9,7 @@ import org.sfnelson.blog.shared.content.render.Input;
 public class Subscript extends Inline {
 
 	public Subscript(Parent parent) {
+		super("sub");
 		setParent(parent);
 	}
 
@@ -34,15 +33,5 @@ public class Subscript extends Inline {
 			input.forward();
 			input.forward();
 		}
-	}
-
-	@Override
-	protected void open(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant(input.annotate("sub"));
-	}
-
-	@Override
-	protected void close(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant("</sub>");
 	}
 }

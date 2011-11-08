@@ -1,7 +1,5 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
@@ -9,14 +7,9 @@ import org.sfnelson.blog.shared.content.render.Input;
  * Date: 2/11/11
  */
 public class Quote extends Inline {
-	@Override
-	protected void open(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant(input.annotate("blockquote"));
-	}
 
-	@Override
-	protected void close(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant("</blockquote>");
+	public Quote() {
+		super("blockquote");
 	}
 
 	@Override

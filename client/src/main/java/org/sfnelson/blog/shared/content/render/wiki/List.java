@@ -23,9 +23,9 @@ public class List implements Parent, Element {
 	public SafeHtml parse(Input input) {
 		SafeHtmlBuilder builder = new SafeHtmlBuilder();
 		if (type == '#') {
-			builder.appendHtmlConstant(input.annotate("ol"));
+			builder.append(input.annotateOpen("ol"));
 		} else {
-			builder.appendHtmlConstant(input.annotate("ul"));
+			builder.append(input.annotateOpen("ul"));
 		}
 		while (checkTerminal(input)) {
 			int spaces = 0;
@@ -48,9 +48,9 @@ public class List implements Parent, Element {
 			break;
 		}
 		if (type == '#')
-			builder.appendHtmlConstant("</ol>");
+			builder.append(input.annotateClose("ol"));
 		else
-			builder.appendHtmlConstant("</ul>");
+			builder.append(input.annotateClose("ul"));
 		eatTerminal(input);
 		return builder.toSafeHtml();
 	}

@@ -11,6 +11,7 @@ import org.sfnelson.blog.shared.content.render.Input;
 public class Code extends Inline {
 
 	public Code(Parent parent) {
+		super("code");
 		setParent(parent);
 	}
 
@@ -31,15 +32,5 @@ public class Code extends Inline {
 	@Override
 	public void eatTerminal(Input input) {
 		if (input.current() == '`') input.forward();
-	}
-
-	@Override
-	protected void open(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant(input.annotate("code"));
-	}
-
-	@Override
-	protected void close(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant("</code>");
 	}
 }

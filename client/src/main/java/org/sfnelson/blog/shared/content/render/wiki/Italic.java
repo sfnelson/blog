@@ -1,7 +1,5 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-
 import org.sfnelson.blog.shared.content.render.Input;
 
 /**
@@ -11,6 +9,7 @@ import org.sfnelson.blog.shared.content.render.Input;
 public class Italic extends Inline {
 
 	public Italic(Parent parent) {
+		super("em");
 		setParent(parent);
 	}
 
@@ -31,15 +30,5 @@ public class Italic extends Inline {
 	@Override
 	public void eatTerminal(Input input) {
 		if (input.current() == '_') input.forward();
-	}
-
-	@Override
-	protected void open(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant(input.annotate("em"));
-	}
-
-	@Override
-	protected void close(SafeHtmlBuilder builder, Input input) {
-		builder.appendHtmlConstant("</em>");
 	}
 }

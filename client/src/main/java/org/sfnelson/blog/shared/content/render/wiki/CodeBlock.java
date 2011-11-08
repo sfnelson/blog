@@ -13,7 +13,7 @@ public class CodeBlock implements Element {
 	@Override
 	public SafeHtml parse(Input input) {
 		SafeHtmlBuilder builder = new SafeHtmlBuilder();
-		builder.appendHtmlConstant(input.annotate("code"));
+		builder.append(input.annotateOpen("code"));
 		while (!input.done()) {
 			switch (input.current()) {
 				case '\n':
@@ -31,7 +31,7 @@ public class CodeBlock implements Element {
 			}
 			break;
 		}
-		builder.appendHtmlConstant("</code>");
+		builder.append(input.annotateClose("code"));
 		return builder.toSafeHtml();
 	}
 }

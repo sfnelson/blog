@@ -1,5 +1,8 @@
 package org.sfnelson.blog.shared.content.render;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 1/11/11
@@ -15,9 +18,23 @@ public class Input {
 		this.position = 0;
 	}
 
-	public String annotate(String tag) {
-		if (annotate) return "<" + tag + " s='" + position + "'>";
-		else return "<" + tag + ">";
+	public SafeHtml annotateOpen(String tag) {
+		String value;
+		if (annotate) value = "<" + tag + " s='" + position + "'>";
+		else value = "<" + tag + ">";
+		return SafeHtmlUtils.fromSafeConstant(value);
+	}
+
+	public SafeHtml annotateClose(String tag) {
+		String value = "</" + tag + ">";
+		return SafeHtmlUtils.fromSafeConstant(value);
+	}
+
+	public SafeHtml annotateLeaf(String tag) {
+		String value;
+		if (annotate) value = "<" + tag + " s='" + position + "' />";
+		else value = "<" + tag + " />";
+		return SafeHtmlUtils.fromSafeConstant(value);
 	}
 
 	public boolean done() {

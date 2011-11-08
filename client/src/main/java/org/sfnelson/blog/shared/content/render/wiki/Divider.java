@@ -1,7 +1,6 @@
 package org.sfnelson.blog.shared.content.render.wiki;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
 import org.sfnelson.blog.shared.content.render.Input;
 
@@ -12,8 +11,6 @@ import org.sfnelson.blog.shared.content.render.Input;
 public class Divider implements Element {
 	@Override
 	public SafeHtml parse(Input input) {
-		SafeHtmlBuilder builder = new SafeHtmlBuilder();
-		builder.appendHtmlConstant(input.annotate("hr"));
-		return builder.toSafeHtml();
+		return input.annotateLeaf("hr");
 	}
 }
