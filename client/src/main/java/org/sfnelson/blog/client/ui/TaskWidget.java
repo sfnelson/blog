@@ -26,7 +26,7 @@ import org.sfnelson.blog.client.request.RequestFactory;
 import org.sfnelson.blog.client.request.TaskProxy;
 import org.sfnelson.blog.client.request.TaskRequest;
 import org.sfnelson.blog.client.views.TaskView;
-import org.sfnelson.blog.client.widgets.TitleWidget;
+import org.sfnelson.blog.client.widgets.TitleEditorWidget;
 import org.sfnelson.blog.shared.domain.TaskUpdateType;
 
 /**
@@ -64,7 +64,7 @@ public class TaskWidget extends Composite implements TaskView, RootEditor.HasDel
 			super(TaskWidget.this, eb, TaskProxy.class);
 		}
 
-		TitleWidget title() {
+		TitleEditorWidget title() {
 			return title;
 		}
 
@@ -127,7 +127,7 @@ public class TaskWidget extends Composite implements TaskView, RootEditor.HasDel
 	Style style;
 
 	@UiField
-	TitleWidget title;
+	TitleEditorWidget title;
 
 	@UiField
 	Anchor complete;
@@ -207,15 +207,17 @@ public class TaskWidget extends Composite implements TaskView, RootEditor.HasDel
 	}
 
 	@Override
-	public void select() {
+	public boolean select() {
 		addStyleName(style.selected());
 		selected = true;
+		return true;
 	}
 
 	@Override
-	public void deselect() {
+	public boolean deselect() {
 		removeStyleName(style.selected());
 		selected = false;
+		return true;
 	}
 
 	@Override

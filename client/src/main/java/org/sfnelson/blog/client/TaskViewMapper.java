@@ -7,6 +7,7 @@ import com.google.web.bindery.requestfactory.shared.EntityProxyId;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import org.sfnelson.blog.client.activities.ShowTasks;
 import org.sfnelson.blog.client.editors.SelectableEditor;
 import org.sfnelson.blog.client.places.AuthorPlace;
 
@@ -31,10 +32,10 @@ public class TaskViewMapper implements ActivityMapper, EditorMapper {
 			if (current == null) {
 				current = tasks.get();
 			}
-			return null;
+		} else {
+			current = null;
 		}
-		current = null;
-		return null;
+		return current;
 	}
 
 	@Override

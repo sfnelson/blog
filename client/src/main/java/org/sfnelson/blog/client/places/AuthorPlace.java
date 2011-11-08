@@ -21,7 +21,7 @@ public class AuthorPlace extends Place {
 	}
 
 	public String toString() {
-		return "author:" + action;
+		return "publish:" + action;
 	}
 
 	public boolean equals(Object obj) {

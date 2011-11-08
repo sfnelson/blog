@@ -6,6 +6,7 @@ import com.google.gwt.place.shared.Place;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import org.sfnelson.blog.client.activities.ShowAdminNav;
 import org.sfnelson.blog.client.places.AuthorPlace;
 
 /**

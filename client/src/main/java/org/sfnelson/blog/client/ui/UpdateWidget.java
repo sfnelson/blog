@@ -71,7 +71,7 @@ public class UpdateWidget extends Composite implements UpdateView, RootEditor.Ha
 			this.eventBus = eb;
 		}
 
-		ContentWidget content() {
+		ContentEditorWidget content() {
 			return content;
 		}
 
@@ -170,7 +170,7 @@ public class UpdateWidget extends Composite implements UpdateView, RootEditor.Ha
 	@UiField
 	TaskUpdateTypeWidget type;
 	@UiField
-	ContentWidget content;
+	ContentEditorWidget content;
 
 	private boolean selected;
 	private boolean editing;
@@ -212,16 +212,18 @@ public class UpdateWidget extends Composite implements UpdateView, RootEditor.Ha
 	}
 
 	@Override
-	public void select() {
+	public boolean select() {
 		selected = true;
 		root.setFocus(true);
 		addStyleName(style.selected());
+		return true;
 	}
 
 	@Override
-	public void deselect() {
+	public boolean deselect() {
 		selected = false;
 		removeStyleName(style.selected());
+		return true;
 	}
 
 	@Override

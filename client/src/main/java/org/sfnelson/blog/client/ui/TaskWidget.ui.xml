@@ -81,7 +81,7 @@
         }
     </ui:style>
     <g:HTMLPanel styleName="{style.widget}">
-        <widgets:TitleWidget ui:field="title"></widgets:TitleWidget>
+        <widgets:TitleEditorWidget ui:field="title"></widgets:TitleEditorWidget>
         <span class="{style.controls}">
             <g:Button ui:field="save">Save</g:Button>
             <g:Button ui:field="cancel">Cancel</g:Button>

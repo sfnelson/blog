@@ -12,7 +12,8 @@ import com.google.gwt.user.client.ui.Widget;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 28/10/11
  */
-public class ArticlePanel extends ComplexPanel implements Focusable, HasFocusHandlers, HasBlurHandlers {
+public class ArticlePanel extends ComplexPanel implements Focusable, HasFocusHandlers, HasBlurHandlers,
+		HasClickHandlers {
 
 	public ArticlePanel() {
 		Element article = DOM.createElement("ARTICLE");
@@ -54,5 +55,10 @@ public class ArticlePanel extends ComplexPanel implements Focusable, HasFocusHan
 	@Override
 	public HandlerRegistration addFocusHandler(FocusHandler handler) {
 		return addDomHandler(handler, FocusEvent.getType());
+	}
+
+	@Override
+	public HandlerRegistration addClickHandler(ClickHandler handler) {
+		return addDomHandler(handler, ClickEvent.getType());
 	}
 }

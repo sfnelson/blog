@@ -1,10 +1,9 @@
-package org.sfnelson.blog.client;
+package org.sfnelson.blog.client.activities;
 
 import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -15,10 +14,12 @@ import com.google.web.bindery.requestfactory.shared.Receiver;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import org.sfnelson.blog.client.EditorMapper;
 import org.sfnelson.blog.client.editors.RootEditor;
 import org.sfnelson.blog.client.events.CreatePostEvent;
 import org.sfnelson.blog.client.events.CreateUpdateEvent;
 import org.sfnelson.blog.client.events.EditorSelectionEvent;
+import org.sfnelson.blog.client.ioc.ViewOnly;
 import org.sfnelson.blog.client.request.EntryProxy;
 import org.sfnelson.blog.client.request.EntryRequest;
 import org.sfnelson.blog.client.request.PostProxy;
@@ -29,22 +30,23 @@ import org.sfnelson.blog.client.views.BlogView;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 5/11/11
  */
-public class ShowBlog extends AbstractActivity
-		implements ActivityMapper, CreatePostEvent.Handler, CreateUpdateEvent.Handler {
+public class ShowBlog extends AbstractActivity implements CreatePostEvent.Handler, CreateUpdateEvent.Handler {
 
 	private final BlogView view;
 	private final EventBus eventBus;
 	private final Provider<EntryRequest> request;
 
+	private Place place;
+
 	@Inject
-	ShowBlog(BlogView view, EventBus eventBus, Provider<EntryRequest> request) {
+	ShowBlog(@ViewOnly BlogView view, EventBus eventBus, Provider<EntryRequest> request) {
 		this.view = view;
 		this.eventBus = eventBus;
 		this.request = request;
 	}
 
-	@Override
-	public Activity getActivity(Place place) {
+	public Activity init(Place place) {
+		this.place = place;
 		return this;
 	}
 
@@ -80,9 +82,15 @@ public class ShowBlog extends AbstractActivity
 				.fire(new Receiver<List<EntryProxy>>() {
 					@Override
 					public void onSuccess(List<EntryProxy> response) {
+						view.getList().clear();
 						view.getList().addAll(response);
 					}
 				});
+	}
+
+	@Override
+	public void onStop() {
+		view.getList().clear();
 	}
 
 	@Override

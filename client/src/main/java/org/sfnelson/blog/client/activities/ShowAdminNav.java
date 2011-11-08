@@ -1,4 +1,4 @@
-package org.sfnelson.blog.client;
+package org.sfnelson.blog.client.activities;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.Scheduler;

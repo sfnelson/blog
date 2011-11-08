@@ -1,0 +1,21 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:widgets="urn:import:org.sfnelson.blog.client.widgets">
+    <ui:style type="org.sfnelson.blog.client.ui.PostViewer.Style">
+        .article {
+            border-left: solid 0.5em transparent;
+            padding-left: 1.5em;
+        }
+
+        .selected {
+            border-left-color: #87ceeb;
+        }
+    </ui:style>
+    <widgets:ArticlePanel ui:field="root" styleName="{style.article}">
+        <widgets:HeaderPanel>
+            <widgets:TitleWidget ui:field="title"></widgets:TitleWidget>
+            <widgets:DateWidget ui:field="posted"></widgets:DateWidget>
+        </widgets:HeaderPanel>
+        <widgets:ContentWidget ui:field="content"></widgets:ContentWidget>
+    </widgets:ArticlePanel>
+</ui:UiBinder>

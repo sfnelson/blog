@@ -1,9 +1,11 @@
-package org.sfnelson.blog.client;
+package org.sfnelson.blog.client.ioc;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 import com.google.gwt.place.shared.PlaceController;
+
+import org.sfnelson.blog.client.*;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>

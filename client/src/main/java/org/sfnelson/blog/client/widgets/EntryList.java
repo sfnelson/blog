@@ -1,10 +1,7 @@
-package org.sfnelson.blog.client.ui;
+package org.sfnelson.blog.client.widgets;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.web.bindery.event.shared.EventBus;
@@ -15,6 +12,7 @@ import org.sfnelson.blog.client.editors.EditorSource;
 import org.sfnelson.blog.client.editors.EntryEditor;
 import org.sfnelson.blog.client.editors.RootEditor;
 import org.sfnelson.blog.client.events.EditorSelectionEvent;
+import org.sfnelson.blog.client.ioc.ViewOnly;
 import org.sfnelson.blog.client.request.EntryProxy;
 import org.sfnelson.blog.client.request.PostProxy;
 import org.sfnelson.blog.client.request.UpdateProxy;
@@ -29,8 +27,6 @@ import org.sfnelson.blog.client.views.UpdateView;
  * Date: 19/10/11
  */
 public class EntryList extends Composite implements BlogView, KeyPressHandler {
-	interface Binder extends UiBinder<FlowPanel, EntryList> {
-	}
 
 	private class Source implements EditorSource<EntryProxy> {
 		@Override
@@ -59,18 +55,17 @@ public class EntryList extends Composite implements BlogView, KeyPressHandler {
 	private final Provider<PostView> posts;
 	private final Provider<UpdateView> updates;
 	private final EditorList<EntryProxy> list;
-
-	@UiField
-	FlowPanel entries;
+	private final FlowPanel entries;
 
 	@Inject
-	EntryList(EventBus eventBus, Provider<PostView> posts, Provider<UpdateView> updates) {
+	EntryList(EventBus eventBus, @ViewOnly Provider<PostView> posts, @ViewOnly Provider<UpdateView> updates) {
 		this.eventBus = eventBus;
 		this.posts = posts;
 		this.updates = updates;
 		this.list = new EditorList<EntryProxy>(new Source());
 
-		initWidget(GWT.<Binder>create(Binder.class).createAndBindUi(this));
+		entries = new FlowPanel();
+		initWidget(entries);
 
 		addDomHandler(this, KeyPressEvent.getType());
 	}

@@ -1,4 +1,4 @@
-package org.sfnelson.blog.client;
+package org.sfnelson.blog.client.activities;
 
 import java.util.List;
 
@@ -15,6 +15,7 @@ import com.google.web.bindery.requestfactory.shared.Receiver;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import org.sfnelson.blog.client.EditorMapper;
 import org.sfnelson.blog.client.events.CreateTaskEvent;
 import org.sfnelson.blog.client.events.EditorSelectionEvent;
 import org.sfnelson.blog.client.request.TaskProxy;

@@ -1,4 +1,4 @@
-package org.sfnelson.blog.client;
+package org.sfnelson.blog.client.ioc;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -9,12 +9,17 @@ import com.google.gwt.place.shared.PlaceController;
 
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import org.sfnelson.blog.client.*;
+import org.sfnelson.blog.client.activities.ShowBlog;
+import org.sfnelson.blog.client.activities.ShowEditableBlog;
 import org.sfnelson.blog.client.request.AuthRequest;
 import org.sfnelson.blog.client.request.EntryRequest;
 import org.sfnelson.blog.client.request.RequestFactory;
 import org.sfnelson.blog.client.request.TaskRequest;
 import org.sfnelson.blog.client.ui.*;
 import org.sfnelson.blog.client.views.*;
+import org.sfnelson.blog.client.widgets.EditableEntryList;
+import org.sfnelson.blog.client.widgets.EntryList;
 import org.sfnelson.blog.client.widgets.ErrorPanel;
 import org.sfnelson.blog.client.widgets.NavWidget;
 
@@ -28,13 +33,30 @@ public class BlogModule extends AbstractGinModule {
 	protected void configure() {
 		bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
 
-		bind(BlogView.class).to(EntryList.class).in(Singleton.class);
+		bind(BlogView.class).annotatedWith(ViewOnly.class).to(EntryList.class).in(Singleton.class);
+		bind(BlogView.class).annotatedWith(Author.class).to(EditableEntryList.class).in(Singleton.class);
+
+		bind(ShowBlog.class).annotatedWith(ViewOnly.class).to(ShowBlog.class);
+		bind(ShowBlog.class).annotatedWith(Author.class).to(ShowEditableBlog.class);
+
+		bind(PostView.class).annotatedWith(ViewOnly.class).to(PostViewer.class);
+		bind(PostView.class).annotatedWith(Author.class).to(PostWidget.class);
+
+		bind(UpdateView.class).annotatedWith(ViewOnly.class).to(UpdateViewer.class);
+		bind(UpdateView.class).annotatedWith(Author.class).to(UpdateWidget.class);
+
 		bind(TasksView.class).to(TaskList.class).in(Singleton.class);
 		bind(AuthView.class).to(AuthWidget.class).in(Singleton.class);
 		bind(ErrorView.class).to(ErrorPanel.class).in(Singleton.class);
-		bind(PostView.class).to(PostWidget.class);
+
+
 		bind(TaskView.class).to(TaskWidget.class);
-		bind(UpdateView.class).to(UpdateWidget.class);
+
+
+		bind(AuthViewMapper.class).in(Singleton.class);
+		bind(NavViewMapper.class).in(Singleton.class);
+		bind(EntryViewMapper.class).in(Singleton.class);
+		bind(TaskViewMapper.class).in(Singleton.class);
 	}
 
 	@Provides

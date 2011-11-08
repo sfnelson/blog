@@ -1,6 +1,6 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
-    <ui:style type="org.sfnelson.blog.client.ui.ContentWidget.Style">
+    <ui:style type="org.sfnelson.blog.client.ui.ContentEditorWidget.Style">
         .content {
             position: relative;
         }

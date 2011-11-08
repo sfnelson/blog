@@ -31,7 +31,7 @@ import org.sfnelson.blog.client.request.RequestFactory;
 import org.sfnelson.blog.client.views.PostView;
 import org.sfnelson.blog.client.widgets.ArticlePanel;
 import org.sfnelson.blog.client.widgets.DateWidget;
-import org.sfnelson.blog.client.widgets.TitleWidget;
+import org.sfnelson.blog.client.widgets.TitleEditorWidget;
 import org.sfnelson.blog.domain.Content;
 
 /**
@@ -73,7 +73,7 @@ public class PostWidget extends Composite implements PostView, RootEditor.HasDel
 			return driver;
 		}
 
-		TitleWidget title() {
+		TitleEditorWidget title() {
 			return title;
 		}
 
@@ -81,7 +81,7 @@ public class PostWidget extends Composite implements PostView, RootEditor.HasDel
 			return posted;
 		}
 
-		ContentWidget content() {
+		ContentEditorWidget content() {
 			return content;
 		}
 
@@ -162,11 +162,11 @@ public class PostWidget extends Composite implements PostView, RootEditor.HasDel
 	@UiField
 	ArticlePanel root;
 	@UiField
-	TitleWidget title;
+	TitleEditorWidget title;
 	@UiField
 	DateWidget posted;
 	@UiField
-	ContentWidget content;
+	ContentEditorWidget content;
 
 	@UiField
 	Anchor delete;
@@ -200,16 +200,18 @@ public class PostWidget extends Composite implements PostView, RootEditor.HasDel
 	}
 
 	@Override
-	public void select() {
+	public boolean select() {
 		selected = true;
 		root.setFocus(true);
 		addStyleName(style.selected());
+		return true;
 	}
 
 	@Override
-	public void deselect() {
+	public boolean deselect() {
 		selected = false;
 		removeStyleName(style.selected());
+		return true;
 	}
 
 	@UiHandler("save")

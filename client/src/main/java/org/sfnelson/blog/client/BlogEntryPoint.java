@@ -10,6 +10,7 @@ import com.google.web.bindery.requestfactory.shared.EntityProxyId;
 
 import com.google.common.collect.Lists;
 import org.sfnelson.blog.client.editors.SelectableEditor;
+import org.sfnelson.blog.client.ioc.Injector;
 import org.sfnelson.blog.client.places.BlogPlace;
 import org.sfnelson.blog.client.widgets.RootPanel;
 

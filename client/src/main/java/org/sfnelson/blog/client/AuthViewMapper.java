@@ -5,6 +5,7 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
 import com.google.inject.Inject;
+import org.sfnelson.blog.client.activities.ShowAuth;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>

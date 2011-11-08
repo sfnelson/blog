@@ -48,10 +48,10 @@
     <widgets:ArticlePanel ui:field="root" styleName="{style.article}">
         <g:Anchor ui:field="delete" styleName="{style.delete}" title="Delete">&#x2717;</g:Anchor>
         <widgets:HeaderPanel>
-            <widgets:TitleWidget ui:field="title"></widgets:TitleWidget>
+            <widgets:TitleEditorWidget ui:field="title"></widgets:TitleEditorWidget>
             <widgets:DateWidget ui:field="posted"></widgets:DateWidget>
         </widgets:HeaderPanel>
-        <blogui:ContentWidget ui:field="content"></blogui:ContentWidget>
+        <blogui:ContentEditorWidget ui:field="content"></blogui:ContentEditorWidget>
         <widgets:FooterPanel styleName="{style.controls}">
             <g:Button ui:field="save">Save</g:Button>
             <g:Button ui:field="cancel">Cancel</g:Button>

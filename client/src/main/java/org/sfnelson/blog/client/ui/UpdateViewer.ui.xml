@@ -2,16 +2,7 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:widgets="urn:import:org.sfnelson.blog.client.widgets"
              xmlns:blog="urn:import:org.sfnelson.blog.client.ui">
-    <ui:style type="org.sfnelson.blog.client.ui.UpdateWidget.Style">
-        .controls {
-            text-align: right;
-            display: none;
-        }
-
-        .changed .controls, .editing .controls {
-            display: block;
-        }
-
+    <ui:style type="org.sfnelson.blog.client.ui.UpdateViewer.Style">
         .article {
             border-left: solid 0.5em transparent;
             padding-left: 1.5em;
@@ -41,33 +32,9 @@
             border-left-color: #87ceeb;
         }
 
-        .selected .content, .editing .content {
+        .selected .content {
             display: block;
             padding: 1ex 0 0 0;
-        }
-
-        .delete {
-            display: none;
-            position: absolute;
-            top: 4px;
-            right: -30px;
-            width: 20px;
-            font-size: 20px;
-            line-height: 20px;
-            text-align: center;
-            color: #aaa;
-        }
-
-        .delete:hover {
-            color: #8b0000;
-        }
-
-        .selected .delete {
-            display: block;
-        }
-
-        .editing .delete {
-            display: none;
         }
 
         .type {
@@ -86,15 +53,10 @@
         }
     </ui:style>
     <widgets:ArticlePanel ui:field="root" styleName="{style.article}">
-        <g:Anchor ui:field="delete" styleName="{style.delete}" title="Delete">&#x2717;</g:Anchor>
         <widgets:HeaderPanel>
             <widgets:TaskUpdateTypeWidget ui:field="type" styleName="{style.type}"></widgets:TaskUpdateTypeWidget>
             <widgets:TaskNameWidget ui:field="task"></widgets:TaskNameWidget>
         </widgets:HeaderPanel>
-        <blog:ContentEditorWidget ui:field="content" styleName="{style.content}"></blog:ContentEditorWidget>
-        <widgets:FooterPanel styleName="{style.controls}">
-            <g:Button ui:field="save">Save</g:Button>
-            <g:Button ui:field="cancel">Cancel</g:Button>
-        </widgets:FooterPanel>
+        <widgets:ContentWidget ui:field="content" styleName="{style.content}"></widgets:ContentWidget>
     </widgets:ArticlePanel>
 </ui:UiBinder>

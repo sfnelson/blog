@@ -26,8 +26,8 @@ import org.sfnelson.blog.shared.content.render.ContentRenderer;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 3/11/11
  */
-public class ContentWidget extends Composite implements ValueAwareEditor<ContentProxy> {
-	interface Binder extends UiBinder<HTMLPanel, ContentWidget> {
+public class ContentEditorWidget extends Composite implements ValueAwareEditor<ContentProxy> {
+	interface Binder extends UiBinder<HTMLPanel, ContentEditorWidget> {
 	}
 
 	interface Style extends CssResource {
@@ -71,7 +71,7 @@ public class ContentWidget extends Composite implements ValueAwareEditor<Content
 	private HandlerRegistration registration;
 	private EditorDelegate<ContentProxy> delegate;
 
-	public ContentWidget() {
+	public ContentEditorWidget() {
 		renderer = new ContentRenderer();
 
 		initWidget(GWT.<Binder>create(Binder.class).createAndBindUi(this));

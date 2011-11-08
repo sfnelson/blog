@@ -17,9 +17,9 @@ public interface ModalEditorView extends IsWidget {
 
 	void view();
 
-	void select();
+	boolean select();
 
-	void deselect();
+	boolean deselect();
 
 	interface Editor<T extends EntityProxy> extends RootEditor<T> {
 		void requestEdit();
