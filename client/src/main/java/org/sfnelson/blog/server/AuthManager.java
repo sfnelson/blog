@@ -49,9 +49,12 @@ public class AuthManager {
 	public Auth login(String authString, String returnURL) throws DiscoveryException, MessageException, ConsumerException {
 		logout();
 
-		String url = RequestFactoryServlet.getThreadLocalRequest().getRequestURL().toString();
-		url = url.substring(0, url.indexOf("gwtRequest"));
-		url += "oauth";
+		// String url = RequestFactoryServlet.getThreadLocalRequest().getRequestURL().toString();
+		// url = url.substring(0, url.indexOf("gwtRequest"));
+		String url = returnURL;
+		if (url.indexOf('#') > 0) url = url.substring(0, url.indexOf('#'));
+		if (url.indexOf('/') > 0) url = url.substring(0, url.lastIndexOf('/'));
+		url += "/oauth";
 
 		List discoveries = manager.discover(authString);
 		DiscoveryInformation discovered = manager.associate(discoveries);
