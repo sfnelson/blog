@@ -114,12 +114,20 @@ public class EntryManager implements EntryService, ContentService {
 	@Override
 	public List<Entry> getEntries(int start, int limit) {
 		List<Entry> entries = Lists.newArrayList();
+		int skip = 0;
 		int count = 0;
-		for (DBObject entry : database.findEntries().skip(start)) {
+		for (DBObject entry : database.findEntries()) {
 			if (entry.get("type").equals("post")) {
-				entries.add(posts.get().init(entry));
+				if (skip < start) {
+					skip++;
+				} else {
+					if (count++ >= limit) break;
+					entries.add(posts.get().init(entry));
+				}
 			} else {
-				entries.add(updates.get().init(entry));
+				if (skip >= start) {
+					entries.add(updates.get().init(entry));
+				}
 			}
 			if (++count >= limit) break;
 		}

@@ -42,7 +42,7 @@
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-dev</artifactId>
             <version>${gwt.version}</version>
-            <scope>test</scope>
+            <!-- this is ugly, but it's needed for safehtml on the server side -->
         </dependency>
 
         <dependency>

@@ -21,6 +21,7 @@ public class Input {
 	}
 
 	public boolean done() {
+		if (input == null) return true;
 		return position >= input.length();
 	}
 
