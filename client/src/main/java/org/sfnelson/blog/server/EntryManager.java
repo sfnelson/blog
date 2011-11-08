@@ -129,7 +129,6 @@ public class EntryManager implements EntryService, ContentService {
 					entries.add(updates.get().init(entry));
 				}
 			}
-			if (++count >= limit) break;
 		}
 		return entries;
 	}
