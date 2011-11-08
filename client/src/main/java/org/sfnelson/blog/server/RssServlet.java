@@ -118,10 +118,10 @@ public class RssServlet extends HttpServlet {
 			}
 			if (!progress.isEmpty()) {
 				value.append(SafeHtmlUtils.fromTrustedString("<h3>Progress:</h3>"));
-				value.append(SafeHtmlUtils.fromTrustedString("<dl>");
+				value.append(SafeHtmlUtils.fromTrustedString("<dl>"));
 				for (Update update : progress) {
 					Task task = update.getTask();
-					value.append(SafeHtmlUtils.fromTrustedString("<dt>");
+					value.append(SafeHtmlUtils.fromTrustedString("<dt>"));
 					value.appendEscaped(task.getTitle());
 					value.append(SafeHtmlUtils.fromTrustedString("</dt><dd>"));
 					value.append(renderer.render(update.getContent()));
