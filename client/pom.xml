@@ -175,6 +175,15 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -215,7 +224,6 @@
                 <configuration>
                     <module>org.sfnelson.blog.Blog</module>
                     <runTarget>/index.html</runTarget>
-                    <strict>true</strict>
                     <logLevel>INFO</logLevel>
                     <style>${gwt.style}</style>
                     <copyWebapp>true</copyWebapp>
@@ -233,28 +241,25 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2</version>
+                <groupId>org.bsc.maven</groupId>
+                <artifactId>maven-processor-plugin</artifactId>
+                <version>2.0.5</version>
                 <executions>
                     <execution>
-                        <id>VerifyRequestFactoryInterfaces</id>
-                        <phase>process-classes</phase>
-                        <configuration>
-                            <executable>java</executable>
-                            <arguments>
-                                <argument>-cp</argument>
-                                <classpath/>
-                                <argument>com.google.web.bindery.requestfactory.apt.ValidationTool</argument>
-                                <argument>${project.build.outputDirectory}</argument>
-                                <argument>org.sfnelson.blog.client.request.RequestFactory</argument>
-                            </arguments>
-                        </configuration>
+                        <id>process</id>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>process</goal>
                         </goals>
+                        <phase>generate-sources</phase>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.web.bindery</groupId>
+                        <artifactId>requestfactory-apt</artifactId>
+                        <version>${gwt.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>
