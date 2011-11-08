@@ -1,12 +1,12 @@
 package org.sfnelson.blog.shared.content.render.html;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+
+import com.google.common.collect.Sets;
 
 /**
  * HTML sanitizer based on com.google.gwt.safehtml.shared.SimpleHtmlSanitizer with extra tags allowed.
@@ -15,10 +15,14 @@ public class HtmlSanitizer implements com.google.gwt.safehtml.shared.HtmlSanitiz
 
 	private static final HtmlSanitizer INSTANCE = new HtmlSanitizer();
 
-	private static final Set<String> TAG_WHITELIST = new HashSet<String>(
-			Arrays.asList("b", "em", "i", "h1", "h2", "h3", "h4", "h5", "h6", "hr",
-					"ul", "ol", "li", "strong", "strike", "code", "p", "dl", "dt",
-					"dd", "table", "tr", "td", "th", "pre"));
+	private static final Set<String> TAG_WHITELIST = Sets.newHashSet(
+			Arrays.asList("a", "abbr", "acronym", "address", "area", "b", "big", "blockquote", "br",
+					"button", "caption", "center", "cite", "code", "col", "colgroup", "dd", "del",
+					"dfn", "dir", "div", "dl", "dt", "em", "fieldset", "font", "form", "h1", "h2",
+					"h3", "h4", "h5", "h6", "hr", "i", "img", "input", "ins", "kbd", "label", "legend",
+					"li", "map", "menu", "ol", "optgroup", "option", "p", "pre", "q", "s", "samp",
+					"select", "small", "span", "strike", "strong", "style", "sub", "sup", "table", "tbody", "td",
+					"textarea", "tfoot", "th", "thead", "tr", "tt", "u", "ul", "var"));
 
 	/**
 	 * Return a singleton SimpleHtmlSanitizer instance.
@@ -45,7 +49,7 @@ public class HtmlSanitizer implements com.google.gwt.safehtml.shared.HtmlSanitiz
 		if (html == null) {
 			throw new NullPointerException("html is null");
 		}
-		return new SafeHtmlBuilder().appendHtmlConstant(simpleSanitize(html)).toSafeHtml();
+		return SafeHtmlUtils.fromTrustedString(simpleSanitize(html));
 	}
 
 	/*
