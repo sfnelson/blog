@@ -22,6 +22,8 @@ import org.openid4java.message.ax.AxMessage;
 import org.openid4java.message.ax.FetchRequest;
 import org.openid4java.message.ax.FetchResponse;
 import org.sfnelson.blog.server.mongo.Database;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -33,6 +35,8 @@ public class AuthManager {
 	private final Database database;
 	private final Provider<Auth> authProvider;
 	private final MessageDigest digest;
+
+	private final Logger log = LoggerFactory.getLogger(AuthManager.class);
 
 	@Inject
 	AuthManager(Database database, Provider<Auth> authProvider) throws Exception {
@@ -93,6 +97,7 @@ public class AuthManager {
 			Auth auth = authProvider.get().init(database.find(Auth.class, id));
 			if (!auth.getAuthenticated()) {
 				auth.setAuthor(false);
+				log.info("new user registered ({})", id);
 				database.persist(auth, id);
 				auth = authProvider.get().init(database.find(Auth.class, id));
 			}
@@ -105,9 +110,12 @@ public class AuthManager {
 				String email = (String) emails.get(0);
 				if (auth.getEmail() == null || !auth.getEmail().equals(email)) {
 					auth.setEmail(email);
+					log.info("updating email for {} - {}", id, email);
 					database.update(auth);
 				}
 			}
+
+			log.info("{} is now logged in", auth.getEmail());
 
 			return (String) req.getSession().getAttribute("openid-returnURL");  // success
 		}
@@ -122,7 +130,11 @@ public class AuthManager {
 			getSession().setAttribute("oauth-id", oauthId);
 		}
 
-		return state();
+		Auth state = state();
+
+		log.info("{} logged in using a stored cookie", state.getEmail());
+
+		return state;
 	}
 
 	public Auth state() {
@@ -135,6 +147,12 @@ public class AuthManager {
 
 	public Auth logout() {
 		HttpSession session = getSession();
+		Auth state = state();
+
+		if (state != null) {
+			log.info("{} logged out", state.getEmail());
+		}
+
 		session.setAttribute("oauth-id", null);
 		session.setAttribute("oauth-email", null);
 		return new Auth(null);

@@ -47,7 +47,7 @@ public class ServletConfig extends GuiceServletContextListener {
 
 				bindInterceptor(Matchers.any(), Matchers.annotatedWith(RequiresLogin.class), new LoginChecker());
 
-				// System.setProperty("gwt.rpc.dumpPayload", "true");
+				System.setProperty("gwt.rpc.dumpPayload", "false");
 			}
 
 			@Provides

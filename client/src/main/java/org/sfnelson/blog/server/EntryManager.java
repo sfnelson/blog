@@ -12,12 +12,16 @@ import org.sfnelson.blog.server.mongo.Database;
 import org.sfnelson.blog.server.security.RequiresLogin;
 import org.sfnelson.blog.server.service.ContentService;
 import org.sfnelson.blog.server.service.EntryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 19/10/11
  */
 public class EntryManager implements EntryService, ContentService {
+
+	private final Logger log = LoggerFactory.getLogger(EntryManager.class);
 
 	private final Database database;
 	private final Provider<Post> posts;
@@ -35,6 +39,8 @@ public class EntryManager implements EntryService, ContentService {
 	public void createEntry(Entry entry) {
 		if (entry != null) {
 			database.persist(entry);
+
+			log.info("new entry created");
 
 			if (entry instanceof Update) {
 				Update update = (Update) entry;

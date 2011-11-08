@@ -51,6 +51,6 @@ public class Auth extends DomainObject<Auth> {
 	}
 
 	public void setAuthor(boolean author) {
-		delta.put("author", true);
+		delta.put("author", author);
 	}
 }
