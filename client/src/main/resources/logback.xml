@@ -1,12 +1,12 @@
 <configuration>
     <appender name="INFOFILE" class="ch.qos.logback.core.FileAppender">
-        <file>blog-info.log</file>
+        <file>../logs/blog-info.log</file>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <append>false</append>
+        <append>true</append>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
@@ -22,8 +22,8 @@
         </encoder>
     </appender>
     <appender name="DEBUGFILE" class="ch.qos.logback.core.FileAppender">
-        <file>blog-debug.log</file>
-        <append>false</append>
+        <file>../logs/blog-debug.log</file>
+        <append>true</append>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
