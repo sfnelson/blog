@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -101,32 +102,32 @@ public class RssServlet extends HttpServlet {
 		SafeHtmlBuilder value = new SafeHtmlBuilder();
 		value.append(renderer.render(post.getContent()));
 		if (!complete.isEmpty() || !progress.isEmpty()) {
-			value.appendHtmlConstant("<h2>Goals</h2>");
+			value.append(SafeHtmlUtils.fromTrustedString("<h2>Goals</h2>"));
 			if (!complete.isEmpty()) {
-				value.appendHtmlConstant("<h3>Completed:</h3>");
-				value.appendHtmlConstant("<dl>");
+				value.append(SafeHtmlUtils.fromTrustedString("<h3>Completed:</h3>"));
+				value.append(SafeHtmlUtils.fromTrustedString("<dl>"));
 				for (Update update : complete) {
 					Task task = update.getTask();
-					value.appendHtmlConstant("<dt>");
+					value.append(SafeHtmlUtils.fromTrustedString("<dt>"));
 					value.appendEscaped(task.getTitle());
-					value.appendHtmlConstant("</dt><dd>");
+					value.append(SafeHtmlUtils.fromTrustedString("</dt><dd>"));
 					value.append(renderer.render(update.getContent()));
-					value.appendHtmlConstant("</dd>");
+					value.append(SafeHtmlUtils.fromTrustedString("</dd>"));
 				}
-				value.appendHtmlConstant("</dl>");
+				value.append(SafeHtmlUtils.fromTrustedString("</dl>"));
 			}
 			if (!progress.isEmpty()) {
-				value.appendHtmlConstant("<h3>Progress:</h3>");
-				value.appendHtmlConstant("<dl>");
+				value.append(SafeHtmlUtils.fromTrustedString("<h3>Progress:</h3>"));
+				value.append(SafeHtmlUtils.fromTrustedString("<dl>");
 				for (Update update : progress) {
 					Task task = update.getTask();
-					value.appendHtmlConstant("<dt>");
+					value.append(SafeHtmlUtils.fromTrustedString("<dt>");
 					value.appendEscaped(task.getTitle());
-					value.appendHtmlConstant("</dt><dd>");
+					value.append(SafeHtmlUtils.fromTrustedString("</dt><dd>"));
 					value.append(renderer.render(update.getContent()));
-					value.appendHtmlConstant("</dd>");
+					value.append(SafeHtmlUtils.fromTrustedString("</dd>"));
 				}
-				value.appendHtmlConstant("</dl>");
+				value.append(SafeHtmlUtils.fromTrustedString("</dl>"));
 			}
 		}
 		content.setValue(value.toSafeHtml().asString());
