@@ -76,7 +76,11 @@ public class AuthManager {
 		DiscoveryInformation discovered = (DiscoveryInformation) req.getSession().getAttribute("openid-disc");
 
 		// extract the receiving URL from the HTTP request
-		StringBuffer receivingURL = req.getRequestURL();
+		String url = (String) req.getSession().getAttribute("openid-returnURL");
+		if (url.indexOf('#') > 0) url = url.substring(0, url.indexOf('#'));
+		if (url.indexOf('/') > 0) url = url.substring(0, url.lastIndexOf('/'));
+		StringBuffer receivingURL = new StringBuffer().append(url);
+		receivingURL.append("/oauth");
 		String queryString = req.getQueryString();
 		if (queryString != null && queryString.length() > 0)
 			receivingURL.append("?").append(req.getQueryString());
@@ -123,6 +127,7 @@ public class AuthManager {
 			return (String) req.getSession().getAttribute("openid-returnURL");  // success
 		}
 
+		log.error("could not retrieve verification identifier, failing");
 		return null;
 	}
 

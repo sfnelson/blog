@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.openid4java.OpenIDException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
@@ -18,6 +20,7 @@ import org.openid4java.OpenIDException;
 public class OAuthServlet extends HttpServlet {
 
 	private final AuthManager auth;
+	private final Logger log = LoggerFactory.getLogger(OAuthServlet.class);
 
 	@Inject
 	OAuthServlet(AuthManager auth) {
@@ -28,7 +31,7 @@ public class OAuthServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
 			String returnURL = auth.verify(req);
-			if (returnURL.indexOf('#') > 0) {
+			if (returnURL != null && returnURL.indexOf('#') > 0) {
 				returnURL = returnURL.substring(0, returnURL.indexOf('#'));
 			}
 
