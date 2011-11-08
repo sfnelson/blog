@@ -22,19 +22,19 @@ public class Input {
 		String value;
 		if (annotate) value = "<" + tag + " s='" + position + "'>";
 		else value = "<" + tag + ">";
-		return SafeHtmlUtils.fromSafeConstant(value);
+		return SafeHtmlUtils.fromTrustedString(value);
 	}
 
 	public SafeHtml annotateClose(String tag) {
 		String value = "</" + tag + ">";
-		return SafeHtmlUtils.fromSafeConstant(value);
+		return SafeHtmlUtils.fromTrustedString(value);
 	}
 
 	public SafeHtml annotateLeaf(String tag) {
 		String value;
 		if (annotate) value = "<" + tag + " s='" + position + "' />";
 		else value = "<" + tag + " />";
-		return SafeHtmlUtils.fromSafeConstant(value);
+		return SafeHtmlUtils.fromTrustedString(value);
 	}
 
 	public boolean done() {
