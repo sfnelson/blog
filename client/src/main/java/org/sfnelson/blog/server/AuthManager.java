@@ -138,7 +138,7 @@ public class AuthManager {
 		String id = (String) getSession().getAttribute("oauth-id");
 
 		if (id == null) {
-			Auth auth = authProvider.get().init(database.find(Auth.class, oauthId));
+			Auth auth = getAuth(oauthId);
 			if (auth.getAuthenticated()) {
 				getSession().setAttribute("oauth-id", oauthId);
 
@@ -146,7 +146,7 @@ public class AuthManager {
 			}
 		}
 
-		return state();
+		return getAuth(id);
 	}
 
 	public Auth state() {
@@ -154,7 +154,7 @@ public class AuthManager {
 		String id = (String) session.getAttribute("oauth-id");
 
 		if (id != null) {
-			return authProvider.get().init(database.find(Auth.class, id));
+			return getAuth(id);
 		}
 
 		for (Cookie cookie : getRequest().getCookies()) {
@@ -163,7 +163,7 @@ public class AuthManager {
 			}
 		}
 
-		return new Auth(null);
+		return authProvider.get().init(null);
 	}
 
 	public Auth logout() {
@@ -176,7 +176,7 @@ public class AuthManager {
 
 		session.setAttribute("oauth-id", null);
 		session.setAttribute("oauth-email", null);
-		return new Auth(null);
+		return authProvider.get().init(null);
 	}
 
 	private HttpSession getSession() {
@@ -185,5 +185,9 @@ public class AuthManager {
 
 	private HttpServletRequest getRequest() {
 		return RequestFactoryServlet.getThreadLocalRequest();
+	}
+
+	private Auth getAuth(String id) {
+		return authProvider.get().init(database.find(Auth.class, id));
 	}
 }
