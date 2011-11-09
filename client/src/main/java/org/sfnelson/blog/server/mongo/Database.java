@@ -3,11 +3,8 @@ package org.sfnelson.blog.server.mongo;
 import com.google.inject.Inject;
 import com.mongodb.*;
 import org.bson.types.ObjectId;
-import org.sfnelson.blog.server.Auth;
-import org.sfnelson.blog.server.domain.Content;
-import org.sfnelson.blog.server.domain.Post;
-import org.sfnelson.blog.server.domain.Task;
-import org.sfnelson.blog.server.domain.Update;
+import org.sfnelson.blog.server.domain.Auth;
+import org.sfnelson.blog.server.domain.*;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>

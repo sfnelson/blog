@@ -1,4 +1,4 @@
-package org.sfnelson.blog.server;
+package org.sfnelson.blog.server.domain;
 
 import com.google.inject.Inject;
 import org.sfnelson.blog.server.mongo.DomainObject;

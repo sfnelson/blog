@@ -3,8 +3,11 @@ package org.sfnelson.blog.server;
 import java.security.MessageDigest;
 import java.util.List;
 
+import com.google.gwt.user.server.Base64Utils;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.openid4java.association.AssociationException;
@@ -21,6 +24,7 @@ import org.openid4java.message.ParameterList;
 import org.openid4java.message.ax.AxMessage;
 import org.openid4java.message.ax.FetchRequest;
 import org.openid4java.message.ax.FetchResponse;
+import org.sfnelson.blog.server.domain.Auth;
 import org.sfnelson.blog.server.mongo.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,10 +98,9 @@ public class AuthManager {
 		// examine the verification result and extract the verified identifier
 		Identifier verified = verification.getVerifiedId();
 		if (verified != null) {
-			AuthSuccess authSuccess =
-					(AuthSuccess) verification.getAuthResponse();
+			AuthSuccess authSuccess = (AuthSuccess) verification.getAuthResponse();
 			byte[] idHash = digest.digest(authSuccess.getIdentity().getBytes());
-			String id = new String(idHash);
+			String id = Base64Utils.toBase64(idHash);
 
 			req.getSession().setAttribute("oauth-id", id);
 
@@ -135,22 +138,32 @@ public class AuthManager {
 		String id = (String) getSession().getAttribute("oauth-id");
 
 		if (id == null) {
-			getSession().setAttribute("oauth-id", oauthId);
+			Auth auth = authProvider.get().init(database.find(Auth.class, oauthId));
+			if (auth.getAuthenticated()) {
+				getSession().setAttribute("oauth-id", oauthId);
+
+				log.info("{} logged in using a stored cookie", auth.getEmail());
+			}
 		}
 
-		Auth state = state();
-
-		log.info("{} logged in using a stored cookie", state.getEmail());
-
-		return state;
+		return state();
 	}
 
 	public Auth state() {
 		HttpSession session = getSession();
 		String id = (String) session.getAttribute("oauth-id");
 
-		if (id == null) return new Auth(null);
-		else return authProvider.get().init(database.find(Auth.class, id));
+		if (id != null) {
+			return authProvider.get().init(database.find(Auth.class, id));
+		}
+
+		for (Cookie cookie : getRequest().getCookies()) {
+			if (cookie.getName().equals("oauth-id")) {
+				return cookie(cookie.getValue());
+			}
+		}
+
+		return new Auth(null);
 	}
 
 	public Auth logout() {
@@ -168,5 +181,9 @@ public class AuthManager {
 
 	private HttpSession getSession() {
 		return RequestFactoryServlet.getThreadLocalRequest().getSession();
+	}
+
+	private HttpServletRequest getRequest() {
+		return RequestFactoryServlet.getThreadLocalRequest();
 	}
 }

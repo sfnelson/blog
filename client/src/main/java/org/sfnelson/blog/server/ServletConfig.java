@@ -15,7 +15,9 @@ import com.google.inject.servlet.ServletModule;
 import javax.validation.*;
 import org.sfnelson.blog.client.request.RequestFactory;
 import org.sfnelson.blog.server.mongo.Database;
+import org.sfnelson.blog.server.security.AuthorChecker;
 import org.sfnelson.blog.server.security.LoginChecker;
+import org.sfnelson.blog.server.security.RequiresAuthor;
 import org.sfnelson.blog.server.security.RequiresLogin;
 import org.sfnelson.blog.server.service.ContentService;
 import org.sfnelson.blog.server.service.EntryService;
@@ -45,7 +47,10 @@ public class ServletConfig extends GuiceServletContextListener {
 				bind(TaskService.class).to(TaskManager.class);
 				bind(Locator.class).to(DomainObjectLocator.class);
 
-				bindInterceptor(Matchers.any(), Matchers.annotatedWith(RequiresLogin.class), new LoginChecker());
+				bindInterceptor(Matchers.any(), Matchers.annotatedWith(RequiresLogin.class),
+						new LoginChecker(getProvider(AuthManager.class)));
+				bindInterceptor(Matchers.any(), Matchers.annotatedWith(RequiresAuthor.class),
+						new AuthorChecker(getProvider(AuthManager.class)));
 
 				System.setProperty("gwt.rpc.dumpPayload", "false");
 			}

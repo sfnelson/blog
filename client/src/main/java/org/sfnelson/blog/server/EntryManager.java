@@ -9,6 +9,7 @@ import com.google.inject.Provider;
 import com.mongodb.DBObject;
 import org.sfnelson.blog.server.domain.*;
 import org.sfnelson.blog.server.mongo.Database;
+import org.sfnelson.blog.server.security.RequiresAuthor;
 import org.sfnelson.blog.server.security.RequiresLogin;
 import org.sfnelson.blog.server.service.ContentService;
 import org.sfnelson.blog.server.service.EntryService;
@@ -35,7 +36,7 @@ public class EntryManager implements EntryService, ContentService {
 	}
 
 	@Override
-	@RequiresLogin
+	@RequiresAuthor
 	public void createEntry(Entry entry) {
 		if (entry != null) {
 			database.persist(entry);
@@ -66,7 +67,7 @@ public class EntryManager implements EntryService, ContentService {
 	}
 
 	@Override
-	@RequiresLogin
+	@RequiresAuthor
 	public void updateEntry(Entry update) {
 		if (update != null) {
 			database.update(update);
@@ -74,7 +75,7 @@ public class EntryManager implements EntryService, ContentService {
 	}
 
 	@Override
-	@RequiresLogin
+	@RequiresAuthor
 	public void deleteEntry(Entry update) {
 		database.remove(update);
 	}

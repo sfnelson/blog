@@ -9,6 +9,7 @@ import com.mongodb.DBObject;
 import org.sfnelson.blog.server.domain.Task;
 import org.sfnelson.blog.server.domain.Update;
 import org.sfnelson.blog.server.mongo.Database;
+import org.sfnelson.blog.server.security.RequiresAuthor;
 import org.sfnelson.blog.server.security.RequiresLogin;
 import org.sfnelson.blog.server.service.TaskService;
 import org.sfnelson.blog.shared.domain.TaskUpdateType;
@@ -31,6 +32,7 @@ public class TaskManager implements TaskService {
 	}
 
 	@Override
+	@RequiresLogin
 	public List<Task> getCurrentTasks(int start, int limit) {
 		List<Task> tasks = Lists.newArrayList();
 		int count = 0;
@@ -42,7 +44,7 @@ public class TaskManager implements TaskService {
 	}
 
 	@Override
-	@RequiresLogin
+	@RequiresAuthor
 	public void createTask(Task task) {
 		database.persist(task);
 		if (task.getContent() != null) {
@@ -57,7 +59,7 @@ public class TaskManager implements TaskService {
 	}
 
 	@Override
-	@RequiresLogin
+	@RequiresAuthor
 	public void updateTask(Task task) {
 		database.update(task);
 		if (task.getContent() != null) {

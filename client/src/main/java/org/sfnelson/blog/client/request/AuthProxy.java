@@ -3,7 +3,7 @@ package org.sfnelson.blog.client.request;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 import com.google.web.bindery.requestfactory.shared.ValueProxy;
 
-import org.sfnelson.blog.server.Auth;
+import org.sfnelson.blog.server.domain.Auth;
 
 /**
  * Author: Stephen Nelson <stephen@sfnelson.org>
