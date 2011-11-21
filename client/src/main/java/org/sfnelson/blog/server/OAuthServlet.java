@@ -30,17 +30,18 @@ public class OAuthServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			String returnURL = auth.verify(req, resp);
-			if (returnURL == null) {
-				returnURL = "";
-			} else if (returnURL.indexOf('#') > 0) {
-				returnURL = returnURL.substring(0, returnURL.indexOf('#'));
+			String url = auth.getReturnUrl(req);
+			if (url == null) return;
+			else if (url.indexOf('#') > 0) {
+				url = url.substring(0, url.indexOf('#'));
 			}
+
+			auth.verify(req, resp);
 
 			resp.setStatus(HttpServletResponse.SC_OK);
 			resp.setContentType("text/html");
 			resp.getWriter().append("<html><head><title>Done</title>" +
-					"<script>window.opener.location.href='" + returnURL + "#auth:ready';</script>" +
+					"<script>window.opener.location.href='" + url + "#auth:ready';</script>" +
 					"</head></html>\r\n\r\n");
 		} catch (OpenIDException ex) {
 			throw new ServletException(ex);

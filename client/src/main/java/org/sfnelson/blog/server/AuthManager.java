@@ -7,6 +7,7 @@ import com.google.gwt.user.server.Base64Utils;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.Singleton;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,9 +35,12 @@ import org.slf4j.LoggerFactory;
  * Author: Stephen Nelson <stephen@sfnelson.org>
  * Date: 29/10/11
  */
+@Singleton
 public class AuthManager {
 
 	private static final String COOKIE_NAME = "oauth-id";
+	private static final String AUTH_DISCOVERY = "openid-disc";
+	private static final String AUTH_URL = "openid-returnURL";
 
 	private final ConsumerManager manager;
 	private final Database database;
@@ -53,11 +57,10 @@ public class AuthManager {
 		this.digest = MessageDigest.getInstance("MD5");
 	}
 
-	public Auth login(String authString, String returnURL) throws DiscoveryException, MessageException, ConsumerException {
+	public Auth login(String authString, String returnURL)
+			throws DiscoveryException, MessageException, ConsumerException {
 		logout();
 
-		// String url = RequestFactoryServlet.getThreadLocalRequest().getRequestURL().toString();
-		// url = url.substring(0, url.indexOf("gwtRequest"));
 		String url = returnURL;
 		if (url.indexOf('#') > 0) url = url.substring(0, url.indexOf('#'));
 		if (url.indexOf('/') > 0) url = url.substring(0, url.lastIndexOf('/'));
@@ -66,8 +69,8 @@ public class AuthManager {
 		List discoveries = manager.discover(authString);
 		DiscoveryInformation discovered = manager.associate(discoveries);
 		HttpSession session = getSession();
-		session.setAttribute("openid-disc", discovered);
-		session.setAttribute("openid-returnURL", returnURL);
+		session.setAttribute(AUTH_DISCOVERY, discovered);
+		session.setAttribute(AUTH_URL, returnURL);
 
 		AuthRequest authRequest = manager.authenticate(discovered, url);
 
@@ -78,12 +81,13 @@ public class AuthManager {
 		return new Auth(authRequest.getDestinationUrl(true));
 	}
 
-	public String verify(HttpServletRequest req, HttpServletResponse resp) throws MessageException, AssociationException, DiscoveryException {
+	public boolean verify(HttpServletRequest req, HttpServletResponse resp)
+			throws MessageException, AssociationException, DiscoveryException {
 		ParameterList response = new ParameterList(req.getParameterMap());
-		DiscoveryInformation discovered = (DiscoveryInformation) req.getSession().getAttribute("openid-disc");
+		DiscoveryInformation discovered = (DiscoveryInformation) req.getSession().getAttribute(AUTH_DISCOVERY);
 
 		// extract the receiving URL from the HTTP request
-		String url = (String) req.getSession().getAttribute("openid-returnURL");
+		String url = (String) req.getSession().getAttribute(AUTH_URL);
 		if (url.indexOf('#') > 0) url = url.substring(0, url.indexOf('#'));
 		if (url.indexOf('/') > 0) url = url.substring(0, url.lastIndexOf('/'));
 		StringBuffer receivingURL = new StringBuffer().append(url);
@@ -105,7 +109,7 @@ public class AuthManager {
 			byte[] idHash = digest.digest(authSuccess.getIdentity().getBytes());
 			String id = Base64Utils.toBase64(idHash);
 
-			req.getSession().setAttribute("oauth-id", id);
+			req.getSession().setAttribute(COOKIE_NAME, id);
 			Cookie cookie = new Cookie(COOKIE_NAME, id);
 			cookie.setMaxAge(14 * 24 * 60 * 60); // 2 weeks in seconds
 			cookie.setComment("oauth login token");
@@ -135,23 +139,30 @@ public class AuthManager {
 
 			log.info("{} is now logged in", auth.getEmail());
 
-			return (String) req.getSession().getAttribute("openid-returnURL");  // success
+			return true;
 		}
 
 		log.error("could not retrieve verification identifier, failing");
-		return null;
+		return false;
+	}
+
+	public String getReturnUrl(HttpServletRequest req) {
+		return (String) req.getSession().getAttribute(AUTH_URL);
 	}
 
 	private Auth getCookie() {
-		for (Cookie cookie : getRequest().getCookies()) {
+		HttpServletRequest req = getRequest();
+		Cookie[] cookies = req.getCookies();
+		for (Cookie cookie : cookies) {
 			if (cookie.getName().equals(COOKIE_NAME)) {
 				Auth auth = getAuth(cookie.getValue());
 				if (auth.getAuthenticated()) {
-					getSession().setAttribute("oauth-id", cookie.getValue());
 					log.info("{} logged in using a stored cookie", auth.getEmail());
+					getSession().setAttribute(COOKIE_NAME, cookie.getValue());
 					return auth;
 				} else {
 					log.info("{} has an invalid cookie, removing", auth.getEmail());
+					getSession().removeAttribute(COOKIE_NAME);
 					cookie.setMaxAge(0);
 					cookie.setComment("removing invalid oauth token");
 					getResponse().addCookie(cookie);
@@ -163,7 +174,7 @@ public class AuthManager {
 
 	public Auth state() {
 		HttpSession session = getSession();
-		String id = (String) session.getAttribute("oauth-id");
+		String id = (String) session.getAttribute(COOKIE_NAME);
 
 		Auth auth;
 		if (id != null) {
@@ -184,8 +195,7 @@ public class AuthManager {
 			log.info("{} logged out", state.getEmail());
 		}
 
-		session.setAttribute("oauth-id", null);
-		session.setAttribute("oauth-email", null);
+		session.setAttribute(COOKIE_NAME, null);
 
 		getResponse().addCookie(new Cookie(COOKIE_NAME, ""));
 

@@ -1,6 +1,12 @@
 <configuration>
-    <appender name="INFOFILE" class="ch.qos.logback.core.FileAppender">
+    <appender name="INFOFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/blog-info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>logs/blog-info-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 10 days' worth of history -->
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
@@ -21,8 +27,14 @@
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    <appender name="DEBUGFILE" class="ch.qos.logback.core.FileAppender">
+    <appender name="INFOFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/blog-debug.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>logs/blog-debug-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 10 days' worth of history -->
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
         <append>true</append>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
