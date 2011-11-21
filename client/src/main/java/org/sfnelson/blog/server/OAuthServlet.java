@@ -30,8 +30,10 @@ public class OAuthServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			String returnURL = auth.verify(req);
-			if (returnURL != null && returnURL.indexOf('#') > 0) {
+			String returnURL = auth.verify(req, resp);
+			if (returnURL == null) {
+				returnURL = "";
+			} else if (returnURL.indexOf('#') > 0) {
 				returnURL = returnURL.substring(0, returnURL.indexOf('#'));
 			}
 

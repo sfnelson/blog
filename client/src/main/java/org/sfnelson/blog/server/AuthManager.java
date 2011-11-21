@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.openid4java.association.AssociationException;
 import org.openid4java.consumer.ConsumerException;
@@ -34,6 +35,8 @@ import org.slf4j.LoggerFactory;
  * Date: 29/10/11
  */
 public class AuthManager {
+
+	private static final String COOKIE_NAME = "oauth-id";
 
 	private final ConsumerManager manager;
 	private final Database database;
@@ -75,7 +78,7 @@ public class AuthManager {
 		return new Auth(authRequest.getDestinationUrl(true));
 	}
 
-	public String verify(HttpServletRequest req) throws MessageException, AssociationException, DiscoveryException {
+	public String verify(HttpServletRequest req, HttpServletResponse resp) throws MessageException, AssociationException, DiscoveryException {
 		ParameterList response = new ParameterList(req.getParameterMap());
 		DiscoveryInformation discovered = (DiscoveryInformation) req.getSession().getAttribute("openid-disc");
 
@@ -103,6 +106,11 @@ public class AuthManager {
 			String id = Base64Utils.toBase64(idHash);
 
 			req.getSession().setAttribute("oauth-id", id);
+			Cookie cookie = new Cookie(COOKIE_NAME, id);
+			cookie.setMaxAge(14 * 24 * 60 * 60); // 2 weeks in seconds
+			cookie.setComment("oauth login token");
+			cookie.setVersion(1);
+			resp.addCookie(cookie);
 
 			Auth auth = authProvider.get().init(database.find(Auth.class, id));
 			if (!auth.getAuthenticated()) {
@@ -134,36 +142,38 @@ public class AuthManager {
 		return null;
 	}
 
-	public Auth cookie(String oauthId) {
-		String id = (String) getSession().getAttribute("oauth-id");
-
-		if (id == null) {
-			Auth auth = getAuth(oauthId);
-			if (auth.getAuthenticated()) {
-				getSession().setAttribute("oauth-id", oauthId);
-
-				log.info("{} logged in using a stored cookie", auth.getEmail());
+	private Auth getCookie() {
+		for (Cookie cookie : getRequest().getCookies()) {
+			if (cookie.getName().equals(COOKIE_NAME)) {
+				Auth auth = getAuth(cookie.getValue());
+				if (auth.getAuthenticated()) {
+					getSession().setAttribute("oauth-id", cookie.getValue());
+					log.info("{} logged in using a stored cookie", auth.getEmail());
+					return auth;
+				} else {
+					log.info("{} has an invalid cookie, removing", auth.getEmail());
+					cookie.setMaxAge(0);
+					cookie.setComment("removing invalid oauth token");
+					getResponse().addCookie(cookie);
+				}
 			}
 		}
-
-		return getAuth(id);
+		return null;
 	}
 
 	public Auth state() {
 		HttpSession session = getSession();
 		String id = (String) session.getAttribute("oauth-id");
 
+		Auth auth;
 		if (id != null) {
-			return getAuth(id);
+			auth = getAuth(id);
+		} else {
+			auth = getCookie();
 		}
 
-		for (Cookie cookie : getRequest().getCookies()) {
-			if (cookie.getName().equals("oauth-id")) {
-				return cookie(cookie.getValue());
-			}
-		}
-
-		return authProvider.get().init(null);
+		if (auth != null) return auth;
+		else return authProvider.get().init(null);
 	}
 
 	public Auth logout() {
@@ -176,6 +186,9 @@ public class AuthManager {
 
 		session.setAttribute("oauth-id", null);
 		session.setAttribute("oauth-email", null);
+
+		getResponse().addCookie(new Cookie(COOKIE_NAME, ""));
+
 		return authProvider.get().init(null);
 	}
 
@@ -185,6 +198,10 @@ public class AuthManager {
 
 	private HttpServletRequest getRequest() {
 		return RequestFactoryServlet.getThreadLocalRequest();
+	}
+
+	private HttpServletResponse getResponse() {
+		return RequestFactoryServlet.getThreadLocalResponse();
 	}
 
 	private Auth getAuth(String id) {

@@ -15,8 +15,6 @@ import org.sfnelson.blog.server.ServiceLocator;
 public interface AuthRequest extends RequestContext {
 	Request<AuthProxy> login(String provider, String returnURL);
 
-	Request<AuthProxy> cookie(String authId);
-
 	Request<AuthProxy> state();
 
 	Request<AuthProxy> logout();

@@ -1,12 +1,9 @@
 package org.sfnelson.blog.client.activities;
 
-import java.util.Date;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -51,12 +48,7 @@ public class ShowAuth extends AbstractActivity implements AuthWidget.Presenter {
 		view.setPresenter(this);
 		panel.setWidget(view);
 
-		String oauthId = Cookies.getCookie("oauth-id");
-		if (oauthId != null) {
-			request.get().cookie(oauthId).fire(new Receiver());
-		} else {
-			request.get().state().fire(new Receiver());
-		}
+		request.get().state().fire(new Receiver());
 	}
 
 	@Override
@@ -71,7 +63,6 @@ public class ShowAuth extends AbstractActivity implements AuthWidget.Presenter {
 
 	@Override
 	public void logout() {
-		Cookies.removeCookie("oauth-id");
 		request.get().logout().fire(new Receiver());
 	}
 
@@ -106,9 +97,6 @@ public class ShowAuth extends AbstractActivity implements AuthWidget.Presenter {
 				}
 			} else {
 				view.setEmail(response.getEmail());
-				Date expires = new Date();
-				expires.setTime(expires.getTime() + 14 * 24 * 60 * 60 * 1000); // two weeks.
-				Cookies.setCookie("oauth-id", response.getAuthId(), expires);
 			}
 
 			ShowAuth.this.credentials = response;
